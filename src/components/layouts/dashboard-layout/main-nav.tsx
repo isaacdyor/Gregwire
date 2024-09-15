@@ -41,7 +41,7 @@ export const MainNav: React.FC = () => {
         </Link>
       );
     });
-  }, [segment, isOpen]);
+  }, [segment, isOpen, setIsOpen]);
 
   return (
     <div
