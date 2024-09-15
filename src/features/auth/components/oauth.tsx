@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import type { Provider } from "@supabase/supabase-js";
 import { Icons } from "@/components/icons";
+import { env } from "@/env";
 
 type OAuthProvider = {
   name: Provider;
@@ -29,7 +30,7 @@ export const OAuthProviders: React.FC = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard`,
       },
     });
     if (error) {
