@@ -17,7 +17,7 @@ export const LogoutButton = () => {
 
   return (
     <div
-      onClick={handleLogout}
+      // onClick={handleLogout}
       className="flex gap-2 rounded-md px-2 py-1 hover:cursor-pointer hover:bg-muted"
     >
       <LogOut className="h-5 w-5 text-muted-foreground" />

@@ -29,7 +29,7 @@ export const UserMenu = () => {
   };
 
   return (
-    <Popover open={popoverOpen} onOpenChange={handleOpenChange}>
+    <Popover open={popoverOpen}>
       <PopoverTrigger asChild onClick={() => setPopoverOpen(!popoverOpen)}>
         <div
           className={cn(
