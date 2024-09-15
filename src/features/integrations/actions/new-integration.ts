@@ -11,17 +11,15 @@ export async function integrateGmail() {
     const oauth2Client = new OAuth2Client(
       env.GOOGLE_CLIENT_ID,
       env.GOOGLE_CLIENT_SECRET,
-      `${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/callback`,
+      `${env.NEXT_PUBLIC_APP_URL}/integrations/gmail`,
     );
     console.timeEnd("OAuth2Client initialization");
 
     const scopes = [
       "https://www.googleapis.com/auth/gmail.readonly",
       "https://www.googleapis.com/auth/gmail.send",
-      // Add other scopes as needed
     ];
 
-    console.time("generateAuthUrl");
     const authorizationUrl = oauth2Client.generateAuthUrl({
       access_type: "offline",
       scope: scopes,
@@ -35,6 +33,7 @@ export async function integrateGmail() {
     // Log success without awaiting
     void logtail.info("Generated Gmail authorization URL", {
       integration: "Gmail",
+      authorizationUrl: authorizationUrl,
       timestamp: new Date().toISOString(),
       executionTime: endTime - startTime,
     });
