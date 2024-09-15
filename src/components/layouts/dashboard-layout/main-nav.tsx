@@ -61,7 +61,7 @@ export const MainNav: React.FC = () => {
         onMouseLeave={() => setIsOpen(false)}
       >
         <div className="h flex flex-col justify-center space-y-6">
-          <div className="flex w-full items-center px-1.5">
+          <div className="flex w-full items-center px-2">
             <Logo full={isOpen} />
           </div>
 

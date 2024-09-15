@@ -13,8 +13,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 // };
 
 export const metadata: Metadata = {
-  title: "Febak",
-  description: "Sick chat app",
+  title: "Gregwire",
+  description: "Communication automation platform",
   icons: {
     icon: "/favicon.ico",
   },
