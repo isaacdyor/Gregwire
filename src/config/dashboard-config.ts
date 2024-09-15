@@ -1,18 +1,18 @@
 export const dashboardConfig = [
   {
-    label: "Chat",
-    url: "/chat",
-    icon: "chat",
+    label: "Dashboard",
+    url: "/dashboard",
+    icon: "home",
   },
   {
-    label: "Visitors",
-    url: "/visitors",
-    icon: "users",
+    label: "Automations",
+    url: "/automations",
+    icon: "workflow",
   },
   {
-    label: "Explore",
-    url: "/explore",
-    icon: "compass",
+    label: "Integrations",
+    url: "/integrations",
+    icon: "usb",
   },
   {
     label: "Settings",

@@ -52,7 +52,7 @@ export async function updateSession(request: NextRequest) {
   }
   if (user && !isProtectedRoute) {
     // Redirect to /chat if authenticated user accesses any unprotected route
-    return NextResponse.redirect(new URL("/chat", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

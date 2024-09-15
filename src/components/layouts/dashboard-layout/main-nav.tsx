@@ -25,6 +25,7 @@ export const MainNav: React.FC = () => {
             "flex h-10 items-center rounded-md px-2.5 text-sm text-muted-foreground hover:bg-secondary",
             item.url.startsWith(`/${segment}`) ? "bg-secondary" : "",
           )}
+          onClick={() => setIsOpen(false)}
         >
           <div className="flex w-full items-center overflow-hidden">
             <Icon className="h-5 w-5 flex-shrink-0" />
@@ -60,7 +61,7 @@ export const MainNav: React.FC = () => {
         onMouseLeave={() => setIsOpen(false)}
       >
         <div className="h flex flex-col justify-center space-y-6">
-          <div className="flex w-full items-center px-3">
+          <div className="flex w-full items-center px-1.5">
             <Logo full={isOpen} />
           </div>
 

@@ -1,4 +1,13 @@
-import { Compass, Key, MessageCircle, Settings, Users } from "lucide-react";
+import {
+  Compass,
+  Home,
+  Key,
+  MessageCircle,
+  Settings,
+  Usb,
+  Users,
+  Workflow,
+} from "lucide-react";
 import { Github } from "./github";
 import { Google } from "./google";
 
@@ -10,4 +19,7 @@ export const Icons = {
   settings: Settings,
   compass: Compass,
   users: Users,
+  usb: Usb,
+  workflow: Workflow,
+  home: Home,
 };

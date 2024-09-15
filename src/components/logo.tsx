@@ -8,7 +8,7 @@ export const Logo: React.FC<{ full?: boolean }> = ({ full = true }) => {
       href="/"
       className="flex items-center gap-1 overflow-hidden text-2xl font-semibold tracking-tighter text-foreground"
     >
-      <Cable />
+      <Cable className="shrink-0" />
       <div className="flex overflow-hidden">
         <h1
           className={cn(
