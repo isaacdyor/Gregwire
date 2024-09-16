@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    void logtail.info("Succesfully generated tokens", {
+    await logtail.info("Successfully generated tokens", {
       tokens,
       timestamp: new Date().toISOString(),
     });
@@ -41,23 +41,22 @@ export async function GET(request: NextRequest) {
       status: "ACTIVE",
       user: {
         connect: {
-          id: "", // using ctx.user.id
+          id: "", // TODO: Replace with actual user ID
         },
       },
     });
 
-    void logtail.info("Succesfully added integration", {
+    await logtail.info("Successfully added integration", {
       newIntegration,
       timestamp: new Date().toISOString(),
     });
 
-    // Redirect to success page
     return NextResponse.redirect(
       new URL("/dashboard?integration=success", request.url),
     );
   } catch (error) {
     console.error("Error in Gmail callback:", error);
-    void logtail.error("Error in Gmail Callback", {
+    await logtail.error("Error in Gmail Callback", {
       error,
       timestamp: new Date().toISOString(),
     });
@@ -65,7 +64,6 @@ export async function GET(request: NextRequest) {
       new URL("/integrations?error=token_exchange_failed", request.url),
     );
   } finally {
-    // Flush logs asynchronously
-    logtail.flush().catch(console.error);
+    await logtail.flush().catch(console.error);
   }
 }
