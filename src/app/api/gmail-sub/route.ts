@@ -27,5 +27,7 @@ export async function POST(req: NextRequest) {
     console.error("Error processing request:", error);
     void logtail.error("Error processing request", { error });
     return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+  } finally {
+    await logtail.flush();
   }
 }
