@@ -15,6 +15,11 @@ export const dashboardConfig = [
     icon: "usb",
   },
   {
+    label: "Messages",
+    url: "/messages",
+    icon: "chat",
+  },
+  {
     label: "Settings",
     url: "/settings",
     icon: "settings",

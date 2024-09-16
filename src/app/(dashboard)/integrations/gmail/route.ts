@@ -2,16 +2,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import { OAuth2Client } from "google-auth-library";
 import { env } from "@/env";
 import { logtail } from "@/config/logtail-config";
+import { api } from "@/trpc/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
-
-  void logtail.info("Inside gmail integration route", {
-    integration: "Gmail",
-    code,
-    timestamp: new Date().toISOString(),
-  });
 
   if (!code) {
     return NextResponse.redirect(
@@ -29,12 +24,30 @@ export async function GET(request: NextRequest) {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    // Here, you should store the tokens securely (e.g., in your database)
-    // await storeTokens(tokens);
+    void logtail.info("Succesfully generated tokens", {
+      tokens,
+      timestamp: new Date().toISOString(),
+    });
 
-    // Log success
-    void logtail.info("Successfully exchanged code for tokens", {
-      integration: "Gmail",
+    if (!tokens.access_token || !tokens.expiry_date) {
+      throw new Error("Failed to obtain access token");
+    }
+
+    const newIntegration = await api.integrations.create({
+      type: "GMAIL",
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token ?? null,
+      tokenExpiration: new Date(tokens.expiry_date),
+      status: "ACTIVE",
+      user: {
+        connect: {
+          id: "", // using ctx.user.id
+        },
+      },
+    });
+
+    void logtail.info("Succesfully added integration", {
+      newIntegration,
       timestamp: new Date().toISOString(),
     });
 
@@ -44,15 +57,10 @@ export async function GET(request: NextRequest) {
     );
   } catch (error) {
     console.error("Error in Gmail callback:", error);
-
-    // Log error
-    void logtail.error("Failed to exchange code for tokens", {
-      integration: "Gmail",
-      error: error instanceof Error ? error.message : String(error),
+    void logtail.error("Error in Gmail Callback", {
+      error,
       timestamp: new Date().toISOString(),
     });
-
-    // Redirect to error page
     return NextResponse.redirect(
       new URL("/integrations?error=token_exchange_failed", request.url),
     );

@@ -1,31 +1,29 @@
-import { z } from "zod";
-
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import { IntegrationCreateInputSchema } from "prisma/generated/zod";
 
 export const integrationsRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
-  create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
+  create: privateProcedure
+    .input(IntegrationCreateInputSchema)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.post.create({
+      return ctx.db.integration.create({
         data: {
-          name: input.name,
+          type: input.type,
+          providerUserId: input.providerUserId,
+          accessToken: input.accessToken,
+          refreshToken: input.refreshToken,
+          tokenExpiration: input.tokenExpiration,
+          scopes: input.scopes,
+          createdAt: input.createdAt,
+          lastUsedAt: input.lastUsedAt,
+          lastRefreshedAt: input.lastRefreshedAt,
+          status: input.status,
+          metadata: input.metadata,
+          user: {
+            connect: {
+              id: ctx.user.id,
+            },
+          },
         },
       });
     }),
-
-  getLatest: publicProcedure.query(async ({ ctx }) => {
-    const post = await ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-
-    return post ?? null;
-  }),
 });

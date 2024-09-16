@@ -7,7 +7,7 @@ export const LogoutButton = () => {
   const supabase = createClient();
   const router = useRouter();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
     setLoading(true);
