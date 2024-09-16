@@ -1,5 +1,9 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { IntegrationCreateInputSchema } from "prisma/generated/zod";
+import {
+  IntegrationCreateInputSchema,
+  IntegrationUpdateArgsSchema,
+  IntegrationUpdateInputSchema,
+} from "prisma/generated/zod";
 
 export const integrationsRouter = createTRPCRouter({
   create: privateProcedure
@@ -25,5 +29,18 @@ export const integrationsRouter = createTRPCRouter({
           },
         },
       });
+    }),
+
+  update: privateProcedure
+    .input(IntegrationUpdateInputSchema)
+    .mutation(async ({ input, ctx }) => {
+      const { id, ...updateData } = input;
+
+      const updatedIntegration = await ctx.db.integration.update({
+        where: { id: id as string },
+        data: updateData,
+      });
+
+      return updatedIntegration;
     }),
 });
