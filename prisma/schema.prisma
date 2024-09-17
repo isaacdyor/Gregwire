@@ -62,6 +62,7 @@ model Integration {
 
 model Email {
   id            String      @id @default(uuid())
+  messageId     String      @unique
   integrationId String
   historyId     String
   receivedAt    DateTime    @default(now())

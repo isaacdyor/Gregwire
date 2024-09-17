@@ -28,6 +28,21 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
+    const existingMessage = await api.emails.getByMessageId(
+      body.message.messageId,
+    );
+
+    if (existingMessage) {
+      void logtail.info("Duplicate message received, skipping processing", {
+        messageId: body.message.messageId,
+        timestamp: new Date().toISOString(),
+      });
+      return NextResponse.json(
+        { success: true, duplicate: true },
+        { status: 200 },
+      );
+    }
+
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
     // Parse the decoded data as JSON
@@ -39,6 +54,7 @@ export async function POST(req: NextRequest) {
     const newEmail = await api.emails.create({
       email: {
         historyId: String(validatedData.historyId),
+        messageId: body.message.messageId,
         receivedAt: new Date(),
         processed: false,
         integration: {
