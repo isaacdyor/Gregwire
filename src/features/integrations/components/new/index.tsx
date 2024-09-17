@@ -1,33 +1,17 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { GmailIntegration } from "./gmail";
-import { api } from "@/trpc/react";
+import { integrationConfig } from "@/config/integration-config";
+import { Fragment } from "react";
+import { NewIntegrationCard } from "./new-integration-card";
 
 export const NewIntegration = () => {
-  const mutation = api.integrations.create.useMutation();
-
   return (
-    <div className="flex">
-      <GmailIntegration />
-      <Button
-        onClick={() =>
-          mutation.mutate({
-            type: "GMAIL",
-            accessToken: "",
-            refreshToken: "",
-            tokenExpiration: new Date(),
-            status: "ACTIVE",
-            user: {
-              connect: {
-                id: "",
-              },
-            },
-          })
-        }
-      >
-        Trial
-      </Button>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {integrationConfig.map((integration) => (
+        <Fragment key={integration.title}>
+          <NewIntegrationCard integration={integration} />
+        </Fragment>
+      ))}
     </div>
   );
 };

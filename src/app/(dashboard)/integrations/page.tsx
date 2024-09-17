@@ -1,10 +1,12 @@
-import Link from "next/link";
+import { ContentLayout } from "@/components/layouts/content-layout";
+import { Integrations } from "@/features/integrations/components";
+import { api } from "@/trpc/server";
 
-export default async function Integrations() {
+export default async function IntegrationsPage() {
+  const integrations = api.integrations.getAll();
   return (
-    <div>
-      <h1>Integrations</h1>
-      <Link href="/integrations/new">Slack</Link>
-    </div>
+    <ContentLayout title="Integrations">
+      <Integrations />
+    </ContentLayout>
   );
 }

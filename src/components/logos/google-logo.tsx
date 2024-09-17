@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { type LucideProps } from "lucide-react";
 
-export const Google = ({ ...props }: LucideProps) => {
+export const GoogleLogo = ({ ...props }: LucideProps) => {
   return (
     <svg
       role="img"

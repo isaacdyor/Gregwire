@@ -1,7 +1,6 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import {
   IntegrationCreateInputSchema,
-  IntegrationUpdateArgsSchema,
   IntegrationUpdateInputSchema,
 } from "prisma/generated/zod";
 
@@ -43,4 +42,15 @@ export const integrationsRouter = createTRPCRouter({
 
       return updatedIntegration;
     }),
+
+  getAll: privateProcedure.query(async ({ ctx }) => {
+    return ctx.db.integration.findMany({
+      where: {
+        userId: ctx.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }),
 });

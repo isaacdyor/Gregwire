@@ -1,25 +1,25 @@
 "use client";
 
-import React from "react";
+import { Logos } from "@/components/logos";
 import { Button } from "@/components/ui/button";
+import { env } from "@/env";
 import { createClient } from "@/lib/supabase/client";
 import type { Provider } from "@supabase/supabase-js";
-import { Icons } from "@/components/icons";
-import { env } from "@/env";
+import React from "react";
 
 type OAuthProvider = {
   name: Provider;
-  icon: keyof typeof Icons;
+  logo: keyof typeof Logos;
 };
 
 const providers: OAuthProvider[] = [
   {
     name: "google",
-    icon: "google",
+    logo: "google",
   },
   {
     name: "github",
-    icon: "github",
+    logo: "github",
   },
 ];
 
@@ -41,7 +41,7 @@ export const OAuthProviders: React.FC = () => {
   return (
     <>
       {providers.map((provider) => {
-        const Icon = Icons[provider.icon ?? "google"];
+        const Logo = Logos[provider.logo ?? "google"];
         return (
           <Button
             key={provider.name}
@@ -50,7 +50,7 @@ export const OAuthProviders: React.FC = () => {
             onClick={() => handleLogin(provider.name)}
           >
             <div className="flex items-center gap-2">
-              <Icon className="h-5 w-5" />
+              <Logo className="h-5 w-5" />
               <p>
                 Sign in with{" "}
                 {provider.name.charAt(0).toUpperCase() + provider.name.slice(1)}

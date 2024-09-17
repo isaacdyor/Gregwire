@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { type LucideProps } from "lucide-react";
 
-export const Github = ({ ...props }: LucideProps) => {
+export const GithubLogo = ({ ...props }: LucideProps) => {
   return (
     <svg
       role="img"
