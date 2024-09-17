@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
       refreshToken: tokens.refresh_token ?? null,
       tokenExpiration: new Date(tokens.expiry_date),
       status: "ACTIVE",
+      genericType: "EMAIL",
       user: {
         connect: {
           id: "",

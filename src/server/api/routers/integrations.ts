@@ -20,6 +20,7 @@ export const integrationsRouter = createTRPCRouter({
           lastUsedAt: input.lastUsedAt,
           lastRefreshedAt: input.lastRefreshedAt,
           status: input.status,
+          genericType: input.genericType,
           metadata: input.metadata,
           user: {
             connect: {

@@ -27,6 +27,13 @@ enum IntegrationType {
   GOOGLE_CALENDAR
 }
 
+enum GenericType {
+  EMAIL
+  CALENDAR
+  TASK
+  CHAT
+}
+
 enum IntegrationStatus {
   ACTIVE
   REVOKED
@@ -47,6 +54,17 @@ model Integration {
   lastUsedAt      DateTime?
   lastRefreshedAt DateTime?
   status          IntegrationStatus @default(ACTIVE)
+  genericType     GenericType      
   metadata        Json?
   user            User              @relation("UserIntegrations", fields: [userId], references: [id], onDelete: Cascade)
+  emails    Email[]     @relation("IntegrationEmails")
+}
+
+model Email {
+  id            String      @id @default(uuid())
+  integrationId String
+  historyId     String
+  receivedAt    DateTime    @default(now())
+  processed     Boolean     @default(false)
+  integration   Integration @relation("IntegrationEmails", fields: [integrationId], references: [id], onDelete: Cascade)
 }

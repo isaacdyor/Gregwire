@@ -1,4 +1,5 @@
 import { logtail } from "@/config/logtail-config";
+import { api } from "@/trpc/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -11,6 +12,11 @@ const PubSubMessageSchema = z.object({
   subscription: z.string(),
 });
 
+const MessageDataSchema = z.object({
+  emailAddress: z.string(),
+  historyId: z.string(),
+});
+
 export async function POST(req: NextRequest) {
   try {
     // Parse the JSON body
@@ -20,6 +26,28 @@ export async function POST(req: NextRequest) {
     void logtail.info("Received hit", {
       body,
       timestamp: new Date().toISOString(),
+    });
+
+    const decodedData = Buffer.from(body.message.data, "base64").toString();
+
+    // Parse the decoded data as JSON
+    const jsonData = JSON.parse(decodedData);
+
+    // Validate the parsed data against MessageDataSchema
+    const validatedData = MessageDataSchema.parse(jsonData);
+
+    const newEmail = await api.emails.create({
+      email: {
+        historyId: validatedData.historyId,
+        receivedAt: new Date(),
+        processed: false,
+        integration: {
+          connect: {
+            id: "", // plug in integration email directly
+          },
+        },
+      },
+      integrationId: validatedData.emailAddress,
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
