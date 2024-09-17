@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
         { status: 200 },
       );
     }
+
     void logtail.info("Before Decode", {
       timestamp: new Date().toISOString(),
     });
@@ -87,7 +88,15 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error processing request:", error);
     void logtail.error("Error processing request", { error });
-    return NextResponse.json({ error: "Bad Request" }, { status: 200 });
+
+    // Even if there's an error, we return a 200 status to prevent Pub/Sub from retrying
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Error occurred, but acknowledged to prevent retry",
+      },
+      { status: 200 },
+    );
   } finally {
     await logtail.flush();
   }
