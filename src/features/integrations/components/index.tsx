@@ -1,5 +1,5 @@
-import React, { FC, ReactNode } from "react";
 import { type Integration } from "@prisma/client";
+import React, { type ReactNode } from "react";
 import { CurrentIntegrationCard } from "./current-integration-card";
 
 export const Integrations: React.FC<{

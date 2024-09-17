@@ -32,7 +32,7 @@ export async function startGmailWatch(
       },
     });
 
-    logtail.info("Successfully set up watch", {
+    void logtail.info("Successfully set up watch", {
       res,
       timestamp: new Date().toISOString(),
     });

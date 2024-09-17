@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (newIntegration) {
-      startGmailWatch(newIntegration.userId, tokens);
+      await startGmailWatch(newIntegration.userId, tokens);
     }
 
     await logtail.info("Successfully set up watch", {

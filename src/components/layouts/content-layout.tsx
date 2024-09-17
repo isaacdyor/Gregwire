@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import React, { type FC, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { buttonVariants } from "../ui/button";
 
 interface ContentLayoutProps {
