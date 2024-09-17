@@ -23,6 +23,7 @@ enum IntegrationType {
   SLACK
   OUTLOOK
   GITHUB
+  GOOGLE_CALENDAR
 }
 
 enum IntegrationStatus {

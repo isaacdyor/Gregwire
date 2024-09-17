@@ -1,8 +1,10 @@
 import { type LogoName } from "@/components/logos";
 import { integrateGmail } from "@/features/integrations/actions/new-integration";
+import { type IntegrationType } from "@prisma/client";
 
 // Updated IntegrationItem interface
 interface IntegrationItem {
+  type: IntegrationType;
   title: string;
   logo: LogoName;
   description: string;
@@ -43,18 +45,21 @@ const callIntegrateGmail = async (): Promise<void> => {
 // Updated integrationConfig with promise-based onIntegrate functions
 export const integrationConfig: IntegrationConfig = [
   {
+    type: "GMAIL",
     title: "Gmail",
     logo: "gmail",
     description: "Integrate your Gmail account to sync emails and contacts.",
     onIntegrate: callIntegrateGmail,
   },
   {
+    type: "SLACK",
     title: "Slack",
     logo: "slack",
     description: "Connect your Slack workspace for seamless communication.",
     onIntegrate: integrateSlack,
   },
   {
+    type: "GOOGLE_CALENDAR",
     title: "Google Calendar",
     logo: "googleCalendar",
     description: "Sync your Google Calendar to manage events and schedules.",
