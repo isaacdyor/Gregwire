@@ -1,15 +1,10 @@
-import {
-  createTRPCRouter,
-  privateProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
-import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { EmailCreateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
 const CreateEmailInputSchema = z.object({
   email: EmailCreateInputSchema,
-  integrationId: z.string(),
+  integrationEmail: z.string(),
 });
 
 export const emailsRouter = createTRPCRouter({
@@ -47,7 +42,7 @@ export const emailsRouter = createTRPCRouter({
           processed: input.email.processed ?? false,
           integration: {
             connect: {
-              id: input.integrationId,
+              email: input.integrationEmail,
             },
           },
         },

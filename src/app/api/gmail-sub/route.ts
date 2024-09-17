@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
           },
         },
       },
-      integrationId: validatedData.emailAddress,
+      integrationEmail: validatedData.emailAddress,
     });
 
     void logtail.info("Created New Email", {
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error processing request:", error);
     void logtail.error("Error processing request", { error });
-    return NextResponse.json({ error: "Bad Request" }, { status: 400 });
+    return NextResponse.json({ error: "Bad Request" }, { status: 200 });
   } finally {
     await logtail.flush();
   }

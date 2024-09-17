@@ -43,6 +43,7 @@ enum IntegrationStatus {
 model Integration {
   id              String            @id @default(uuid())
   userId          String
+  email           String?           @unique        
   type            IntegrationType
   providerUserId  String?
   accessToken     String
