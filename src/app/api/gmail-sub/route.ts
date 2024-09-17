@@ -14,7 +14,7 @@ const PubSubMessageSchema = z.object({
 
 const MessageDataSchema = z.object({
   emailAddress: z.string(),
-  historyId: z.string(),
+  historyId: z.number(),
 });
 
 export async function POST(req: NextRequest) {
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     const newEmail = await api.emails.create({
       email: {
-        historyId: validatedData.historyId,
+        historyId: String(validatedData.historyId),
         receivedAt: new Date(),
         processed: false,
         integration: {
