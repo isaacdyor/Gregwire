@@ -13,24 +13,9 @@ const CreateEmailInputSchema = z.object({
 });
 
 export const emailsRouter = createTRPCRouter({
-  getAll: privateProcedure
+  getAll: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input: integrationId }) => {
-      // First, verify that the integration belongs to the current user
-      const integration = await ctx.db.email.findMany({
-        where: {
-          id: integrationId,
-          integration: {
-            userId: ctx.user.id,
-          },
-        },
-      });
-
-      if (!integration) {
-        throw new TRPCError({ code: "UNAUTHORIZED" });
-      }
-
-      // If the integration is verified, proceed to fetch the emails
       return ctx.db.email.findMany({
         where: {
           integrationId: integrationId,
@@ -41,7 +26,7 @@ export const emailsRouter = createTRPCRouter({
       });
     }),
 
-  getByMessageId: privateProcedure
+  getByMessageId: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input: messageid }) => {
       return ctx.db.email.findUnique({
