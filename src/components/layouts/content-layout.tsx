@@ -24,7 +24,10 @@ export const ContentLayout: React.FC<ContentLayoutProps> = ({
           {backLink && (
             <Link
               href={backLink}
-              className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "icon" }),
+                "size-9",
+              )}
             >
               <ArrowLeft />
             </Link>
