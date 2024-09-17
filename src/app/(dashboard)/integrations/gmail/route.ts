@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.redirect(
-      new URL("/dashboard?integration=success", request.url),
+      new URL("/integrations?integration=success", request.url),
     );
   } catch (error) {
     console.error("Error in Gmail callback:", error);

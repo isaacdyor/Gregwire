@@ -1,3 +1,4 @@
+import { logtail } from "@/config/logtail-config";
 import { env } from "@/env";
 import { api } from "@/trpc/server";
 import { gmail_v1 } from "@googleapis/gmail";
@@ -15,10 +16,7 @@ export async function startGmailWatch(
   );
 
   // 2. Set credentials (assuming you've already obtained these)
-  oauth2Client.setCredentials({
-    access_token: credentials.access_token,
-    refresh_token: credentials.refresh_token,
-  });
+  oauth2Client.setCredentials(credentials);
 
   // 3. Set up Gmail watch
   const gmailClient = new gmail_v1.Gmail({
@@ -29,9 +27,14 @@ export async function startGmailWatch(
     const res = await gmailClient.users.watch({
       userId: "me",
       requestBody: {
-        topicName: "projects/YOUR_PROJECT_ID/topics/YOUR_TOPIC_NAME",
+        topicName: "projects/gregwire/topics/gmail-notifications",
         labelIds: ["INBOX"],
       },
+    });
+
+    logtail.info("Successfully set up watch", {
+      res,
+      timestamp: new Date().toISOString(),
     });
 
     // 4. Store watch expiration
@@ -47,5 +50,7 @@ export async function startGmailWatch(
   } catch (error) {
     console.error("Error setting up watch:", error);
     throw error;
+  } finally {
+    await logtail.flush();
   }
 }

@@ -13,6 +13,7 @@ export const env = createEnv({
       .default("development"),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
+    GOOGLE_PROJECT_ID: z.string().min(1),
   },
 
   /**
@@ -40,6 +41,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     NEXT_PUBLIC_LOGTAIL_TOKEN: process.env.NEXT_PUBLIC_LOGTAIL_TOKEN,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    GOOGLE_PROJECT_ID: process.env.GOOGLE_PROJECT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
