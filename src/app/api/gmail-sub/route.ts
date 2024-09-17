@@ -21,9 +21,15 @@ export async function POST(req: NextRequest) {
   try {
     // Parse the JSON body
     const rawBody: unknown = await req.json();
+
+    void logtail.info("Received req", {
+      rawBody,
+      timestamp: new Date().toISOString(),
+    });
+
     const body = PubSubMessageSchema.parse(rawBody);
 
-    void logtail.info("Received hit", {
+    void logtail.info("Parsed Request", {
       body,
       timestamp: new Date().toISOString(),
     });
@@ -42,9 +48,15 @@ export async function POST(req: NextRequest) {
         { status: 200 },
       );
     }
-
+    void logtail.info("Before Decode", {
+      timestamp: new Date().toISOString(),
+    });
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
+    void logtail.info("Parsed message", {
+      decodedData,
+      timestamp: new Date().toISOString(),
+    });
     // Parse the decoded data as JSON
     const jsonData: unknown = JSON.parse(decodedData);
 
