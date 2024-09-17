@@ -3,6 +3,7 @@ import { OAuth2Client } from "google-auth-library";
 import { env } from "@/env";
 import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
+import { startGmailWatch } from "./start-gmail-watch";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -41,12 +42,21 @@ export async function GET(request: NextRequest) {
       status: "ACTIVE",
       user: {
         connect: {
-          id: "", // TODO: Replace with actual user ID
+          id: "",
         },
       },
     });
 
     await logtail.info("Successfully added integration", {
+      newIntegration,
+      timestamp: new Date().toISOString(),
+    });
+
+    if (newIntegration) {
+      startGmailWatch(newIntegration.userId, tokens);
+    }
+
+    await logtail.info("Successfully set up watch", {
       newIntegration,
       timestamp: new Date().toISOString(),
     });

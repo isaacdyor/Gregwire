@@ -23,9 +23,13 @@ export default async function IntegrationsPage() {
       </Link>
     );
   };
+
   return (
-    <ContentLayout title="Integrations" Icon={NewIntegrationButton}>
-      <Integrations integrations={integrations} />
+    <ContentLayout title="Integrations" Icon={<NewIntegrationButton />}>
+      <Integrations
+        integrations={integrations}
+        NewIntegrationButton={<NewIntegrationButton />}
+      />
     </ContentLayout>
   );
 }

@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 generator zod {
   provider = "zod-prisma-types"
 }
@@ -15,7 +16,7 @@ model User {
   name         String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  integrations Integration[]
+  integrations Integration[] @relation("UserIntegrations")
 }
 
 enum IntegrationType {
@@ -32,7 +33,6 @@ enum IntegrationStatus {
   EXPIRED
 }
 
-
 model Integration {
   id              String            @id @default(uuid())
   userId          String
@@ -48,6 +48,5 @@ model Integration {
   lastRefreshedAt DateTime?
   status          IntegrationStatus @default(ACTIVE)
   metadata        Json?
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation("UserIntegrations", fields: [userId], references: [id], onDelete: Cascade)
 }
-

@@ -7,7 +7,7 @@ import { buttonVariants } from "../ui/button";
 interface ContentLayoutProps {
   children: ReactNode;
   title: string;
-  Icon?: FC;
+  Icon?: ReactNode;
   backLink?: string;
 }
 
@@ -18,7 +18,7 @@ export const ContentLayout: React.FC<ContentLayoutProps> = ({
   backLink,
 }) => {
   return (
-    <div className="flex flex-col gap-8 px-6 py-8">
+    <div className="flex h-full flex-col gap-8 px-6 py-8">
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {backLink && (
@@ -33,9 +33,9 @@ export const ContentLayout: React.FC<ContentLayoutProps> = ({
           <h1 className="text-3xl font-semibold">{title}</h1>
         </div>
 
-        {Icon && <Icon />}
+        {Icon && Icon}
       </header>
-      <main className="">{children}</main>
+      <main className="h-full">{children}</main>
     </div>
   );
 };

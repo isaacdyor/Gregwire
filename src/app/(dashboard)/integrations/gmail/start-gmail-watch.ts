@@ -3,7 +3,10 @@ import { api } from "@/trpc/server";
 import { gmail_v1 } from "@googleapis/gmail";
 import { OAuth2Client, type Credentials } from "google-auth-library";
 
-export async function connectGmail(userId: string, credentials: Credentials) {
+export async function startGmailWatch(
+  userId: string,
+  credentials: Credentials,
+) {
   // 1. Set up OAuth2 client
   const oauth2Client = new OAuth2Client(
     env.GOOGLE_CLIENT_ID,
