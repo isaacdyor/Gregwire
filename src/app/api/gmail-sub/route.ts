@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
     // Parse the decoded data as JSON
-    const jsonData = JSON.parse(decodedData);
+    const jsonData: unknown = JSON.parse(decodedData);
 
     // Validate the parsed data against MessageDataSchema
     const validatedData = MessageDataSchema.parse(jsonData);
@@ -48,6 +48,11 @@ export async function POST(req: NextRequest) {
         },
       },
       integrationId: validatedData.emailAddress,
+    });
+
+    void logtail.info("Created New Email", {
+      newEmail,
+      timestamp: new Date().toISOString(),
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
