@@ -2,6 +2,7 @@ import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import { getMessage } from "./get-message";
 
 const PubSubMessageSchema = z.object({
   message: z.object({
@@ -22,47 +23,38 @@ export async function POST(req: NextRequest) {
     // Parse the JSON body
     const rawBody: unknown = await req.json();
 
-    void logtail.info("Received req", {
-      rawBody,
-      timestamp: new Date().toISOString(),
-    });
-
     const body = PubSubMessageSchema.parse(rawBody);
-
-    void logtail.info("Parsed Request", {
-      body,
-      timestamp: new Date().toISOString(),
-    });
 
     const existingMessage = await api.emails.getByMessageId(
       body.message.messageId,
     );
 
     if (existingMessage) {
-      void logtail.info("Duplicate message received, skipping processing", {
-        messageId: body.message.messageId,
-        timestamp: new Date().toISOString(),
-      });
       return NextResponse.json(
         { success: true, duplicate: true },
         { status: 200 },
       );
     }
 
-    void logtail.info("Before Decode", {
-      timestamp: new Date().toISOString(),
-    });
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
-    void logtail.info("Parsed message", {
-      decodedData,
-      timestamp: new Date().toISOString(),
-    });
     // Parse the decoded data as JSON
     const jsonData: unknown = JSON.parse(decodedData);
 
     // Validate the parsed data against MessageDataSchema
     const validatedData = MessageDataSchema.parse(jsonData);
+
+    void logtail.info("Before getMessage call", {
+      historyId: validatedData.historyId,
+      timestamp: new Date().toISOString(),
+    });
+
+    await getMessage(String(validatedData.historyId));
+
+    void logtail.info("After getMessage call", {
+      historyId: validatedData.historyId,
+      timestamp: new Date().toISOString(),
+    });
 
     const newEmail = await api.emails.create({
       email: {
@@ -79,15 +71,9 @@ export async function POST(req: NextRequest) {
       integrationEmail: validatedData.emailAddress,
     });
 
-    void logtail.info("Created New Email", {
-      newEmail,
-      timestamp: new Date().toISOString(),
-    });
-
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error processing request:", error);
-    void logtail.error("Error processing request", { error });
 
     // Even if there's an error, we return a 200 status to prevent Pub/Sub from retrying
     return NextResponse.json(

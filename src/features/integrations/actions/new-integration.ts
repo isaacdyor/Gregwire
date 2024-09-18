@@ -7,13 +7,11 @@ import { env } from "@/env";
 export async function integrateGmail() {
   const startTime = Date.now();
   try {
-    console.time("OAuth2Client initialization");
     const oauth2Client = new OAuth2Client(
       env.GOOGLE_CLIENT_ID,
       env.GOOGLE_CLIENT_SECRET,
       `${env.NEXT_PUBLIC_APP_URL}/integrations/gmail`,
     );
-    console.timeEnd("OAuth2Client initialization");
 
     const scopes = [
       "https://www.googleapis.com/auth/gmail.readonly",

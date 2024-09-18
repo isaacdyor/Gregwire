@@ -1,4 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { EmailCreateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
@@ -8,18 +12,18 @@ const CreateEmailInputSchema = z.object({
 });
 
 export const emailsRouter = createTRPCRouter({
-  getAll: publicProcedure
-    .input(z.string())
-    .query(async ({ ctx, input: integrationId }) => {
-      return ctx.db.email.findMany({
-        where: {
-          integrationId: integrationId,
+  getAll: privateProcedure.query(async ({ ctx }) => {
+    return ctx.db.email.findMany({
+      where: {
+        integration: {
+          userId: ctx.user.id,
         },
-        orderBy: {
-          receivedAt: "desc",
-        },
-      });
-    }),
+      },
+      orderBy: {
+        receivedAt: "desc",
+      },
+    });
+  }),
 
   getByMessageId: publicProcedure
     .input(z.string())

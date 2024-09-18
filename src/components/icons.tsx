@@ -2,6 +2,7 @@ import {
   Compass,
   Home,
   Key,
+  Mail,
   MessageCircle,
   Settings,
   Usb,
@@ -18,6 +19,7 @@ export const Icons = {
   usb: Usb,
   workflow: Workflow,
   home: Home,
+  mail: Mail,
 };
 
 export type IconName = keyof typeof Icons;

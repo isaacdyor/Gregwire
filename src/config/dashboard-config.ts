@@ -1,4 +1,12 @@
-export const dashboardConfig = [
+import { type IconName } from "@/components/icons";
+
+interface DashboardItem {
+  label: string;
+  url: string;
+  icon: IconName;
+}
+
+export const dashboardConfig: DashboardItem[] = [
   {
     label: "Dashboard",
     url: "/dashboard",
@@ -15,9 +23,9 @@ export const dashboardConfig = [
     icon: "usb",
   },
   {
-    label: "Messages",
-    url: "/messages",
-    icon: "chat",
+    label: "Emails",
+    url: "/emails",
+    icon: "mail",
   },
   {
     label: "Settings",
