@@ -2,7 +2,7 @@ import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { getMessage } from "./get-message";
+import { processHistory } from "./process-history";
 
 const PubSubMessageSchema = z.object({
   message: z.object({
@@ -29,12 +29,12 @@ export async function POST(req: NextRequest) {
       body.message.messageId,
     );
 
-    // if (existingMessage) {
-    //   return NextResponse.json(
-    //     { success: true, duplicate: true },
-    //     { status: 200 },
-    //   );
-    // }
+    if (existingMessage) {
+      return NextResponse.json(
+        { success: true, duplicate: true },
+        { status: 200 },
+      );
+    }
 
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
@@ -49,14 +49,13 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    await getMessage(validatedData.historyId, validatedData.emailAddress);
+    await processHistory(validatedData.historyId, validatedData.emailAddress);
 
     void logtail.info("After getMessage call", {
       historyId: validatedData.historyId,
       timestamp: new Date().toISOString(),
     });
 
-    // const newEmail = await api.emails.create({
     //   email: {
     //     historyId: String(validatedData.historyId),
     //     messageId: body.message.messageId,

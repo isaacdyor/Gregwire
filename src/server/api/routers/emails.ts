@@ -40,8 +40,11 @@ export const emailsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.email.create({
         data: {
-          historyId: input.email.historyId,
           messageId: input.email.messageId,
+          subject: input.email.subject,
+          from: input.email.from,
+          date: input.email.date,
+          body: input.email.body,
           receivedAt: input.email.receivedAt ?? new Date(),
           processed: input.email.processed ?? false,
           integration: {

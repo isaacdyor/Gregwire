@@ -2,7 +2,7 @@ import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
 
-export async function getMessages(historyId: string, email: string) {
+export async function processHistory(historyId: string, email: string) {
   try {
     const integration = await api.integrations.getByEmail({ email });
 
@@ -34,6 +34,7 @@ export async function getMessages(historyId: string, email: string) {
 
       for (const message of historyItem.messages) {
         if (!message.id) continue;
+        console.log("WEEEEEOOOOOOOOW");
 
         // Fetch full message details
         const fullMessage = await gmail.users.messages.get({
@@ -83,6 +84,24 @@ export async function getMessages(historyId: string, email: string) {
           body,
           timestamp: new Date().toISOString(),
         });
+        const newEmail = await api.emails.create({
+          email: {
+            messageId: message.id,
+            subject,
+            from,
+            date: new Date(date),
+            body,
+            receivedAt: new Date(),
+            processed: false,
+            integration: {
+              connect: {
+                email,
+              },
+            },
+          },
+          integrationEmail: email,
+        });
+        void logtail.info("Created new email", { newEmail });
       }
     }
   } catch (error) {

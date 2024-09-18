@@ -59,14 +59,17 @@ model Integration {
   genericType     GenericType      
   metadata        Json?
   user            User              @relation("UserIntegrations", fields: [userId], references: [id], onDelete: Cascade)
-  emails    Email[]     @relation("IntegrationEmails")
+  emails          Email[]     @relation("IntegrationEmails")
 }
 
 model Email {
   id            String      @id @default(uuid())
   messageId     String      @unique
   integrationId String
-  historyId     String
+  subject       String?
+  from          String?
+  date          DateTime?
+  body          String?     @db.Text
   receivedAt    DateTime    @default(now())
   processed     Boolean     @default(false)
   integration   Integration @relation("IntegrationEmails", fields: [integrationId], references: [id], onDelete: Cascade)

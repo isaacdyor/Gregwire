@@ -60,7 +60,7 @@ export const UserScalarFieldEnumSchema = z.enum(['id','name','createdAt','update
 
 export const IntegrationScalarFieldEnumSchema = z.enum(['id','userId','email','type','providerUserId','accessToken','refreshToken','tokenExpiration','watchExpiration','recentHistoryId','scopes','createdAt','lastUsedAt','lastRefreshedAt','status','genericType','metadata']);
 
-export const EmailScalarFieldEnumSchema = z.enum(['id','messageId','integrationId','historyId','receivedAt','processed']);
+export const EmailScalarFieldEnumSchema = z.enum(['id','messageId','integrationId','subject','from','date','body','receivedAt','processed']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -135,7 +135,10 @@ export const EmailSchema = z.object({
   id: z.string(),
   messageId: z.string(),
   integrationId: z.string(),
-  historyId: z.string(),
+  subject: z.string().nullable(),
+  from: z.string().nullable(),
+  date: z.coerce.date().nullable(),
+  body: z.string().nullable(),
   receivedAt: z.coerce.date(),
   processed: z.boolean(),
 })
@@ -237,7 +240,10 @@ export const EmailSelectSchema: z.ZodType<Prisma.EmailSelect> = z.object({
   id: z.boolean().optional(),
   messageId: z.boolean().optional(),
   integrationId: z.boolean().optional(),
-  historyId: z.boolean().optional(),
+  subject: z.boolean().optional(),
+  from: z.boolean().optional(),
+  date: z.boolean().optional(),
+  body: z.boolean().optional(),
   receivedAt: z.boolean().optional(),
   processed: z.boolean().optional(),
   integration: z.union([z.boolean(),z.lazy(() => IntegrationArgsSchema)]).optional(),
@@ -438,7 +444,10 @@ export const EmailWhereInputSchema: z.ZodType<Prisma.EmailWhereInput> = z.object
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   messageId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  historyId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  from: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  date: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  body: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   integration: z.union([ z.lazy(() => IntegrationRelationFilterSchema),z.lazy(() => IntegrationWhereInputSchema) ]).optional(),
@@ -448,7 +457,10 @@ export const EmailOrderByWithRelationInputSchema: z.ZodType<Prisma.EmailOrderByW
   id: z.lazy(() => SortOrderSchema).optional(),
   messageId: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
-  historyId: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  from: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  date: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  body: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional(),
   integration: z.lazy(() => IntegrationOrderByWithRelationInputSchema).optional()
@@ -473,7 +485,10 @@ export const EmailWhereUniqueInputSchema: z.ZodType<Prisma.EmailWhereUniqueInput
   OR: z.lazy(() => EmailWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => EmailWhereInputSchema),z.lazy(() => EmailWhereInputSchema).array() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  historyId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  from: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  date: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  body: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   integration: z.union([ z.lazy(() => IntegrationRelationFilterSchema),z.lazy(() => IntegrationWhereInputSchema) ]).optional(),
@@ -483,7 +498,10 @@ export const EmailOrderByWithAggregationInputSchema: z.ZodType<Prisma.EmailOrder
   id: z.lazy(() => SortOrderSchema).optional(),
   messageId: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
-  historyId: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  from: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  date: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  body: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => EmailCountOrderByAggregateInputSchema).optional(),
@@ -498,7 +516,10 @@ export const EmailScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.EmailSc
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   messageId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  historyId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  from: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  date: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
+  body: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
 }).strict();
@@ -702,7 +723,10 @@ export const IntegrationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Integra
 export const EmailCreateInputSchema: z.ZodType<Prisma.EmailCreateInput> = z.object({
   id: z.string().optional(),
   messageId: z.string(),
-  historyId: z.string(),
+  subject: z.string().optional().nullable(),
+  from: z.string().optional().nullable(),
+  date: z.coerce.date().optional().nullable(),
+  body: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional(),
   integration: z.lazy(() => IntegrationCreateNestedOneWithoutEmailsInputSchema)
@@ -712,7 +736,10 @@ export const EmailUncheckedCreateInputSchema: z.ZodType<Prisma.EmailUncheckedCre
   id: z.string().optional(),
   messageId: z.string(),
   integrationId: z.string(),
-  historyId: z.string(),
+  subject: z.string().optional().nullable(),
+  from: z.string().optional().nullable(),
+  date: z.coerce.date().optional().nullable(),
+  body: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -720,7 +747,10 @@ export const EmailUncheckedCreateInputSchema: z.ZodType<Prisma.EmailUncheckedCre
 export const EmailUpdateInputSchema: z.ZodType<Prisma.EmailUpdateInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   integration: z.lazy(() => IntegrationUpdateOneRequiredWithoutEmailsNestedInputSchema).optional()
@@ -730,7 +760,10 @@ export const EmailUncheckedUpdateInputSchema: z.ZodType<Prisma.EmailUncheckedUpd
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integrationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -739,7 +772,10 @@ export const EmailCreateManyInputSchema: z.ZodType<Prisma.EmailCreateManyInput> 
   id: z.string().optional(),
   messageId: z.string(),
   integrationId: z.string(),
-  historyId: z.string(),
+  subject: z.string().optional().nullable(),
+  from: z.string().optional().nullable(),
+  date: z.coerce.date().optional().nullable(),
+  body: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -747,7 +783,10 @@ export const EmailCreateManyInputSchema: z.ZodType<Prisma.EmailCreateManyInput> 
 export const EmailUpdateManyMutationInputSchema: z.ZodType<Prisma.EmailUpdateManyMutationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -756,7 +795,10 @@ export const EmailUncheckedUpdateManyInputSchema: z.ZodType<Prisma.EmailUnchecke
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integrationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -1092,7 +1134,10 @@ export const EmailCountOrderByAggregateInputSchema: z.ZodType<Prisma.EmailCountO
   id: z.lazy(() => SortOrderSchema).optional(),
   messageId: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
-  historyId: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  from: z.lazy(() => SortOrderSchema).optional(),
+  date: z.lazy(() => SortOrderSchema).optional(),
+  body: z.lazy(() => SortOrderSchema).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1101,7 +1146,10 @@ export const EmailMaxOrderByAggregateInputSchema: z.ZodType<Prisma.EmailMaxOrder
   id: z.lazy(() => SortOrderSchema).optional(),
   messageId: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
-  historyId: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  from: z.lazy(() => SortOrderSchema).optional(),
+  date: z.lazy(() => SortOrderSchema).optional(),
+  body: z.lazy(() => SortOrderSchema).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1110,7 +1158,10 @@ export const EmailMinOrderByAggregateInputSchema: z.ZodType<Prisma.EmailMinOrder
   id: z.lazy(() => SortOrderSchema).optional(),
   messageId: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
-  historyId: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  from: z.lazy(() => SortOrderSchema).optional(),
+  date: z.lazy(() => SortOrderSchema).optional(),
+  body: z.lazy(() => SortOrderSchema).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1601,7 +1652,10 @@ export const UserCreateOrConnectWithoutIntegrationsInputSchema: z.ZodType<Prisma
 export const EmailCreateWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailCreateWithoutIntegrationInput> = z.object({
   id: z.string().optional(),
   messageId: z.string(),
-  historyId: z.string(),
+  subject: z.string().optional().nullable(),
+  from: z.string().optional().nullable(),
+  date: z.coerce.date().optional().nullable(),
+  body: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -1609,7 +1663,10 @@ export const EmailCreateWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailCre
 export const EmailUncheckedCreateWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailUncheckedCreateWithoutIntegrationInput> = z.object({
   id: z.string().optional(),
   messageId: z.string(),
-  historyId: z.string(),
+  subject: z.string().optional().nullable(),
+  from: z.string().optional().nullable(),
+  date: z.coerce.date().optional().nullable(),
+  body: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -1672,7 +1729,10 @@ export const EmailScalarWhereInputSchema: z.ZodType<Prisma.EmailScalarWhereInput
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   messageId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  historyId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  from: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  date: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  body: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
 }).strict();
@@ -1854,7 +1914,10 @@ export const IntegrationUncheckedUpdateManyWithoutUserInputSchema: z.ZodType<Pri
 export const EmailCreateManyIntegrationInputSchema: z.ZodType<Prisma.EmailCreateManyIntegrationInput> = z.object({
   id: z.string().optional(),
   messageId: z.string(),
-  historyId: z.string(),
+  subject: z.string().optional().nullable(),
+  from: z.string().optional().nullable(),
+  date: z.coerce.date().optional().nullable(),
+  body: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -1862,7 +1925,10 @@ export const EmailCreateManyIntegrationInputSchema: z.ZodType<Prisma.EmailCreate
 export const EmailUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailUpdateWithoutIntegrationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -1870,7 +1936,10 @@ export const EmailUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailUpd
 export const EmailUncheckedUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailUncheckedUpdateWithoutIntegrationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -1878,7 +1947,10 @@ export const EmailUncheckedUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma
 export const EmailUncheckedUpdateManyWithoutIntegrationInputSchema: z.ZodType<Prisma.EmailUncheckedUpdateManyWithoutIntegrationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messageId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  historyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  from: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  body: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
