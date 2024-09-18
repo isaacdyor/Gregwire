@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { OAuth2Client } from "google-auth-library";
-import { env } from "@/env";
 import { logtail } from "@/config/logtail-config";
+import { env } from "@/env";
 import { api } from "@/trpc/server";
+import { OAuth2Client } from "google-auth-library";
+import { type NextRequest, NextResponse } from "next/server";
 import { startGmailWatch } from "./start-gmail-watch";
 
 export async function GET(request: NextRequest) {
@@ -16,14 +16,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const oauth2Client = new OAuth2Client(
+    const auth = new OAuth2Client(
       env.GOOGLE_CLIENT_ID,
       env.GOOGLE_CLIENT_SECRET,
       `${env.NEXT_PUBLIC_APP_URL}/integrations/gmail`,
     );
 
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+    const { tokens } = await auth.getToken(code);
+    auth.setCredentials(tokens);
 
     await logtail.info("Successfully generated tokens", {
       tokens,

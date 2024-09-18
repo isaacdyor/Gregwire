@@ -1,8 +1,13 @@
-import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import {
   IntegrationCreateInputSchema,
   IntegrationUpdateInputSchema,
 } from "prisma/generated/zod";
+import { z } from "zod";
 
 export const integrationsRouter = createTRPCRouter({
   create: privateProcedure
@@ -54,4 +59,14 @@ export const integrationsRouter = createTRPCRouter({
       },
     });
   }),
+
+  getByEmail: publicProcedure
+    .input(z.object({ email: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.integration.findUnique({
+        where: {
+          email: input.email,
+        },
+      });
+    }),
 });

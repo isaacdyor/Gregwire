@@ -1,24 +1,25 @@
 import { logtail } from "@/config/logtail-config";
-import { OAuth2Client } from "google-auth-library";
-import { google } from "googleapis";
-import { NextResponse } from "next/server";
-import { env } from "process";
+import { api } from "@/trpc/server";
+import { getGmailClient } from "@/utils/gmail";
 
-export async function getMessage(historyId: string) {
+export async function getMessage(historyId: string, email: string) {
   try {
     void logtail.info("Called get message", {
       timestamp: new Date().toISOString(),
     });
-    // Set up Gmail API client
-    const auth = new OAuth2Client(
-      env.GOOGLE_CLIENT_ID,
-      env.GOOGLE_CLIENT_SECRET,
-      `${env.NEXT_PUBLIC_APP_URL}/integrations/gmail`,
-    );
-    // You need to set up authentication here, e.g., using a service account or user credentials
-    // auth.setCredentials(...);
 
-    const gmail = google.gmail({ version: "v1", auth });
+    const integration = await api.integrations.getByEmail({ email });
+
+    if (!integration?.refreshToken) {
+      console.error("No refresh token:", email);
+      void logtail.error("Integration not found for email", { email });
+      return;
+    }
+
+    const gmail = getGmailClient({
+      refreshToken: integration.refreshToken,
+      accessToken: integration.accessToken,
+    });
 
     // Fetch history
     const history = await gmail.users.history.list({

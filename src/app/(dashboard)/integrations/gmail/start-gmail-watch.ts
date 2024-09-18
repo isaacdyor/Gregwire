@@ -1,22 +1,15 @@
 import { logtail } from "@/config/logtail-config";
-import { env } from "@/env";
 import { api } from "@/trpc/server";
+import { getOAuth2Client } from "@/utils/oauth2-client";
 import { gmail_v1 } from "@googleapis/gmail";
-import { OAuth2Client, type Credentials } from "google-auth-library";
+import { type Credentials } from "google-auth-library";
 
 export async function startGmailWatch(
   userId: string,
   credentials: Credentials,
 ) {
   // 1. Set up OAuth2 client
-  const oauth2Client = new OAuth2Client(
-    env.GOOGLE_CLIENT_ID,
-    env.GOOGLE_CLIENT_SECRET,
-    `${env.NEXT_PUBLIC_APP_URL}/integrations/gmail`,
-  );
-
-  // 2. Set credentials (assuming you've already obtained these)
-  oauth2Client.setCredentials(credentials);
+  const oauth2Client = getOAuth2Client(credentials);
 
   // 3. Set up Gmail watch
   const gmailClient = new gmail_v1.Gmail({

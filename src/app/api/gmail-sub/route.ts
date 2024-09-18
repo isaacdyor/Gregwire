@@ -15,7 +15,7 @@ const PubSubMessageSchema = z.object({
 
 const MessageDataSchema = z.object({
   emailAddress: z.string(),
-  historyId: z.number(),
+  historyId: z.coerce.string(),
 });
 
 export async function POST(req: NextRequest) {
@@ -29,12 +29,12 @@ export async function POST(req: NextRequest) {
       body.message.messageId,
     );
 
-    if (existingMessage) {
-      return NextResponse.json(
-        { success: true, duplicate: true },
-        { status: 200 },
-      );
-    }
+    // if (existingMessage) {
+    //   return NextResponse.json(
+    //     { success: true, duplicate: true },
+    //     { status: 200 },
+    //   );
+    // }
 
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    await getMessage(String(validatedData.historyId));
+    await getMessage(validatedData.historyId, validatedData.emailAddress);
 
     void logtail.info("After getMessage call", {
       historyId: validatedData.historyId,
