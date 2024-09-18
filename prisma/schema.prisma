@@ -50,6 +50,7 @@ model Integration {
   refreshToken    String?
   tokenExpiration DateTime
   watchExpiration DateTime?
+  recentHistoryId String?
   scopes          String[]
   createdAt       DateTime          @default(now())
   lastUsedAt      DateTime?

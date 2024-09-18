@@ -63,6 +63,7 @@ export const integrationsRouter = createTRPCRouter({
   getByEmail: publicProcedure
     .input(z.object({ email: z.string() }))
     .query(async ({ ctx, input }) => {
+      console.log("getByEmail", input);
       return ctx.db.integration.findUnique({
         where: {
           email: input.email,

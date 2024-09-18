@@ -56,20 +56,20 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    const newEmail = await api.emails.create({
-      email: {
-        historyId: String(validatedData.historyId),
-        messageId: body.message.messageId,
-        receivedAt: new Date(),
-        processed: false,
-        integration: {
-          connect: {
-            id: "", // plug in integration email directly
-          },
-        },
-      },
-      integrationEmail: validatedData.emailAddress,
-    });
+    // const newEmail = await api.emails.create({
+    //   email: {
+    //     historyId: String(validatedData.historyId),
+    //     messageId: body.message.messageId,
+    //     receivedAt: new Date(),
+    //     processed: false,
+    //     integration: {
+    //       connect: {
+    //         id: "", // << this is fine we plug in integration email directly
+    //       },
+    //     },
+    //   },
+    //   integrationEmail: validatedData.emailAddress,
+    // });
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

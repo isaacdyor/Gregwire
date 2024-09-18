@@ -1,7 +1,9 @@
-export default async function Home() {
+import { Dashboard } from "@/features/dashboard/components";
+
+export default async function DashboardPage() {
   return (
     <div>
-      <p>hello world</p>
+      <Dashboard />
     </div>
   );
 }

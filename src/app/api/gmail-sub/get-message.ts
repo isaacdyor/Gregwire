@@ -2,12 +2,8 @@ import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
 
-export async function getMessage(historyId: string, email: string) {
+export async function getMessages(historyId: string, email: string) {
   try {
-    void logtail.info("Called get message", {
-      timestamp: new Date().toISOString(),
-    });
-
     const integration = await api.integrations.getByEmail({ email });
 
     if (!integration?.refreshToken) {
