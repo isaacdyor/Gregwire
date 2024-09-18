@@ -36,7 +36,7 @@ export async function startGmailWatch(
     // 4. Store watch expiration
     const expirationTime = new Date(parseInt(res.data.expiration!));
 
-    await api.integrations.update({
+    await api.integrations.updateCurrentUser({
       id: userId,
       watchExpiration: expirationTime,
     });
