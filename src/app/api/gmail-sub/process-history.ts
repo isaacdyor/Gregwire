@@ -28,6 +28,11 @@ export async function processHistory(historyId: string, email: string) {
       startHistoryId: historyId,
     });
 
+    void logtail.info("Here is the history", {
+      history,
+      timestamp: new Date().toISOString(),
+    });
+
     if (!history.data.history) {
       console.log("No new changes found");
       return;
@@ -39,7 +44,6 @@ export async function processHistory(historyId: string, email: string) {
 
       for (const message of historyItem.messages) {
         if (!message.id) continue;
-        console.log("WEEEEEOOOOOOOOW");
 
         // Fetch full message details
         const fullMessage = await gmail.users.messages.get({
