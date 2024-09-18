@@ -16,7 +16,7 @@ export const MainNav: React.FC = () => {
 
   const sidebarItems = useMemo(() => {
     return dashboardConfig.map((item) => {
-      const Icon = Icons[item.icon as keyof typeof Icons];
+      const Icon = Icons[item.icon];
       return (
         <Link
           href={item.url}

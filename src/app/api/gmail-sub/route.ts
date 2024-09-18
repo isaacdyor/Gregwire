@@ -1,5 +1,4 @@
 import { logtail } from "@/config/logtail-config";
-import { api } from "@/trpc/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { processHistory } from "./process-history";
@@ -25,16 +24,16 @@ export async function POST(req: NextRequest) {
 
     const body = PubSubMessageSchema.parse(rawBody);
 
-    const existingMessage = await api.emails.getByMessageId(
-      body.message.messageId,
-    );
+    // const existingMessage = await api.emails.getByMessageId(
+    //   body.message.messageId,
+    // );
 
-    if (existingMessage) {
-      return NextResponse.json(
-        { success: true, duplicate: true },
-        { status: 200 },
-      );
-    }
+    // if (existingMessage) {
+    //   return NextResponse.json(
+    //     { success: true, duplicate: true },
+    //     { status: 200 },
+    //   );
+    // }
 
     const decodedData = Buffer.from(body.message.data, "base64").toString();
 
