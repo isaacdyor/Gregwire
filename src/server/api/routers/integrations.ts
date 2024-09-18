@@ -9,6 +9,11 @@ import {
 } from "prisma/generated/zod";
 import { z } from "zod";
 
+const UpdateIntegrationInputSchema = z.object({
+  integration: IntegrationUpdateInputSchema,
+  integrationId: z.string(),
+});
+
 export const integrationsRouter = createTRPCRouter({
   create: privateProcedure
     .input(IntegrationCreateInputSchema)
@@ -20,6 +25,7 @@ export const integrationsRouter = createTRPCRouter({
           accessToken: input.accessToken,
           refreshToken: input.refreshToken,
           tokenExpiration: input.tokenExpiration,
+          recentHistoryId: input.recentHistoryId,
           scopes: input.scopes,
           createdAt: input.createdAt,
           lastUsedAt: input.lastUsedAt,
@@ -35,8 +41,17 @@ export const integrationsRouter = createTRPCRouter({
         },
       });
     }),
+  update: publicProcedure
+    .input(UpdateIntegrationInputSchema)
+    .mutation(async ({ input, ctx }) => {
+      const updatedIntegration = await ctx.db.integration.update({
+        where: { id: input.integrationId },
+        data: input.integration,
+      });
 
-  update: privateProcedure
+      return updatedIntegration;
+    }),
+  updateCurrentUser: privateProcedure
     .input(IntegrationUpdateInputSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, ...updateData } = input;

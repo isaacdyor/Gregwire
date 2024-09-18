@@ -4,6 +4,7 @@ import { api } from "@/trpc/server";
 import { OAuth2Client } from "google-auth-library";
 import { type NextRequest, NextResponse } from "next/server";
 import { startGmailWatch } from "./start-gmail-watch";
+import { getGmailClient } from "@/utils/gmail";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -25,6 +26,16 @@ export async function GET(request: NextRequest) {
     const { tokens } = await auth.getToken(code);
     auth.setCredentials(tokens);
 
+    const gmail = getGmailClient({
+      accessToken: tokens.access_token ?? undefined,
+      refreshToken: tokens.refresh_token ?? undefined,
+    });
+
+    const userProfile = await gmail.users.getProfile({
+      userId: "me",
+    });
+    const initialHistoryId = userProfile.data.historyId;
+
     await logtail.info("Successfully generated tokens", {
       tokens,
       timestamp: new Date().toISOString(),
@@ -38,6 +49,7 @@ export async function GET(request: NextRequest) {
       type: "GMAIL",
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token ?? null,
+      recentHistoryId: initialHistoryId ?? "",
       tokenExpiration: new Date(tokens.expiry_date),
       status: "ACTIVE",
       genericType: "EMAIL",

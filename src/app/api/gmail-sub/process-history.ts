@@ -25,7 +25,14 @@ export async function processHistory(historyId: string, email: string) {
     // Fetch history
     const history = await gmail.users.history.list({
       userId: "me",
-      startHistoryId: historyId,
+      startHistoryId: integration.recentHistoryId,
+    });
+
+    await api.integrations.update({
+      integration: {
+        recentHistoryId: historyId,
+      },
+      integrationId: integration.id,
     });
 
     void logtail.info("Here is the history", {
