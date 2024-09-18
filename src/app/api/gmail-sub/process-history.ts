@@ -4,6 +4,11 @@ import { getGmailClient } from "@/utils/gmail";
 
 export async function processHistory(historyId: string, email: string) {
   try {
+    void logtail.info("Proccess history called", {
+      historyId,
+      timestamp: new Date().toISOString(),
+    });
+
     const integration = await api.integrations.getByEmail({ email });
 
     if (!integration?.refreshToken) {

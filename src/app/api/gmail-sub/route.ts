@@ -50,11 +50,6 @@ export async function POST(req: NextRequest) {
 
     await processHistory(validatedData.historyId, validatedData.emailAddress);
 
-    void logtail.info("After getMessage call", {
-      historyId: validatedData.historyId,
-      timestamp: new Date().toISOString(),
-    });
-
     //   email: {
     //     historyId: String(validatedData.historyId),
     //     messageId: body.message.messageId,
