@@ -24,6 +24,11 @@ export async function POST(req: NextRequest) {
 
     const body = PubSubMessageSchema.parse(rawBody);
 
+    void logtail.info("Request", {
+      body,
+      timestamp: new Date().toISOString(),
+    });
+
     // const existingMessage = await api.emails.getByMessageId(
     //   body.message.messageId,
     // );
