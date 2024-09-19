@@ -25,7 +25,6 @@ export async function processHistory(
       accessToken: integration.accessToken,
     });
 
-    // Fetch history
     const history = await gmail.users.history.list({
       userId: "me",
       startHistoryId: integration.recentHistoryId,
@@ -113,6 +112,7 @@ export async function processHistory(
           },
           integrationEmail: email,
         });
+        console.log(newEmail);
       }
     }
   } catch (error) {
