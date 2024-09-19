@@ -1,15 +1,14 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
-import { Emails } from "@/features/emails/components";
+import { columns } from "@/features/emails/components/columns";
+import { EmailTable } from "@/features/emails/components/data-table";
 import { api } from "@/trpc/server";
 
 export default async function MessagesPage() {
   const emails = await api.emails.getAll();
-  const email = await api.emails.getByMessageId("1234567890");
 
   return (
     <ContentLayout title="Emails">
-      <p>Messageid: {email?.messageId}</p>
-      <Emails emails={emails} />
+      <EmailTable columns={columns} emails={emails} />
     </ContentLayout>
   );
 }
