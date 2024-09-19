@@ -17,11 +17,7 @@ const MessageDataSchema = z.object({
   historyId: z.coerce.string(),
 });
 
-// Move this outside the POST function
-const processingMessages = new Set();
-
 export async function POST(req: NextRequest) {
-  let messageId = ""; // We'll set this properly later
   try {
     console.log("RECEIVED REQUEST");
 
@@ -29,31 +25,36 @@ export async function POST(req: NextRequest) {
     const rawBody: unknown = await req.json();
     const body = PubSubMessageSchema.parse(rawBody);
 
-    messageId = body.message.messageId;
+    const decodedData = Buffer.from(body.message.data, "base64").toString();
+    const jsonData: unknown = JSON.parse(decodedData);
+    const validatedData = MessageDataSchema.parse(jsonData);
 
-    if (processingMessages.has(messageId)) {
+    const integration = await api.integrations.getByEmail({
+      email: validatedData.emailAddress,
+    });
+
+    if (!integration) {
       return NextResponse.json(
-        { success: true, duplicate: true, reason: "in-process" },
+        {
+          success: false,
+          error: "Error occurred, but acknowledged to prevent retry",
+        },
         { status: 200 },
       );
     }
 
-    processingMessages.add(messageId);
-
-    const existingMessage = await api.emails.getByMessageId(messageId);
-
-    if (existingMessage) {
+    if (integration?.recentHistoryId === validatedData.historyId) {
       return NextResponse.json(
         { success: true, duplicate: true, reason: "in-database" },
         { status: 200 },
       );
     }
 
-    const decodedData = Buffer.from(body.message.data, "base64").toString();
-    const jsonData: unknown = JSON.parse(decodedData);
-    const validatedData = MessageDataSchema.parse(jsonData);
-
-    await processHistory(validatedData.historyId, validatedData.emailAddress);
+    await processHistory(
+      validatedData.historyId,
+      validatedData.emailAddress,
+      integration,
+    );
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
@@ -66,10 +67,6 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 },
     );
-  } finally {
-    if (messageId) {
-      processingMessages.delete(messageId);
-    }
   }
 }
 // import { NextResponse, type NextRequest } from "next/server";

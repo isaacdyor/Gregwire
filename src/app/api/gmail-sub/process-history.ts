@@ -1,15 +1,18 @@
 import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
+import { type Integration } from "@prisma/client";
 
-export async function processHistory(historyId: string, email: string) {
+export async function processHistory(
+  historyId: string,
+  email: string,
+  integration: Integration,
+) {
   try {
     void logtail.info("Proccess history called", {
       historyId,
       timestamp: new Date().toISOString(),
     });
-
-    const integration = await api.integrations.getByEmail({ email });
 
     if (!integration?.refreshToken) {
       console.error("No refresh token:", email);
@@ -93,13 +96,6 @@ export async function processHistory(historyId: string, email: string) {
           ).toString("utf-8");
         }
 
-        void logtail.info("PARSED EMAIL", {
-          subject,
-          from,
-          date,
-          body,
-          timestamp: new Date().toISOString(),
-        });
         const newEmail = await api.emails.create({
           email: {
             messageId: message.id,
@@ -117,11 +113,9 @@ export async function processHistory(historyId: string, email: string) {
           },
           integrationEmail: email,
         });
-        void logtail.info("Created new email", { newEmail });
       }
     }
   } catch (error) {
     console.error("Error fetching message:", error);
-    void logtail.error("Error fetching message", { error });
   }
 }
