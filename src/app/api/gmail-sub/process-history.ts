@@ -1,17 +1,11 @@
 import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
-import { type Integration } from "@prisma/client";
 
-export async function processHistory(
-  historyId: string,
-  email: string,
-  integration: Integration,
-) {
+export async function processHistory(historyId: string, email: string) {
   try {
-    void logtail.info("Proccess history called", {
-      historyId,
-      timestamp: new Date().toISOString(),
+    const integration = await api.integrations.getByEmail({
+      email,
     });
 
     if (!integration?.refreshToken) {
@@ -94,7 +88,10 @@ export async function processHistory(
             "base64",
           ).toString("utf-8");
         }
-
+        const emailExists = await api.emails.getByMessageId(message.id);
+        if (emailExists) {
+          return console.log("Email already exists");
+        }
         const newEmail = await api.emails.create({
           email: {
             messageId: message.id,
