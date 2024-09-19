@@ -1,4 +1,3 @@
-import { logtail } from "@/config/logtail-config";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { processHistory } from "./process-history";
@@ -18,15 +17,19 @@ const MessageDataSchema = z.object({
   historyId: z.coerce.string(),
 });
 
+// Move this outside the POST function
+const processingMessages = new Set();
+
 export async function POST(req: NextRequest) {
+  let messageId = ""; // We'll set this properly later
   try {
-    console.log("RECIEVED REQUEST");
-    const processingMessages = new Set();
+    console.log("RECEIVED REQUEST");
+
     // Parse the JSON body
     const rawBody: unknown = await req.json();
-
     const body = PubSubMessageSchema.parse(rawBody);
-    const messageId = body.message.messageId;
+
+    messageId = body.message.messageId;
 
     if (processingMessages.has(messageId)) {
       return NextResponse.json(
@@ -41,17 +44,13 @@ export async function POST(req: NextRequest) {
 
     if (existingMessage) {
       return NextResponse.json(
-        { success: true, duplicate: true },
+        { success: true, duplicate: true, reason: "in-database" },
         { status: 200 },
       );
     }
 
     const decodedData = Buffer.from(body.message.data, "base64").toString();
-
-    // Parse the decoded data as JSON
     const jsonData: unknown = JSON.parse(decodedData);
-
-    // Validate the parsed data against MessageDataSchema
     const validatedData = MessageDataSchema.parse(jsonData);
 
     await processHistory(validatedData.historyId, validatedData.emailAddress);
@@ -67,9 +66,12 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 },
     );
+  } finally {
+    if (messageId) {
+      processingMessages.delete(messageId);
+    }
   }
 }
-
 // import { NextResponse, type NextRequest } from "next/server";
 
 // export async function POST(req: NextRequest) {
