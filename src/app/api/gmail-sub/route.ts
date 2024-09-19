@@ -21,14 +21,23 @@ const MessageDataSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     console.log("RECIEVED REQUEST");
+    const processingMessages = new Set();
     // Parse the JSON body
     const rawBody: unknown = await req.json();
 
     const body = PubSubMessageSchema.parse(rawBody);
+    const messageId = body.message.messageId;
 
-    const existingMessage = await api.emails.getByMessageId(
-      body.message.messageId,
-    );
+    if (processingMessages.has(messageId)) {
+      return NextResponse.json(
+        { success: true, duplicate: true, reason: "in-process" },
+        { status: 200 },
+      );
+    }
+
+    processingMessages.add(messageId);
+
+    const existingMessage = await api.emails.getByMessageId(messageId);
 
     if (existingMessage) {
       return NextResponse.json(
