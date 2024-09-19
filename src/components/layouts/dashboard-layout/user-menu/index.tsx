@@ -33,19 +33,19 @@ export const UserMenu = () => {
       <PopoverTrigger asChild onClick={() => setPopoverOpen(!popoverOpen)}>
         <div
           className={cn(
-            "group flex items-center gap-2 rounded-md px-1 py-1 transition-all duration-300 ease-in-out",
+            "group flex items-center gap-2 rounded-md px-1 py-1 transition-all duration-200 ease-in-out",
             isOpen ? "w-full hover:cursor-pointer hover:bg-secondary" : "w-9",
           )}
         >
           <Avatar
             className={cn(
-              "h-7 w-7 transition-all duration-300 ease-in-out",
+              "h-7 w-7 transition-all duration-200 ease-in-out",
               !isOpen && "hover:cursor-pointer",
             )}
           >
             <AvatarFallback
               className={cn(
-                "border bg-background text-sm transition-colors duration-300 ease-in-out",
+                "border bg-background text-sm transition-colors duration-200 ease-in-out",
                 !isOpen && "hover:bg-secondary",
               )}
             >
@@ -56,7 +56,7 @@ export const UserMenu = () => {
           </Avatar>
           <p
             className={cn(
-              "truncate text-sm text-muted-foreground transition-all duration-300 ease-in-out",
+              "truncate text-sm text-muted-foreground transition-all duration-200 ease-in-out",
               isOpen ? "max-w-[120px] opacity-100" : "max-w-0 opacity-0",
             )}
           >
@@ -64,7 +64,7 @@ export const UserMenu = () => {
           </p>
           <EllipsisIcon
             className={cn(
-              "h-4 w-4 shrink-0 text-muted-foreground transition-all duration-300 ease-in-out",
+              "h-4 w-4 shrink-0 text-muted-foreground transition-all duration-200 ease-in-out",
               isOpen ? "max-w-[16px] opacity-100" : "max-w-0 opacity-0",
             )}
           />

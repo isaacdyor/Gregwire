@@ -1,3 +1,4 @@
+import { timeAgo } from "@/utils/datetime";
 import { type Email } from "@prisma/client";
 
 export const Emails: React.FC<{ emails: Email[] }> = ({ emails }) => {
@@ -7,6 +8,7 @@ export const Emails: React.FC<{ emails: Email[] }> = ({ emails }) => {
         <div key={email.id}>
           <p>{email.subject}</p>
           <p className="text-xs text-muted-foreground">{email.from}</p>
+          <p>{timeAgo(email.receivedAt)}</p>
         </div>
       ))}
     </div>

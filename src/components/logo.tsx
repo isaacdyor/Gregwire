@@ -12,7 +12,7 @@ export const Logo: React.FC<{ full?: boolean }> = ({ full = true }) => {
       <div className="flex overflow-hidden">
         <h1
           className={cn(
-            "ml-0 transition-all duration-300 ease-in-out",
+            "ml-0 transition-all duration-200 ease-in-out",
             full
               ? "max-w-[4em] translate-x-0 opacity-100"
               : "max-w-0 -translate-x-2 opacity-0",

@@ -25,15 +25,15 @@ export const emailsRouter = createTRPCRouter({
     });
   }),
 
-  // getByMessageId: publicProcedure
-  //   .input(z.string())
-  //   .query(async ({ ctx, input: messageid }) => {
-  //     return ctx.db.email.findUnique({
-  //       where: {
-  //         messageId: messageid,
-  //       },
-  //     });
-  //   }),
+  getByMessageId: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: messageid }) => {
+      return ctx.db.email.findUnique({
+        where: {
+          messageId: messageid,
+        },
+      });
+    }),
 
   create: publicProcedure
     .input(CreateEmailInputSchema)

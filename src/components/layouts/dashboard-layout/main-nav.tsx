@@ -31,7 +31,7 @@ export const MainNav: React.FC = () => {
             <Icon className="h-5 w-5 flex-shrink-0" />
             <span
               className={cn(
-                "ml-3 transition-all duration-300",
+                "ml-3 transition-all duration-200",
                 isOpen ? "w-auto opacity-100" : "w-0 opacity-0",
               )}
             >
@@ -46,7 +46,7 @@ export const MainNav: React.FC = () => {
   return (
     <div
       className={cn(
-        "absolute z-40 flex h-full bg-background transition-transform duration-300 ease-in-out md:static",
+        "absolute z-40 flex h-full bg-background transition-transform duration-200 ease-in-out md:static",
         "w-52 md:w-auto",
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
       )}
@@ -54,7 +54,7 @@ export const MainNav: React.FC = () => {
       <div className="hidden h-screen w-14 md:block" />
       <div
         className={cn(
-          "absolute z-40 flex h-screen flex-col justify-between border-r bg-background px-2 py-4 transition-all duration-300",
+          "absolute z-40 flex h-screen flex-col justify-between border-r bg-background px-2 py-4 transition-all duration-200",
           isOpen ? "w-52 max-w-52" : "w-14",
         )}
         onMouseEnter={() => setIsOpen(true)}

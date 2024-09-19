@@ -466,15 +466,24 @@ export const EmailOrderByWithRelationInputSchema: z.ZodType<Prisma.EmailOrderByW
   integration: z.lazy(() => IntegrationOrderByWithRelationInputSchema).optional()
 }).strict();
 
-export const EmailWhereUniqueInputSchema: z.ZodType<Prisma.EmailWhereUniqueInput> = z.object({
-  id: z.string()
-})
+export const EmailWhereUniqueInputSchema: z.ZodType<Prisma.EmailWhereUniqueInput> = z.union([
+  z.object({
+    id: z.string(),
+    messageId: z.string()
+  }),
+  z.object({
+    id: z.string(),
+  }),
+  z.object({
+    messageId: z.string(),
+  }),
+])
 .and(z.object({
   id: z.string().optional(),
+  messageId: z.string().optional(),
   AND: z.union([ z.lazy(() => EmailWhereInputSchema),z.lazy(() => EmailWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => EmailWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => EmailWhereInputSchema),z.lazy(() => EmailWhereInputSchema).array() ]).optional(),
-  messageId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   subject: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   from: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),

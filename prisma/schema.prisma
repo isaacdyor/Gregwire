@@ -64,7 +64,7 @@ model Integration {
 
 model Email {
   id            String      @id @default(uuid())
-  messageId     String      
+  messageId     String      @unique    
   integrationId String
   subject       String?
   from          String?
