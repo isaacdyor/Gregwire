@@ -22,8 +22,10 @@ export const MainNav: React.FC = () => {
           href={item.url}
           key={item.label}
           className={cn(
-            "flex h-10 items-center rounded-md px-2.5 text-sm text-muted-foreground hover:bg-secondary",
-            item.url.startsWith(`/${segment}`) ? "bg-secondary" : "",
+            "flex h-10 items-center rounded-md px-2.5 text-sm text-muted-foreground",
+            item.url.startsWith(`/${segment}`)
+              ? "bg-secondary"
+              : "hover:bg-secondary/50",
           )}
           onClick={() => setIsOpen(false)}
         >

@@ -1,4 +1,5 @@
 import {
+  Calendar,
   Compass,
   Home,
   Key,
@@ -20,6 +21,7 @@ export const Icons = {
   workflow: Workflow,
   home: Home,
   mail: Mail,
+  calendar: Calendar,
 };
 
 export type IconName = keyof typeof Icons;

@@ -4,10 +4,32 @@ import { timeAgo } from "@/utils/datetime";
 import { type Email } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 import { truncate, parseFrom } from "@/utils/string";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const columns: ColumnDef<Email>[] = [
   {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+  },
+  {
     accessorKey: "from",
+    header: () => null,
     cell: ({ row }) => {
       const from = row.getValue("from");
       const name = parseFrom(from as string)?.name;
@@ -16,12 +38,14 @@ export const columns: ColumnDef<Email>[] = [
   },
   {
     accessorKey: "subject",
+    header: () => null,
     cell: ({ row }) => (
       <div className="font-medium">{row.getValue("subject")}</div>
     ),
   },
   {
     accessorKey: "body",
+    header: () => null,
     cell: ({ row }) => {
       const body = row.getValue("body");
       return (
@@ -32,10 +56,12 @@ export const columns: ColumnDef<Email>[] = [
     },
   },
   {
-    accessorKey: "recievedAt",
+    accessorKey: "receivedAt",
+    header: () => null,
     cell: ({ row }) => {
-      const recievedAt = row.getValue("recievedAt");
-      return <div className="text-sm">{timeAgo(recievedAt as string)}</div>;
+      const receivedAt = row.getValue("receivedAt");
+      console.log(receivedAt);
+      return <div className="text-sm">{timeAgo(receivedAt as string)}</div>;
     },
   },
 ];

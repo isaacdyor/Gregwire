@@ -14,7 +14,7 @@ export default async function IntegrationsPage() {
       <Link
         href="/integrations/new"
         className={cn(
-          buttonVariants({ variant: "default", size: "sm" }),
+          buttonVariants({ size: "sm" }),
           "flex items-center gap-2",
         )}
       >
@@ -25,7 +25,7 @@ export default async function IntegrationsPage() {
   };
 
   return (
-    <ContentLayout title="Integrations" Icon={<NewIntegrationButton />}>
+    <ContentLayout title="Integrations" Action={<NewIntegrationButton />}>
       <Integrations
         integrations={integrations}
         NewIntegrationButton={<NewIntegrationButton />}

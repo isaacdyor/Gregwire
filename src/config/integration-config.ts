@@ -1,5 +1,6 @@
 import { type LogoName } from "@/components/logos";
-import { integrateGmail } from "@/features/integrations/actions/new-integration";
+import { getGmailAuthlUrl } from "@/features/integrations/actions/get-gmail-url";
+import { getSlackAuthUrl } from "@/features/integrations/actions/get-slack-url";
 import { type IntegrationType } from "@prisma/client";
 
 // Updated IntegrationItem interface
@@ -16,26 +17,22 @@ type IntegrationConfig = IntegrationItem[];
 
 // Mock integration functions
 
-const integrateSlack = async (): Promise<void> => {
-  await new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      if (Math.random() > 0.5) {
-        resolve();
-        console.log("Slack integration completed");
-      } else {
-        reject(new Error("Slack integration failed"));
-      }
-    }, 2000);
-  });
-};
-
 const integrateGoogleCalendar = async (): Promise<void> => {
   await new Promise<void>((resolve) => setTimeout(resolve, 2000));
   console.log("Google Calendar integration completed");
 };
 
-const callIntegrateGmail = async (): Promise<void> => {
-  const result = await integrateGmail();
+type AuthUrlResult = {
+  success: boolean;
+  authorizationUrl?: string;
+};
+
+type GetAuthUrlFunction = () => Promise<AuthUrlResult>;
+
+const integrateService = async (
+  getAuthUrlFn: GetAuthUrlFunction,
+): Promise<void> => {
+  const result = await getAuthUrlFn();
   if (result.success && result.authorizationUrl) {
     console.log("Redirecting to:", result.authorizationUrl);
     window.location.href = result.authorizationUrl;
@@ -49,14 +46,14 @@ export const integrationConfig: IntegrationConfig = [
     title: "Gmail",
     logo: "gmail",
     description: "Integrate your Gmail account to sync emails and contacts.",
-    onIntegrate: callIntegrateGmail,
+    onIntegrate: () => integrateService(getGmailAuthlUrl),
   },
   {
     type: "SLACK",
     title: "Slack",
     logo: "slack",
     description: "Connect your Slack workspace for seamless communication.",
-    onIntegrate: integrateSlack,
+    onIntegrate: () => integrateService(getSlackAuthUrl),
   },
   {
     type: "GOOGLE_CALENDAR",

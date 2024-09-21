@@ -28,6 +28,16 @@ export const dashboardConfig: DashboardItem[] = [
     icon: "mail",
   },
   {
+    label: "Chats",
+    url: "/chats",
+    icon: "chat",
+  },
+  {
+    label: "Events",
+    url: "/events",
+    icon: "calendar",
+  },
+  {
     label: "Settings",
     url: "/settings",
     icon: "settings",

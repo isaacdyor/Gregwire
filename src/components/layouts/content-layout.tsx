@@ -7,14 +7,14 @@ import { buttonVariants } from "../ui/button";
 interface ContentLayoutProps {
   children: ReactNode;
   title: string;
-  Icon?: ReactNode;
+  Action?: ReactNode;
   backLink?: string;
 }
 
 export const ContentLayout: React.FC<ContentLayoutProps> = ({
   children,
   title,
-  Icon,
+  Action,
   backLink,
 }) => {
   return (
@@ -36,7 +36,7 @@ export const ContentLayout: React.FC<ContentLayoutProps> = ({
           <h1 className="text-3xl font-semibold">{title}</h1>
         </div>
 
-        {Icon && Icon}
+        {Action && Action}
       </header>
       <main className="h-full">{children}</main>
     </div>
