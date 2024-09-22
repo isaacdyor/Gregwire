@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 // The client you created from the Server-Side Auth instructions
 import { createClient } from "@/lib/supabase/server";
 import { api } from "@/trpc/server";
+import { env } from "@/env";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/";
+  console.log(env.NEXT_PUBLIC_APP_URL);
 
   if (code) {
     const supabase = createClient();
