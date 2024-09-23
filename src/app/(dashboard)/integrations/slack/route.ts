@@ -27,6 +27,8 @@ export async function GET(request: NextRequest) {
       }),
     });
 
+    console.log("Slack response:", result);
+
     const data = (await result.json()) as {
       ok: boolean;
       error?: string;
@@ -45,6 +47,8 @@ export async function GET(request: NextRequest) {
       throw new Error("Missing required data from Slack response");
     }
 
+    console.log("Slack response:", data);
+
     // Initialize Slack WebClient
     const slack = new WebClient(access_token);
 
@@ -52,6 +56,8 @@ export async function GET(request: NextRequest) {
     const userInfo = await slack.users.info({
       user: authed_user.id,
     });
+
+    console.log("Slack user info:", userInfo);
 
     if (!userInfo.ok) {
       throw new Error("Failed to fetch user info");
@@ -78,6 +84,8 @@ export async function GET(request: NextRequest) {
         userName: userInfo.user?.name,
       }),
     });
+
+    console.log("New integration:", newIntegration);
 
     if (newIntegration) {
       // Here you could set up any initial Slack-specific operations
