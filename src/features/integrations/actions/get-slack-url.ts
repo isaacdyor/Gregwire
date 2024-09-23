@@ -19,7 +19,7 @@ export async function getSlackAuthUrl() {
     authorizationUrl.searchParams.append("scope", scopes);
     authorizationUrl.searchParams.append(
       "redirect_uri",
-      `${"https://f29c-50-147-203-46.ngrok-free.app"}/integrations/slack`,
+      `${env.NEXT_PUBLIC_APP_URL}/integrations/slack`,
     );
 
     const endTime = Date.now();
