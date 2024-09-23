@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
         client_id: env.SLACK_CLIENT_ID,
         client_secret: env.SLACK_CLIENT_SECRET,
         code: code,
-        redirecturi: `${env.NEXT_PUBLIC_APP_URL}/integrations/slack`,
       }),
     });
 
