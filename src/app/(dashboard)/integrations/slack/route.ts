@@ -6,7 +6,7 @@ import { WebClient } from "@slack/web-api";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
-  console.log("code", code);
+  console.log("Full request URL:", request.url);
   if (!code) {
     return NextResponse.redirect(
       new URL("/integrations?error=no_code", request.url),
