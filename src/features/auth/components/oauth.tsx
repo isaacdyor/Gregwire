@@ -27,6 +27,10 @@ export const OAuthProviders: React.FC = () => {
   const supabase = createClient();
 
   const handleLogin = async (provider: Provider) => {
+    console.log(
+      "Redirect URL:",
+      `${env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard`,
+    );
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {

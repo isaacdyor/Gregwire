@@ -4,16 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "b": "next build",
     "db:generate": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "dev": "next dev",
     "d": "next dev",
     "postinstall": "prisma generate",
-    "lint": "next lint",
-    "start": "next start"
+    "l": "next lint",
+    "s": "next start"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^4.7.2",
@@ -30,6 +29,7 @@
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@slack/web-api": "^7.5.0",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.4",
     "@t3-oss/env-nextjs": "^0.10.1",
