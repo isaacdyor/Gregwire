@@ -1,4 +1,3 @@
-import { logtail } from "@/config/logtail-config";
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
 
@@ -8,9 +7,8 @@ export async function processHistory(historyId: string, email: string) {
       email,
     });
 
-    if (!integration?.refreshToken) {
-      console.error("No refresh token:", email);
-      void logtail.error("Integration not found for email", { email });
+    if (!integration?.refreshToken || !integration.recentHistoryId) {
+      console.error("Invalid gmail integration", email);
       return;
     }
 
@@ -29,11 +27,6 @@ export async function processHistory(historyId: string, email: string) {
         recentHistoryId: historyId,
       },
       integrationId: integration.id,
-    });
-
-    void logtail.info("Here is the history", {
-      history,
-      timestamp: new Date().toISOString(),
     });
 
     if (!history.data.history) {
