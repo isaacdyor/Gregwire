@@ -48,9 +48,8 @@ model Integration {
   providerUserId  String?
   accessToken     String
   refreshToken    String?
-  tokenExpiration DateTime
-  watchExpiration DateTime?
-  recentHistoryId String
+  tokenExpiration DateTime?
+  recentHistoryId String?
   scopes          String[]
   createdAt       DateTime          @default(now())
   lastUsedAt      DateTime?

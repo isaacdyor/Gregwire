@@ -68,9 +68,6 @@ export async function GET(request: NextRequest) {
     const newIntegration = await api.integrations.create({
       type: "SLACK",
       accessToken: access_token,
-      refreshToken: null, // Slack doesn't use refresh tokens in the same way as Google
-      recentHistoryId: "", // Slack doesn't have a direct equivalent to Gmail's historyId
-      tokenExpiration: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // Set expiration to 90 days from now
       status: "ACTIVE",
       genericType: "CHAT",
       user: {
