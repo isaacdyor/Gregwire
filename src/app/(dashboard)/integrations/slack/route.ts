@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       team?: { id: string; name: string };
       authed_user?: { id: string };
     };
-
+    console.log("data:", data);
     if (!data.ok) {
       throw new Error(data.error ?? "Failed to exchange code for token");
     }
