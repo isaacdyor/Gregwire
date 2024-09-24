@@ -11,6 +11,11 @@ export async function getSlackAuthUrl() {
       "chat:write",
       "im:history",
       "users:read",
+      "groups:history",
+      "incoming-webhook",
+      "app_mentions:read",
+      "reactions:read",
+      "files:read",
     ].join(",");
 
     // Construct the Slack authorization URL
