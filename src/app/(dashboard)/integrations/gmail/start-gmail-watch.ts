@@ -1,5 +1,4 @@
 import { logtail } from "@/config/logtail-config";
-import { api } from "@/trpc/server";
 import { getClient } from "@/utils/gmail";
 import { gmail_v1 } from "@googleapis/gmail";
 import { type Credentials } from "google-auth-library";
@@ -31,14 +30,6 @@ export async function startGmailWatch(
     void logtail.info("Successfully set up watch", {
       res,
       timestamp: new Date().toISOString(),
-    });
-
-    // 4. Store watch expiration
-    const expirationTime = new Date(parseInt(res.data.expiration!));
-
-    await api.integrations.updateCurrentUser({
-      id: userId,
-      watchExpiration: expirationTime,
     });
 
     console.log("Watch setup successfully", res.data);
