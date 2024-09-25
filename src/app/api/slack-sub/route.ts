@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
 
     // Parse the JSON body
     const rawBody: unknown = await req.json();
+    console.log("Raw body:", rawBody);
     const body = SlackPayloadSchema.parse(rawBody);
 
     console.log("Received Slack payload:", JSON.stringify(body, null, 2));
