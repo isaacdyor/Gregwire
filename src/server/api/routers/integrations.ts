@@ -6,7 +6,6 @@ import {
 import {
   GenericTypeSchema,
   IntegrationCreateInputSchema,
-  IntegrationTypeSchema,
   IntegrationUpdateInputSchema,
 } from "prisma/generated/zod";
 import { z } from "zod";

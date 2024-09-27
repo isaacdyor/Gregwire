@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       type: "SLACK",
       accessToken: access_token,
       status: "ACTIVE",
-      genericType: "CHAT",
+      genericType: "MESSAGE",
       user: {
         connect: {
           id: authed_user.id, // Use the Slack user ID as a temporary solution
