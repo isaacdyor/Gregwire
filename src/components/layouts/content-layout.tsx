@@ -20,7 +20,7 @@ export const ContentLayout: React.FC<ContentLayoutProps> = ({
   return (
     <div className="flex h-full flex-col gap-8 px-6 py-8">
       <header className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {backLink && (
             <Link
               href={backLink}

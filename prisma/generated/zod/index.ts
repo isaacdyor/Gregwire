@@ -403,24 +403,40 @@ export const IntegrationOrderByWithRelationInputSchema: z.ZodType<Prisma.Integra
 export const IntegrationWhereUniqueInputSchema: z.ZodType<Prisma.IntegrationWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    email: z.string()
+    email: z.string(),
+    providerUserId: z.string()
+  }),
+  z.object({
+    id: z.string(),
+    email: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    providerUserId: z.string(),
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
     email: z.string(),
+    providerUserId: z.string(),
+  }),
+  z.object({
+    email: z.string(),
+  }),
+  z.object({
+    providerUserId: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
   email: z.string().optional(),
+  providerUserId: z.string().optional(),
   AND: z.union([ z.lazy(() => IntegrationWhereInputSchema),z.lazy(() => IntegrationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => IntegrationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => IntegrationWhereInputSchema),z.lazy(() => IntegrationWhereInputSchema).array() ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => EnumIntegrationTypeFilterSchema),z.lazy(() => IntegrationTypeSchema) ]).optional(),
-  providerUserId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   accessToken: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   refreshToken: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   tokenExpiration: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),

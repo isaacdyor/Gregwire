@@ -52,7 +52,7 @@ model Integration {
   userId          String
   email           String?           @unique
   type            IntegrationType
-  providerUserId  String?
+  providerUserId  String?           @unique
   accessToken     String
   refreshToken    String?
   tokenExpiration DateTime?

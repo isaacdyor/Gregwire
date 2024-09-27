@@ -1,3 +1,4 @@
+import { api } from "@/trpc/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -8,10 +9,10 @@ const SlackPayloadSchema = z.object({
   event: z
     .object({
       type: z.string(),
-      user: z.string().optional(),
-      channel: z.string().optional(),
-      text: z.string().optional(),
-      ts: z.string().optional(),
+      user: z.string(),
+      channel: z.string(),
+      text: z.string(),
+      ts: z.string(),
     })
     .optional(),
 });
@@ -35,8 +36,22 @@ export async function POST(req: NextRequest) {
 
     // Log event details if it's an event
     if (body.type === "event_callback" && body.event) {
-      console.log("Received event:", body.event.type);
-      console.log("Event details:", JSON.stringify(body.event, null, 2));
+      const newMessage = await api.messages.create({
+        message: {
+          messageId: body.event.ts,
+          userId: body.event.user,
+          channelId: body.event.channel,
+          text: body.event.text,
+          timestamp: body.event.ts,
+          integration: {
+            connect: {
+              providerUserId: body.event.user,
+            },
+          },
+        },
+        providerUserId: body.event.user,
+      });
+      console.log("New message:", newMessage);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
