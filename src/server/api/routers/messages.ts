@@ -45,7 +45,7 @@ export const messagesRouter = createTRPCRouter({
           threadTs: input.message.threadTs,
           integration: {
             connect: {
-              providerUserId: input.providerUserId,
+              teamId: input.providerUserId,
             },
           },
         },

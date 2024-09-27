@@ -14,7 +14,7 @@ export default async function ChatsPage() {
   return (
     <ContentLayout title="Messages">
       {integrations.length === 0 ? (
-        <NoIntegrationLayout />
+        <NoIntegrationLayout genericType={GenericType.MESSAGE} />
       ) : (
         <Messages messages={messages} />
       )}

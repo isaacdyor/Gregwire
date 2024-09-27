@@ -14,7 +14,7 @@ export default async function EmailsPage() {
   return (
     <ContentLayout title="Emails">
       {integrations.length === 0 ? (
-        <NoIntegrationLayout />
+        <NoIntegrationLayout genericType={GenericType.EMAIL} />
       ) : (
         <EmailTable columns={columns} emails={emails} />
       )}

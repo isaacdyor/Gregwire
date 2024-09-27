@@ -75,6 +75,7 @@ export async function GET(request: NextRequest) {
           id: authed_user.id, // Use the Slack user ID as a temporary solution
         },
       },
+      teamId: team.id,
       metadata: JSON.stringify({
         teamId: team.id,
         teamName: team.name,

@@ -19,16 +19,6 @@ datasource db {
 enum IntegrationType {
   GMAIL
   SLACK
-  OUTLOOK
-  GITHUB
-  GOOGLE_CALENDAR
-}
-
-enum GenericType {
-  EMAIL
-  CALENDAR
-  TASK
-  MESSAGE
 }
 
 enum IntegrationStatus {
@@ -44,59 +34,73 @@ model User {
   name         String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  integrations Integration[] @relation("UserIntegrations")
+  integrations Integration[]
 }
 
 model Integration {
-  id              String            @id @default(uuid())
-  userId          String
-  email           String?           @unique
-  type            IntegrationType
-  providerUserId  String?           @unique
-  accessToken     String
-  refreshToken    String?
-  tokenExpiration DateTime?
-  recentHistoryId String?
-  scopes          String[]
-  createdAt       DateTime          @default(now())
-  lastUsedAt      DateTime?
-  lastRefreshedAt DateTime?
-  status          IntegrationStatus @default(ACTIVE)
-  genericType     GenericType
-  metadata        Json?
+  id         String            @id @default(uuid())
+  userId     String
+  type       IntegrationType
+  status     IntegrationStatus @default(ACTIVE)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 
-  user   User   @relation("UserIntegrations", fields: [userId], references: [id], onDelete: Cascade)
-  emails Email[] @relation("IntegrationEmails")
-  messages Message[] @relation("IntegrationMessages")
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gmail      GmailIntegration?
+  slack      SlackIntegration?
+}
+
+model GmailIntegration {
+  id              String    @id @default(uuid())
+  integrationId   String    @unique
+  email           String    @unique
+  accessToken     String
+  refreshToken    String
+  tokenExpiration DateTime
+  recentHistoryId String?
+  
+  integration     Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  emails          Email[]
+}
+
+model SlackIntegration {
+  id            String  @id @default(uuid())
+  integrationId String  @unique
+  teamId        String
+  botToken      String
+  appId         String
+  
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  messages      Message[]
 }
 
 model Email {
-  id            String      @id @default(uuid())
-  messageId     String      @unique
-  integrationId String
-  subject       String?
-  from          String?
-  date          DateTime?
-  body          String?     @db.Text
-  receivedAt    DateTime    @default(now())
-  processed     Boolean     @default(false)
+  id                String          @id @default(uuid())
+  messageId         String          @unique
+  gmailIntegrationId String
+  subject           String?
+  from              String?
+  date              DateTime?
+  body              String?         @db.Text
+  receivedAt        DateTime        @default(now())
+  processed         Boolean         @default(false)
 
-  integration   Integration @relation("IntegrationEmails", fields: [integrationId], references: [id], onDelete: Cascade)
+  gmailIntegration  GmailIntegration @relation(fields: [gmailIntegrationId], references: [id], onDelete: Cascade)
 }
 
 model Message {
-  id            String   @id @default(uuid())
-  messageId     String   @unique
-  integrationId String
-  userId        String
-  channelId     String
-  text          String   @db.Text
-  timestamp     String
-  threadTs      String?
-  receivedAt    DateTime @default(now())
-  processed     Boolean  @default(false)
+  id                 String           @id @default(uuid())
+  messageId          String           @unique
+  slackIntegrationId String
+  userId             String
+  channelId          String
+  text               String           @db.Text
+  timestamp          String
+  threadTs           String?
+  receivedAt         DateTime         @default(now())
+  processed          Boolean          @default(false)
 
-  integration   Integration @relation("IntegrationMessages", fields: [integrationId], references: [id], onDelete: Cascade)
+  slackIntegration   SlackIntegration @relation(fields: [slackIntegrationId], references: [id], onDelete: Cascade)
 
   @@index([channelId, timestamp])
 }
