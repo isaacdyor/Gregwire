@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { processHistory } from "./process-history";
+import { refreshToken } from "./refresh-token";
+import { api } from "@/trpc/server";
 
 const PubSubMessageSchema = z.object({
   message: z.object({
@@ -18,8 +20,6 @@ const MessageDataSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("RECEIVED REQUEST");
-
     // Parse the JSON body
     const rawBody: unknown = await req.json();
     const body = PubSubMessageSchema.parse(rawBody);
@@ -28,7 +28,24 @@ export async function POST(req: NextRequest) {
     const jsonData: unknown = JSON.parse(decodedData);
     const validatedData = MessageDataSchema.parse(jsonData);
 
-    await processHistory(validatedData.historyId, validatedData.emailAddress);
+    const integration = await api.integrations.getByEmail({
+      email: validatedData.emailAddress,
+    });
+
+    if (!integration) {
+      console.error("Invalid gmail integration", validatedData.emailAddress);
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid gmail integration",
+        },
+        { status: 400 },
+      );
+    }
+
+    await refreshToken(integration);
+
+    await processHistory(validatedData.historyId, integration);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

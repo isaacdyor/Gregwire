@@ -1,14 +1,14 @@
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
+import { type Integration } from "@prisma/client";
 
-export async function processHistory(historyId: string, email: string) {
+export async function processHistory(
+  historyId: string,
+  integration: Integration,
+) {
   try {
-    const integration = await api.integrations.getByEmail({
-      email,
-    });
-
     if (!integration?.refreshToken || !integration.recentHistoryId) {
-      console.error("Invalid gmail integration", email);
+      console.error("Invalid gmail integration", integration.email);
       return;
     }
 
@@ -96,11 +96,11 @@ export async function processHistory(historyId: string, email: string) {
             processed: false,
             integration: {
               connect: {
-                email,
+                id: integration.id,
               },
             },
           },
-          integrationEmail: email,
+          integrationEmail: integration.email!, // we found this integration by email
         });
         console.log(newEmail);
       }
