@@ -33,6 +33,7 @@ export const integrationsRouter = createTRPCRouter({
           status: input.status,
           genericType: input.genericType,
           metadata: input.metadata,
+          email: input.email,
           user: {
             connect: {
               id: ctx.user.id,

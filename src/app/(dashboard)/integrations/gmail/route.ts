@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
       tokenExpiration: new Date(tokens.expiry_date),
       status: "ACTIVE",
       genericType: "EMAIL",
+      email: userProfile.data.emailAddress,
       user: {
         connect: {
           id: "",
