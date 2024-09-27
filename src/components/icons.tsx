@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 export const Icons = {
-  chat: MessageCircle,
+  messages: MessageCircle,
   key: Key,
   settings: Settings,
   compass: Compass,

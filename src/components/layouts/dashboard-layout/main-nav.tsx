@@ -58,7 +58,7 @@ export const MainNav: React.FC = () => {
                   : "max-h-0 opacity-0",
               )}
             >
-              <div className="mt-1 space-y-1">
+              <div className="mt-1 space-y-1 pl-1.5">
                 {item.children.map((child) => {
                   const ChildIcon = Icons[child.icon];
                   return (
@@ -73,7 +73,7 @@ export const MainNav: React.FC = () => {
                       )}
                       onClick={() => setIsOpen(false)}
                     >
-                      <ChildIcon className="h-5 w-5 flex-shrink-0" />
+                      <ChildIcon className="h-4 w-4 flex-shrink-0" />
                       <span>{child.label}</span>
                     </Link>
                   );

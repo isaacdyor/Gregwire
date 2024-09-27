@@ -41,9 +41,9 @@ export const dashboardConfig: DashboardItem[] = [
         icon: "mail",
       },
       {
-        label: "Chats",
-        url: "/chats",
-        icon: "chat",
+        label: "Messages",
+        url: "/messages",
+        icon: "messages",
       },
       {
         label: "Events",
