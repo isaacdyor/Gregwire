@@ -1,10 +1,19 @@
 import { type IconName } from "@/components/icons";
 
-interface DashboardItem {
+type DashboardItemBase = {
   label: string;
-  url: string;
   icon: IconName;
-}
+};
+
+type DashboardItemWithUrl = DashboardItemBase & {
+  url: string;
+};
+
+type DashboardItemWithChildren = DashboardItemBase & {
+  children: DashboardItemWithUrl[];
+};
+
+type DashboardItem = DashboardItemWithUrl | DashboardItemWithChildren;
 
 export const dashboardConfig: DashboardItem[] = [
   {
@@ -23,19 +32,25 @@ export const dashboardConfig: DashboardItem[] = [
     icon: "usb",
   },
   {
-    label: "Emails",
-    url: "/emails",
+    label: "Communications",
     icon: "mail",
-  },
-  {
-    label: "Chats",
-    url: "/chats",
-    icon: "chat",
-  },
-  {
-    label: "Events",
-    url: "/events",
-    icon: "calendar",
+    children: [
+      {
+        label: "Emails",
+        url: "/emails",
+        icon: "mail",
+      },
+      {
+        label: "Chats",
+        url: "/chats",
+        icon: "chat",
+      },
+      {
+        label: "Events",
+        url: "/events",
+        icon: "calendar",
+      },
+    ],
   },
   {
     label: "Settings",

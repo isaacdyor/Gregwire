@@ -42,19 +42,15 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const protectedRoutes = dashboardConfig.map((route) => route.url);
+  const publicRoutes = ["/", "/signin", "/signup", "/auth"];
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route),
-  );
-
-  if (!user && isProtectedRoute) {
+  if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
     // Redirect to signin if unauthenticated user tries to access protected route
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);
   }
-  if (user && !isProtectedRoute) {
+  if (user && publicRoutes.includes(request.nextUrl.pathname)) {
     // Redirect to /chat if authenticated user accesses any unprotected route
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
