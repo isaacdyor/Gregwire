@@ -42,8 +42,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error processing Slack request:", error);
-
-    // Always return 200 to acknowledge receipt, even on error
     return NextResponse.json(
       {
         success: false,

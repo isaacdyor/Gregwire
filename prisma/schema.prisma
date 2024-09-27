@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,13 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String        @id
-  name         String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  integrations Integration[] @relation("UserIntegrations")
-}
+// Enums
 
 enum IntegrationType {
   GMAIL
@@ -40,10 +37,20 @@ enum IntegrationStatus {
   EXPIRED
 }
 
+// Models
+
+model User {
+  id           String        @id
+  name         String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  integrations Integration[] @relation("UserIntegrations")
+}
+
 model Integration {
   id              String            @id @default(uuid())
   userId          String
-  email           String?           @unique        
+  email           String?           @unique
   type            IntegrationType
   providerUserId  String?
   accessToken     String
@@ -55,15 +62,17 @@ model Integration {
   lastUsedAt      DateTime?
   lastRefreshedAt DateTime?
   status          IntegrationStatus @default(ACTIVE)
-  genericType     GenericType      
+  genericType     GenericType
   metadata        Json?
-  user            User              @relation("UserIntegrations", fields: [userId], references: [id], onDelete: Cascade)
-  emails          Email[]     @relation("IntegrationEmails")
+
+  user   User   @relation("UserIntegrations", fields: [userId], references: [id], onDelete: Cascade)
+  emails Email[] @relation("IntegrationEmails")
+  messages Message[] @relation("IntegrationMessages")
 }
 
 model Email {
   id            String      @id @default(uuid())
-  messageId     String      @unique    
+  messageId     String      @unique
   integrationId String
   subject       String?
   from          String?
@@ -71,5 +80,22 @@ model Email {
   body          String?     @db.Text
   receivedAt    DateTime    @default(now())
   processed     Boolean     @default(false)
+
   integration   Integration @relation("IntegrationEmails", fields: [integrationId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id            String   @id @default(uuid())
+  messageId     String   @unique
+  integrationId String
+  userId        String
+  channelId     String
+  text          String   @db.Text
+  timestamp     DateTime
+  receivedAt    DateTime @default(now())
+  processed     Boolean  @default(false)
+
+  integration   Integration @relation("IntegrationMessages", fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@index([channelId, timestamp])
 }
