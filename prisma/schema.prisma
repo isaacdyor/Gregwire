@@ -91,7 +91,7 @@ model Message {
   userId        String
   channelId     String
   text          String   @db.Text
-  timestamp     DateTime
+  timestamp     String
   receivedAt    DateTime @default(now())
   processed     Boolean  @default(false)
 
