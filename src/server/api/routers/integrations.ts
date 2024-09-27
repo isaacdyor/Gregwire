@@ -4,7 +4,9 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import {
+  GenericTypeSchema,
   IntegrationCreateInputSchema,
+  IntegrationTypeSchema,
   IntegrationUpdateInputSchema,
 } from "prisma/generated/zod";
 import { z } from "zod";
@@ -83,6 +85,17 @@ export const integrationsRouter = createTRPCRouter({
       return ctx.db.integration.findUnique({
         where: {
           email: input.email,
+        },
+      });
+    }),
+
+  getByType: publicProcedure
+    .input(z.object({ type: GenericTypeSchema }))
+    .query(async ({ ctx, input }) => {
+      console.log("getByEmail", input);
+      return ctx.db.integration.findMany({
+        where: {
+          genericType: input.type,
         },
       });
     }),

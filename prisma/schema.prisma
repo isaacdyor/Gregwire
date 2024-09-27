@@ -28,7 +28,7 @@ enum GenericType {
   EMAIL
   CALENDAR
   TASK
-  CHAT
+  MESSAGE
 }
 
 enum IntegrationStatus {

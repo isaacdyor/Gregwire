@@ -1,20 +1,13 @@
+import { NoIntegrationLayout } from "@/components/layouts/no-integration-layout";
 import { type Integration } from "@prisma/client";
-import React, { type ReactNode } from "react";
+import React from "react";
 import { CurrentIntegrationCard } from "./current-integration-card";
 
 export const Integrations: React.FC<{
   integrations: Integration[];
-  NewIntegrationButton: ReactNode;
-}> = ({ integrations, NewIntegrationButton }) => {
+}> = ({ integrations }) => {
   if (integrations.length === 0) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="flex flex-col gap-2 pb-40">
-          <p className="text-muted-foreground">No integrations found.</p>
-          {NewIntegrationButton}
-        </div>
-      </div>
-    );
+    return <NoIntegrationLayout />;
   }
 
   return (

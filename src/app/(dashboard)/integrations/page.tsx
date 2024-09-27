@@ -26,10 +26,7 @@ export default async function IntegrationsPage() {
 
   return (
     <ContentLayout title="Integrations" Action={<NewIntegrationButton />}>
-      <Integrations
-        integrations={integrations}
-        NewIntegrationButton={<NewIntegrationButton />}
-      />
+      <Integrations integrations={integrations} />
     </ContentLayout>
   );
 }
