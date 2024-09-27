@@ -42,6 +42,7 @@ export const messagesRouter = createTRPCRouter({
           channelId: input.message.channelId,
           text: input.message.text,
           timestamp: input.message.timestamp,
+          threadTs: input.message.threadTs,
           integration: {
             connect: {
               providerUserId: input.providerUserId,

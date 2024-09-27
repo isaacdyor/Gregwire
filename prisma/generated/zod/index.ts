@@ -62,7 +62,7 @@ export const IntegrationScalarFieldEnumSchema = z.enum(['id','userId','email','t
 
 export const EmailScalarFieldEnumSchema = z.enum(['id','messageId','integrationId','subject','from','date','body','receivedAt','processed']);
 
-export const MessageScalarFieldEnumSchema = z.enum(['id','messageId','integrationId','userId','channelId','text','timestamp','receivedAt','processed']);
+export const MessageScalarFieldEnumSchema = z.enum(['id','messageId','integrationId','userId','channelId','text','timestamp','threadTs','receivedAt','processed']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -158,6 +158,7 @@ export const MessageSchema = z.object({
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().nullable(),
   receivedAt: z.coerce.date(),
   processed: z.boolean(),
 })
@@ -290,6 +291,7 @@ export const MessageSelectSchema: z.ZodType<Prisma.MessageSelect> = z.object({
   channelId: z.boolean().optional(),
   text: z.boolean().optional(),
   timestamp: z.boolean().optional(),
+  threadTs: z.boolean().optional(),
   receivedAt: z.boolean().optional(),
   processed: z.boolean().optional(),
   integration: z.union([z.boolean(),z.lazy(() => IntegrationArgsSchema)]).optional(),
@@ -595,6 +597,7 @@ export const MessageWhereInputSchema: z.ZodType<Prisma.MessageWhereInput> = z.ob
   channelId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   text: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   timestamp: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  threadTs: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   integration: z.union([ z.lazy(() => IntegrationRelationFilterSchema),z.lazy(() => IntegrationWhereInputSchema) ]).optional(),
@@ -608,6 +611,7 @@ export const MessageOrderByWithRelationInputSchema: z.ZodType<Prisma.MessageOrde
   channelId: z.lazy(() => SortOrderSchema).optional(),
   text: z.lazy(() => SortOrderSchema).optional(),
   timestamp: z.lazy(() => SortOrderSchema).optional(),
+  threadTs: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional(),
   integration: z.lazy(() => IntegrationOrderByWithRelationInputSchema).optional()
@@ -636,6 +640,7 @@ export const MessageWhereUniqueInputSchema: z.ZodType<Prisma.MessageWhereUniqueI
   channelId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   text: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   timestamp: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  threadTs: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   integration: z.union([ z.lazy(() => IntegrationRelationFilterSchema),z.lazy(() => IntegrationWhereInputSchema) ]).optional(),
@@ -649,6 +654,7 @@ export const MessageOrderByWithAggregationInputSchema: z.ZodType<Prisma.MessageO
   channelId: z.lazy(() => SortOrderSchema).optional(),
   text: z.lazy(() => SortOrderSchema).optional(),
   timestamp: z.lazy(() => SortOrderSchema).optional(),
+  threadTs: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => MessageCountOrderByAggregateInputSchema).optional(),
@@ -667,6 +673,7 @@ export const MessageScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Messa
   channelId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   text: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   timestamp: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  threadTs: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
 }).strict();
@@ -954,6 +961,7 @@ export const MessageCreateInputSchema: z.ZodType<Prisma.MessageCreateInput> = z.
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional(),
   integration: z.lazy(() => IntegrationCreateNestedOneWithoutMessagesInputSchema)
@@ -967,6 +975,7 @@ export const MessageUncheckedCreateInputSchema: z.ZodType<Prisma.MessageUnchecke
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -978,6 +987,7 @@ export const MessageUpdateInputSchema: z.ZodType<Prisma.MessageUpdateInput> = z.
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   integration: z.lazy(() => IntegrationUpdateOneRequiredWithoutMessagesNestedInputSchema).optional()
@@ -991,6 +1001,7 @@ export const MessageUncheckedUpdateInputSchema: z.ZodType<Prisma.MessageUnchecke
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -1003,6 +1014,7 @@ export const MessageCreateManyInputSchema: z.ZodType<Prisma.MessageCreateManyInp
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -1014,6 +1026,7 @@ export const MessageUpdateManyMutationInputSchema: z.ZodType<Prisma.MessageUpdat
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -1026,6 +1039,7 @@ export const MessageUncheckedUpdateManyInputSchema: z.ZodType<Prisma.MessageUnch
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -1416,6 +1430,7 @@ export const MessageCountOrderByAggregateInputSchema: z.ZodType<Prisma.MessageCo
   channelId: z.lazy(() => SortOrderSchema).optional(),
   text: z.lazy(() => SortOrderSchema).optional(),
   timestamp: z.lazy(() => SortOrderSchema).optional(),
+  threadTs: z.lazy(() => SortOrderSchema).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1428,6 +1443,7 @@ export const MessageMaxOrderByAggregateInputSchema: z.ZodType<Prisma.MessageMaxO
   channelId: z.lazy(() => SortOrderSchema).optional(),
   text: z.lazy(() => SortOrderSchema).optional(),
   timestamp: z.lazy(() => SortOrderSchema).optional(),
+  threadTs: z.lazy(() => SortOrderSchema).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1440,6 +1456,7 @@ export const MessageMinOrderByAggregateInputSchema: z.ZodType<Prisma.MessageMinO
   channelId: z.lazy(() => SortOrderSchema).optional(),
   text: z.lazy(() => SortOrderSchema).optional(),
   timestamp: z.lazy(() => SortOrderSchema).optional(),
+  threadTs: z.lazy(() => SortOrderSchema).optional(),
   receivedAt: z.lazy(() => SortOrderSchema).optional(),
   processed: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -2013,6 +2030,7 @@ export const MessageCreateWithoutIntegrationInputSchema: z.ZodType<Prisma.Messag
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -2024,6 +2042,7 @@ export const MessageUncheckedCreateWithoutIntegrationInputSchema: z.ZodType<Pris
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -2121,6 +2140,7 @@ export const MessageScalarWhereInputSchema: z.ZodType<Prisma.MessageScalarWhereI
   channelId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   text: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   timestamp: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  threadTs: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   receivedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   processed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
 }).strict();
@@ -2411,6 +2431,7 @@ export const MessageCreateManyIntegrationInputSchema: z.ZodType<Prisma.MessageCr
   channelId: z.string(),
   text: z.string(),
   timestamp: z.string(),
+  threadTs: z.string().optional().nullable(),
   receivedAt: z.coerce.date().optional(),
   processed: z.boolean().optional()
 }).strict();
@@ -2455,6 +2476,7 @@ export const MessageUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma.Messag
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -2466,6 +2488,7 @@ export const MessageUncheckedUpdateWithoutIntegrationInputSchema: z.ZodType<Pris
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -2477,6 +2500,7 @@ export const MessageUncheckedUpdateManyWithoutIntegrationInputSchema: z.ZodType<
   channelId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   text: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   timestamp: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  threadTs: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   receivedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   processed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();

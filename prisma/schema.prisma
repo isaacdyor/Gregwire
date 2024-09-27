@@ -92,6 +92,7 @@ model Message {
   channelId     String
   text          String   @db.Text
   timestamp     String
+  threadTs      String?
   receivedAt    DateTime @default(now())
   processed     Boolean  @default(false)
 

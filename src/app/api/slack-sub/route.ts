@@ -13,6 +13,7 @@ const SlackPayloadSchema = z.object({
       channel: z.string(),
       text: z.string(),
       ts: z.string(),
+      thread_ts: z.string().optional(),
     })
     .optional(),
 });
@@ -43,6 +44,7 @@ export async function POST(req: NextRequest) {
           channelId: body.event.channel,
           text: body.event.text,
           timestamp: body.event.ts,
+          threadTs: body.event.thread_ts,
           integration: {
             connect: {
               providerUserId: body.event.user,
