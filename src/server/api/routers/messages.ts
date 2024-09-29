@@ -15,8 +15,10 @@ export const messagesRouter = createTRPCRouter({
   getAll: privateProcedure.query(async ({ ctx }) => {
     return ctx.db.message.findMany({
       where: {
-        integration: {
-          userId: ctx.user.id,
+        slackIntegration: {
+          integration: {
+            userId: ctx.user.id,
+          },
         },
       },
     });
@@ -43,7 +45,7 @@ export const messagesRouter = createTRPCRouter({
           text: input.message.text,
           timestamp: input.message.timestamp,
           threadTs: input.message.threadTs,
-          integration: {
+          slackIntegration: {
             connect: {
               teamId: input.providerUserId,
             },

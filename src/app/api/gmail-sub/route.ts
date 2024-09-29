@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     const jsonData: unknown = JSON.parse(decodedData);
     const validatedData = MessageDataSchema.parse(jsonData);
 
-    const integration = await api.integrations.getByEmail({
+    const integration = await api.gmail.getByEmail({
       email: validatedData.emailAddress,
     });
 

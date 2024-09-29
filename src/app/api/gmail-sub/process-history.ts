@@ -1,10 +1,10 @@
 import { api } from "@/trpc/server";
 import { getGmailClient } from "@/utils/gmail";
-import { type Integration } from "@prisma/client";
+import { type GmailIntegration } from "@prisma/client";
 
 export async function processHistory(
   historyId: string,
-  integration: Integration,
+  integration: GmailIntegration,
 ) {
   try {
     if (!integration?.refreshToken || !integration.recentHistoryId) {
@@ -22,11 +22,9 @@ export async function processHistory(
       startHistoryId: integration.recentHistoryId,
     });
 
-    await api.integrations.update({
-      integration: {
-        recentHistoryId: historyId,
-      },
-      integrationId: integration.id,
+    await api.gmail.update({
+      id: integration.id,
+      recentHistoryId: historyId,
     });
 
     if (!history.data.history) {
@@ -94,13 +92,13 @@ export async function processHistory(
             body,
             receivedAt: new Date(),
             processed: false,
-            integration: {
+            gmailIntegration: {
               connect: {
-                id: integration.id,
+                integrationId: integration.id,
               },
             },
           },
-          integrationEmail: integration.email!, // we found this integration by email
+          integrationEmail: integration.email, // we found this integration by email
         });
         console.log(newEmail);
       }

@@ -17,10 +17,10 @@ type IntegrationConfig = IntegrationItem[];
 
 // Mock integration functions
 
-const integrateGoogleCalendar = async (): Promise<void> => {
-  await new Promise<void>((resolve) => setTimeout(resolve, 2000));
-  console.log("Google Calendar integration completed");
-};
+// const integrateGoogleCalendar = async (): Promise<void> => {
+//   await new Promise<void>((resolve) => setTimeout(resolve, 2000));
+//   console.log("Google Calendar integration completed");
+// };
 
 type AuthUrlResult = {
   success: boolean;
@@ -55,13 +55,13 @@ export const integrationConfig: IntegrationConfig = [
     description: "Connect your Slack workspace for seamless communication.",
     onIntegrate: () => integrateService(getSlackAuthUrl),
   },
-  {
-    type: "GOOGLE_CALENDAR",
-    title: "Google Calendar",
-    logo: "googleCalendar",
-    description: "Sync your Google Calendar to manage events and schedules.",
-    onIntegrate: integrateGoogleCalendar,
-  },
+  // {
+  //   type: "GOOGLE_CALENDAR",
+  //   title: "Google Calendar",
+  //   logo: "googleCalendar",
+  //   description: "Sync your Google Calendar to manage events and schedules.",
+  //   onIntegrate: integrateGoogleCalendar,
+  // },
 ];
 
 export type { IntegrationConfig, IntegrationItem };
