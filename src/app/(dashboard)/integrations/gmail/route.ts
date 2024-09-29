@@ -1,9 +1,9 @@
 import { env } from "@/env";
 import { api } from "@/trpc/server";
+import { getGmailClient } from "@/utils/gmail";
 import { OAuth2Client } from "google-auth-library";
 import { type NextRequest, NextResponse } from "next/server";
-import { startGmailWatch } from "./start-gmail-watch";
-import { getGmailClient } from "@/utils/gmail";
+import { startGmailSub } from "./start-gmail-sub";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (newIntegration) {
-      await startGmailWatch(tokens);
+      await startGmailSub(tokens);
     }
 
     return NextResponse.redirect(

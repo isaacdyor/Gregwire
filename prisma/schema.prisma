@@ -66,9 +66,8 @@ model GmailIntegration {
 model SlackIntegration {
   id            String  @id @default(uuid())
   integrationId String  @unique
-  teamId        String  @unique
-  botToken      String
-  appId         String
+  teamId        String
+  accessToken   String
   
   integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
   messages      Message[]

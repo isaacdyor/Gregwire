@@ -1,7 +1,7 @@
 import { env } from "@/env";
 import { api } from "@/trpc/server";
-import { type NextRequest, NextResponse } from "next/server";
 import { WebClient } from "@slack/web-api";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -66,9 +66,8 @@ export async function GET(request: NextRequest) {
 
     // Create new integration in your database
     const newIntegration = await api.slack.create({
-      teamId: "your-slack-team-id",
-      botToken: "your-slack-bot-token",
-      appId: "your-slack-app-id",
+      teamId: team.id,
+      accessToken: access_token,
       integration: {},
     });
 

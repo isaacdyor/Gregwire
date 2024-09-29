@@ -18,7 +18,7 @@ export const IntegrationScalarFieldEnumSchema = z.enum(['id','userId','type','st
 
 export const GmailIntegrationScalarFieldEnumSchema = z.enum(['id','integrationId','email','accessToken','refreshToken','tokenExpiration','recentHistoryId']);
 
-export const SlackIntegrationScalarFieldEnumSchema = z.enum(['id','integrationId','teamId','botToken','appId']);
+export const SlackIntegrationScalarFieldEnumSchema = z.enum(['id','integrationId','teamId','accessToken']);
 
 export const EmailScalarFieldEnumSchema = z.enum(['id','messageId','gmailIntegrationId','subject','from','date','body','receivedAt','processed']);
 
@@ -94,8 +94,7 @@ export const SlackIntegrationSchema = z.object({
   id: z.string(),
   integrationId: z.string(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string(),
+  accessToken: z.string(),
 })
 
 export type SlackIntegration = z.infer<typeof SlackIntegrationSchema>
@@ -258,8 +257,7 @@ export const SlackIntegrationSelectSchema: z.ZodType<Prisma.SlackIntegrationSele
   id: z.boolean().optional(),
   integrationId: z.boolean().optional(),
   teamId: z.boolean().optional(),
-  botToken: z.boolean().optional(),
-  appId: z.boolean().optional(),
+  accessToken: z.boolean().optional(),
   integration: z.union([z.boolean(),z.lazy(() => IntegrationArgsSchema)]).optional(),
   messages: z.union([z.boolean(),z.lazy(() => MessageFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => SlackIntegrationCountOutputTypeArgsSchema)]).optional(),
@@ -546,8 +544,7 @@ export const SlackIntegrationWhereInputSchema: z.ZodType<Prisma.SlackIntegration
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   teamId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  botToken: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  appId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  accessToken: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   integration: z.union([ z.lazy(() => IntegrationRelationFilterSchema),z.lazy(() => IntegrationWhereInputSchema) ]).optional(),
   messages: z.lazy(() => MessageListRelationFilterSchema).optional()
 }).strict();
@@ -556,8 +553,7 @@ export const SlackIntegrationOrderByWithRelationInputSchema: z.ZodType<Prisma.Sl
   id: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
   teamId: z.lazy(() => SortOrderSchema).optional(),
-  botToken: z.lazy(() => SortOrderSchema).optional(),
-  appId: z.lazy(() => SortOrderSchema).optional(),
+  accessToken: z.lazy(() => SortOrderSchema).optional(),
   integration: z.lazy(() => IntegrationOrderByWithRelationInputSchema).optional(),
   messages: z.lazy(() => MessageOrderByRelationAggregateInputSchema).optional()
 }).strict();
@@ -565,40 +561,23 @@ export const SlackIntegrationOrderByWithRelationInputSchema: z.ZodType<Prisma.Sl
 export const SlackIntegrationWhereUniqueInputSchema: z.ZodType<Prisma.SlackIntegrationWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    integrationId: z.string(),
-    teamId: z.string()
-  }),
-  z.object({
-    id: z.string(),
-    integrationId: z.string(),
-  }),
-  z.object({
-    id: z.string(),
-    teamId: z.string(),
+    integrationId: z.string()
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
     integrationId: z.string(),
-    teamId: z.string(),
-  }),
-  z.object({
-    integrationId: z.string(),
-  }),
-  z.object({
-    teamId: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
   integrationId: z.string().optional(),
-  teamId: z.string().optional(),
   AND: z.union([ z.lazy(() => SlackIntegrationWhereInputSchema),z.lazy(() => SlackIntegrationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => SlackIntegrationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => SlackIntegrationWhereInputSchema),z.lazy(() => SlackIntegrationWhereInputSchema).array() ]).optional(),
-  botToken: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  appId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  teamId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  accessToken: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   integration: z.union([ z.lazy(() => IntegrationRelationFilterSchema),z.lazy(() => IntegrationWhereInputSchema) ]).optional(),
   messages: z.lazy(() => MessageListRelationFilterSchema).optional()
 }).strict());
@@ -607,8 +586,7 @@ export const SlackIntegrationOrderByWithAggregationInputSchema: z.ZodType<Prisma
   id: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
   teamId: z.lazy(() => SortOrderSchema).optional(),
-  botToken: z.lazy(() => SortOrderSchema).optional(),
-  appId: z.lazy(() => SortOrderSchema).optional(),
+  accessToken: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => SlackIntegrationCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => SlackIntegrationMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => SlackIntegrationMinOrderByAggregateInputSchema).optional()
@@ -621,8 +599,7 @@ export const SlackIntegrationScalarWhereWithAggregatesInputSchema: z.ZodType<Pri
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   integrationId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   teamId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  botToken: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  appId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  accessToken: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const EmailWhereInputSchema: z.ZodType<Prisma.EmailWhereInput> = z.object({
@@ -1003,8 +980,7 @@ export const GmailIntegrationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Gm
 export const SlackIntegrationCreateInputSchema: z.ZodType<Prisma.SlackIntegrationCreateInput> = z.object({
   id: z.string().optional(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string(),
+  accessToken: z.string(),
   integration: z.lazy(() => IntegrationCreateNestedOneWithoutSlackInputSchema),
   messages: z.lazy(() => MessageCreateNestedManyWithoutSlackIntegrationInputSchema).optional()
 }).strict();
@@ -1013,16 +989,14 @@ export const SlackIntegrationUncheckedCreateInputSchema: z.ZodType<Prisma.SlackI
   id: z.string().optional(),
   integrationId: z.string(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string(),
+  accessToken: z.string(),
   messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutSlackIntegrationInputSchema).optional()
 }).strict();
 
 export const SlackIntegrationUpdateInputSchema: z.ZodType<Prisma.SlackIntegrationUpdateInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integration: z.lazy(() => IntegrationUpdateOneRequiredWithoutSlackNestedInputSchema).optional(),
   messages: z.lazy(() => MessageUpdateManyWithoutSlackIntegrationNestedInputSchema).optional()
 }).strict();
@@ -1031,8 +1005,7 @@ export const SlackIntegrationUncheckedUpdateInputSchema: z.ZodType<Prisma.SlackI
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integrationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messages: z.lazy(() => MessageUncheckedUpdateManyWithoutSlackIntegrationNestedInputSchema).optional()
 }).strict();
 
@@ -1040,23 +1013,20 @@ export const SlackIntegrationCreateManyInputSchema: z.ZodType<Prisma.SlackIntegr
   id: z.string().optional(),
   integrationId: z.string(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string()
+  accessToken: z.string()
 }).strict();
 
 export const SlackIntegrationUpdateManyMutationInputSchema: z.ZodType<Prisma.SlackIntegrationUpdateManyMutationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const SlackIntegrationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.SlackIntegrationUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integrationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const EmailCreateInputSchema: z.ZodType<Prisma.EmailCreateInput> = z.object({
@@ -1494,24 +1464,21 @@ export const SlackIntegrationCountOrderByAggregateInputSchema: z.ZodType<Prisma.
   id: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
   teamId: z.lazy(() => SortOrderSchema).optional(),
-  botToken: z.lazy(() => SortOrderSchema).optional(),
-  appId: z.lazy(() => SortOrderSchema).optional()
+  accessToken: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SlackIntegrationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.SlackIntegrationMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
   teamId: z.lazy(() => SortOrderSchema).optional(),
-  botToken: z.lazy(() => SortOrderSchema).optional(),
-  appId: z.lazy(() => SortOrderSchema).optional()
+  accessToken: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SlackIntegrationMinOrderByAggregateInputSchema: z.ZodType<Prisma.SlackIntegrationMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   integrationId: z.lazy(() => SortOrderSchema).optional(),
   teamId: z.lazy(() => SortOrderSchema).optional(),
-  botToken: z.lazy(() => SortOrderSchema).optional(),
-  appId: z.lazy(() => SortOrderSchema).optional()
+  accessToken: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const DateTimeNullableFilterSchema: z.ZodType<Prisma.DateTimeNullableFilter> = z.object({
@@ -2211,16 +2178,14 @@ export const GmailIntegrationCreateOrConnectWithoutIntegrationInputSchema: z.Zod
 export const SlackIntegrationCreateWithoutIntegrationInputSchema: z.ZodType<Prisma.SlackIntegrationCreateWithoutIntegrationInput> = z.object({
   id: z.string().optional(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string(),
+  accessToken: z.string(),
   messages: z.lazy(() => MessageCreateNestedManyWithoutSlackIntegrationInputSchema).optional()
 }).strict();
 
 export const SlackIntegrationUncheckedCreateWithoutIntegrationInputSchema: z.ZodType<Prisma.SlackIntegrationUncheckedCreateWithoutIntegrationInput> = z.object({
   id: z.string().optional(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string(),
+  accessToken: z.string(),
   messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutSlackIntegrationInputSchema).optional()
 }).strict();
 
@@ -2299,16 +2264,14 @@ export const SlackIntegrationUpdateToOneWithWhereWithoutIntegrationInputSchema: 
 export const SlackIntegrationUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma.SlackIntegrationUpdateWithoutIntegrationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messages: z.lazy(() => MessageUpdateManyWithoutSlackIntegrationNestedInputSchema).optional()
 }).strict();
 
 export const SlackIntegrationUncheckedUpdateWithoutIntegrationInputSchema: z.ZodType<Prisma.SlackIntegrationUncheckedUpdateWithoutIntegrationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   messages: z.lazy(() => MessageUncheckedUpdateManyWithoutSlackIntegrationNestedInputSchema).optional()
 }).strict();
 
@@ -2612,8 +2575,7 @@ export const GmailIntegrationUncheckedUpdateWithoutEmailsInputSchema: z.ZodType<
 export const SlackIntegrationCreateWithoutMessagesInputSchema: z.ZodType<Prisma.SlackIntegrationCreateWithoutMessagesInput> = z.object({
   id: z.string().optional(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string(),
+  accessToken: z.string(),
   integration: z.lazy(() => IntegrationCreateNestedOneWithoutSlackInputSchema)
 }).strict();
 
@@ -2621,8 +2583,7 @@ export const SlackIntegrationUncheckedCreateWithoutMessagesInputSchema: z.ZodTyp
   id: z.string().optional(),
   integrationId: z.string(),
   teamId: z.string(),
-  botToken: z.string(),
-  appId: z.string()
+  accessToken: z.string()
 }).strict();
 
 export const SlackIntegrationCreateOrConnectWithoutMessagesInputSchema: z.ZodType<Prisma.SlackIntegrationCreateOrConnectWithoutMessagesInput> = z.object({
@@ -2644,8 +2605,7 @@ export const SlackIntegrationUpdateToOneWithWhereWithoutMessagesInputSchema: z.Z
 export const SlackIntegrationUpdateWithoutMessagesInputSchema: z.ZodType<Prisma.SlackIntegrationUpdateWithoutMessagesInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integration: z.lazy(() => IntegrationUpdateOneRequiredWithoutSlackNestedInputSchema).optional()
 }).strict();
 
@@ -2653,8 +2613,7 @@ export const SlackIntegrationUncheckedUpdateWithoutMessagesInputSchema: z.ZodTyp
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   integrationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   teamId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  botToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  appId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accessToken: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const IntegrationCreateManyUserInputSchema: z.ZodType<Prisma.IntegrationCreateManyUserInput> = z.object({

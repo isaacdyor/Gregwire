@@ -3,7 +3,7 @@ import { getClient } from "@/utils/gmail";
 import { gmail_v1 } from "@googleapis/gmail";
 import { type Credentials } from "google-auth-library";
 
-export async function startGmailWatch(credentials: Credentials) {
+export async function startGmailSub(credentials: Credentials) {
   // 1. Set up OAuth2 client
   const oauth2Client = getClient({
     accessToken: credentials.access_token ?? undefined,
