@@ -6,6 +6,7 @@ import { z } from "zod";
 const SlackPayloadSchema = z.object({
   type: z.string(),
   challenge: z.string().optional(),
+  team_id: z.string(),
   event: z
     .object({
       type: z.string(),
@@ -45,9 +46,9 @@ export async function POST(req: NextRequest) {
           text: body.event.text,
           timestamp: body.event.ts,
           threadTs: body.event.thread_ts,
-          integration: {
+          slackIntegration: {
             connect: {
-              providerUserId: body.event.user,
+              teamId: body.team_id,
             },
           },
         },

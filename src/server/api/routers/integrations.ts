@@ -3,11 +3,7 @@ import {
   privateProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import {
-  GenericTypeSchema,
-  IntegrationCreateInputSchema,
-  IntegrationUpdateInputSchema,
-} from "prisma/generated/zod";
+import { IntegrationUpdateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
 const UpdateIntegrationInputSchema = z.object({
@@ -16,33 +12,6 @@ const UpdateIntegrationInputSchema = z.object({
 });
 
 export const integrationsRouter = createTRPCRouter({
-  create: privateProcedure
-    .input(IntegrationCreateInputSchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.integration.create({
-        data: {
-          type: input.type,
-          providerUserId: input.providerUserId,
-          accessToken: input.accessToken,
-          refreshToken: input.refreshToken,
-          tokenExpiration: input.tokenExpiration,
-          recentHistoryId: input.recentHistoryId,
-          scopes: input.scopes,
-          createdAt: input.createdAt,
-          lastUsedAt: input.lastUsedAt,
-          lastRefreshedAt: input.lastRefreshedAt,
-          status: input.status,
-          genericType: input.genericType,
-          metadata: input.metadata,
-          email: input.email,
-          user: {
-            connect: {
-              id: ctx.user.id,
-            },
-          },
-        },
-      });
-    }),
   update: publicProcedure
     .input(UpdateIntegrationInputSchema)
     .mutation(async ({ input, ctx }) => {
@@ -76,26 +45,4 @@ export const integrationsRouter = createTRPCRouter({
       },
     });
   }),
-
-  getByEmail: publicProcedure
-    .input(z.object({ email: z.string() }))
-    .query(async ({ ctx, input }) => {
-      console.log("getByEmail", input);
-      return ctx.db.integration.findUnique({
-        where: {
-          email: input.email,
-        },
-      });
-    }),
-
-  getByType: publicProcedure
-    .input(z.object({ type: GenericTypeSchema }))
-    .query(async ({ ctx, input }) => {
-      console.log("getByEmail", input);
-      return ctx.db.integration.findMany({
-        where: {
-          genericType: input.type,
-        },
-      });
-    }),
 });

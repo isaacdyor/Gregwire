@@ -15,8 +15,10 @@ export const emailsRouter = createTRPCRouter({
   getAll: privateProcedure.query(async ({ ctx }) => {
     return ctx.db.email.findMany({
       where: {
-        integration: {
-          userId: ctx.user.id,
+        gmailIntegration: {
+          integration: {
+            userId: ctx.user.id,
+          },
         },
       },
       orderBy: {
@@ -47,7 +49,7 @@ export const emailsRouter = createTRPCRouter({
           body: input.email.body,
           receivedAt: input.email.receivedAt ?? new Date(),
           processed: input.email.processed ?? false,
-          integration: {
+          gmailIntegration: {
             connect: {
               email: input.integrationEmail,
             },

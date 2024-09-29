@@ -55,7 +55,7 @@ model GmailIntegration {
   integrationId   String    @unique
   email           String    @unique
   accessToken     String
-  refreshToken    String
+  refreshToken    String?
   tokenExpiration DateTime
   recentHistoryId String?
   
@@ -66,7 +66,7 @@ model GmailIntegration {
 model SlackIntegration {
   id            String  @id @default(uuid())
   integrationId String  @unique
-  teamId        String
+  teamId        String  @unique
   botToken      String
   appId         String
   

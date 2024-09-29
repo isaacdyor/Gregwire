@@ -65,32 +65,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Create new integration in your database
-    const newIntegration = await api.integrations.create({
-      type: "SLACK",
-      accessToken: access_token,
-      status: "ACTIVE",
-      genericType: "MESSAGE",
-      user: {
-        connect: {
-          id: authed_user.id, // Use the Slack user ID as a temporary solution
-        },
-      },
-      teamId: team.id,
-      metadata: JSON.stringify({
-        teamId: team.id,
-        teamName: team.name,
-        userId: authed_user.id,
-        userName: userInfo.user?.name,
-      }),
+    const newIntegration = await api.slack.create({
+      teamId: "your-slack-team-id",
+      botToken: "your-slack-bot-token",
+      appId: "your-slack-app-id",
+      integration: {},
     });
 
     console.log("New integration:", newIntegration);
-
-    if (newIntegration) {
-      // Here you could set up any initial Slack-specific operations
-      // Similar to startGmailWatch in your Google example
-      // await setupSlackEvents(newIntegration.userId, access_token);
-    }
 
     return NextResponse.redirect(
       new URL("/integrations?integration=success", request.url),

@@ -1,47 +1,36 @@
-import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
+import { IntegrationType } from "@prisma/client";
+import {
+  GmailIntegrationCreateInputSchema,
+  GmailIntegrationUpdateInputSchema,
+} from "prisma/generated/zod";
 import { z } from "zod";
-
-const CreateGmailIntegrationSchema = z.object({
-  email: z.string().email(),
-  accessToken: z.string(),
-  refreshToken: z.string(),
-  tokenExpiration: z.date(),
-  recentHistoryId: z.string().optional(),
-});
 
 export const gmailRouter = createTRPCRouter({
   create: privateProcedure
-    .input(CreateGmailIntegrationSchema)
+    .input(GmailIntegrationCreateInputSchema)
     .mutation(async ({ ctx, input }) => {
-      // Create the main Integration record
-      const integration = await ctx.db.integration.create({
-        data: {
-          type: "GMAIL",
-          status: "ACTIVE",
-          user: {
-            connect: {
-              id: ctx.user.id,
-            },
-          },
-        },
-      });
-
-      // Create the GmailIntegration record
       const gmailIntegration = await ctx.db.gmailIntegration.create({
         data: {
-          integrationId: integration.id,
           email: input.email,
           accessToken: input.accessToken,
           refreshToken: input.refreshToken,
           tokenExpiration: input.tokenExpiration,
           recentHistoryId: input.recentHistoryId,
+          integration: {
+            create: {
+              type: IntegrationType.GMAIL,
+              userId: ctx.user.id,
+            },
+          },
         },
       });
 
-      return {
-        integration,
-        gmailIntegration,
-      };
+      return gmailIntegration;
     }),
 
   getAll: privateProcedure.query(async ({ ctx }) => {
@@ -60,9 +49,12 @@ export const gmailRouter = createTRPCRouter({
   getByEmail: privateProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ ctx, input }) => {
-      return ctx.db.gmailIntegration.findUnique({
+      return ctx.db.gmailIntegration.findFirst({
         where: {
           email: input.email,
+          integration: {
+            userId: ctx.user.id,
+          },
         },
         include: {
           integration: true,
@@ -70,21 +62,15 @@ export const gmailRouter = createTRPCRouter({
       });
     }),
 
-  update: privateProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        accessToken: z.string().optional(),
-        refreshToken: z.string().optional(),
-        tokenExpiration: z.date().optional(),
-        recentHistoryId: z.string().optional(),
-      }),
-    )
+  update: publicProcedure
+    .input(GmailIntegrationUpdateInputSchema)
     .mutation(async ({ ctx, input }) => {
       const { id, ...updateData } = input;
 
       return ctx.db.gmailIntegration.update({
-        where: { id },
+        where: {
+          id: id as string,
+        },
         data: updateData,
       });
     }),

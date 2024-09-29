@@ -39,24 +39,21 @@ export async function GET(request: NextRequest) {
       throw new Error("Failed to obtain access token");
     }
 
-    const newIntegration = await api.integrations.create({
-      type: "GMAIL",
+    if (!userProfile.data.emailAddress) {
+      throw new Error("Failed to obtain user email");
+    }
+
+    const newIntegration = await api.gmail.create({
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token ?? null,
       recentHistoryId: initialHistoryId ?? "",
       tokenExpiration: new Date(tokens.expiry_date),
-      status: "ACTIVE",
-      genericType: "EMAIL",
       email: userProfile.data.emailAddress,
-      user: {
-        connect: {
-          id: "",
-        },
-      },
+      integration: {},
     });
 
     if (newIntegration) {
-      await startGmailWatch(newIntegration.userId, tokens);
+      await startGmailWatch(tokens);
     }
 
     return NextResponse.redirect(

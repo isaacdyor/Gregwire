@@ -1,8 +1,8 @@
 import { api } from "@/trpc/server";
-import { type Integration } from "@prisma/client";
+import { type GmailIntegration } from "@prisma/client";
 import { OAuth2Client } from "google-auth-library";
 
-export const refreshToken = async (integration: Integration) => {
+export const refreshToken = async (integration: GmailIntegration) => {
   if (!integration?.refreshToken) {
     console.error("Invalid gmail integration", integration.email);
     return;
@@ -26,15 +26,13 @@ export const refreshToken = async (integration: Integration) => {
     try {
       const { credentials } = await oauth2Client.refreshAccessToken();
 
-      const updatedIntegration = await api.integrations.update({
-        integrationId: integration.id,
-        integration: {
-          accessToken: credentials.access_token!,
-          refreshToken: credentials.refresh_token ?? integration.refreshToken,
-          tokenExpiration: credentials.expiry_date
-            ? new Date(credentials.expiry_date)
-            : undefined,
-        },
+      const updatedIntegration = await api.gmail.update({
+        id: integration.id,
+        accessToken: credentials.access_token!,
+        refreshToken: credentials.refresh_token ?? integration.refreshToken,
+        tokenExpiration: credentials.expiry_date
+          ? new Date(credentials.expiry_date)
+          : undefined,
       });
 
       console.log("Token refreshed successfully for", integration.email);
