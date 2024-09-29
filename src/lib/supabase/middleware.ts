@@ -33,7 +33,10 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  if (request.nextUrl.pathname.startsWith("/api")) {
+  if (
+    request.nextUrl.pathname.startsWith("/api") ||
+    request.nextUrl.pathname.startsWith("/auth")
+  ) {
     return NextResponse.next();
   }
 
@@ -41,7 +44,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicRoutes = ["/", "/signin", "/signup", "/auth"];
+  const publicRoutes = ["/", "/signin", "/signup"];
 
   if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
     // Redirect to signin if unauthenticated user tries to access protected route

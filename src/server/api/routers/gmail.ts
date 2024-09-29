@@ -46,15 +46,12 @@ export const gmailRouter = createTRPCRouter({
     });
   }),
 
-  getByEmail: privateProcedure
+  getByEmail: publicProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ ctx, input }) => {
       return ctx.db.gmailIntegration.findFirst({
         where: {
           email: input.email,
-          integration: {
-            userId: ctx.user.id,
-          },
         },
         include: {
           integration: true,
