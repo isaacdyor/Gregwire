@@ -13,6 +13,7 @@ export async function getSlackAuthUrl() {
       "groups:read",
       "im:history",
       "im:read",
+      "users:read",
     ].join(",");
 
     // Construct the Slack authorization URL
