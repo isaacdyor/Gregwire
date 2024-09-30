@@ -10,8 +10,7 @@ export const slackRouter = createTRPCRouter({
       const slackIntegration = await ctx.db.slackIntegration.create({
         data: {
           teamId: input.teamId,
-          botToken: input.botToken,
-          appId: input.appId,
+          accessToken: input.accessToken,
           integration: {
             create: {
               type: IntegrationType.SLACK,
