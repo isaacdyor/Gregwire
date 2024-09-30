@@ -4,8 +4,7 @@ import { Messages } from "@/features/messages/components";
 import { api } from "@/trpc/server";
 
 export default async function MessagesPage() {
-  const integrations = await api.gmail.getAll();
-
+  const integrations = await api.slack.getAll();
   const messages = await api.messages.getAll();
 
   return (

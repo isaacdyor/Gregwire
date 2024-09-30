@@ -8,14 +8,11 @@ export async function getSlackAuthUrl() {
     // Define the scopes you need for your Slack app
     const scopes = [
       "channels:history",
-      "chat:write",
-      "im:history",
-      "users:read",
+      "channels:read",
       "groups:history",
-      "incoming-webhook",
-      "app_mentions:read",
-      "reactions:read",
-      "files:read",
+      "groups:read",
+      "im:history",
+      "im:read",
     ].join(",");
 
     // Construct the Slack authorization URL
