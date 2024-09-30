@@ -2,6 +2,22 @@ import { env } from "@/env";
 import { api } from "@/trpc/server";
 import { WebClient } from "@slack/web-api";
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+const SlackPayloadSchema = z.object({
+  ok: z.boolean(),
+  app_id: z.string(),
+  authed_user: z.object({
+    id: z.string(),
+    scope: z.string(),
+    access_token: z.string(),
+    token_type: z.string(),
+  }),
+  team: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+});
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -30,28 +46,20 @@ export async function GET(request: NextRequest) {
 
     console.log("Slack response:", result);
 
-    const data = (await result.json()) as {
-      ok: boolean;
-      error?: string;
-      access_token?: string;
-      team?: { id: string; name: string };
-      authed_user?: { id: string };
-    };
+    const data = SlackPayloadSchema.parse(await result.json());
+
     console.log("data:", data);
-    if (!data.ok) {
-      throw new Error(data.error ?? "Failed to exchange code for token");
-    }
 
-    const { access_token, team, authed_user } = data;
+    const { team, authed_user } = data;
 
-    if (!access_token || !team || !authed_user) {
+    if (!team || !authed_user) {
       throw new Error("Missing required data from Slack response");
     }
 
     console.log("Slack response:", data);
 
     // Initialize Slack WebClient
-    const slack = new WebClient(access_token);
+    const slack = new WebClient(authed_user.access_token);
 
     // Get user info
     const userInfo = await slack.users.info({
@@ -67,7 +75,7 @@ export async function GET(request: NextRequest) {
     // Create new integration in your database
     const newIntegration = await api.slack.create({
       teamId: team.id,
-      accessToken: access_token,
+      accessToken: authed_user.access_token,
       integration: {},
     });
 
