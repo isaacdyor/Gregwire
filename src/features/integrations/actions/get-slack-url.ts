@@ -19,7 +19,7 @@ export async function getSlackAuthUrl() {
     // Construct the Slack authorization URL
     const authorizationUrl = new URL("https://slack.com/oauth/v2/authorize");
     authorizationUrl.searchParams.append("client_id", env.SLACK_CLIENT_ID);
-    authorizationUrl.searchParams.append("scope", scopes);
+    authorizationUrl.searchParams.append("user_scope", scopes);
     authorizationUrl.searchParams.append(
       "redirect_uri",
       `${env.NEXT_PUBLIC_APP_URL}/integrations/slack`,
