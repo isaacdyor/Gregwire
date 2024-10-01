@@ -1,9 +1,10 @@
+import { ContentLayout } from "@/components/layouts/content-layout";
 import { Dashboard } from "@/features/dashboard/components";
 
 export default async function DashboardPage() {
   return (
-    <div>
+    <ContentLayout title="Dashboard">
       <Dashboard />
-    </div>
+    </ContentLayout>
   );
 }

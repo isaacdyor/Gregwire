@@ -5,7 +5,7 @@ import { emailsRouter } from "./routers/emails";
 import { messagesRouter } from "./routers/messages";
 import { gmailRouter } from "./routers/gmail";
 import { slackRouter } from "./routers/slack";
-
+import { llmRouter } from "./routers/llm";
 /**
  * This is the primary router for your server.
  *
@@ -18,6 +18,7 @@ export const appRouter = createTRPCRouter({
   messages: messagesRouter,
   gmail: gmailRouter,
   slack: slackRouter,
+  llm: llmRouter,
 });
 
 // export type definition of API
