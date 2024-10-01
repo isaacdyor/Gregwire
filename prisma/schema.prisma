@@ -92,7 +92,7 @@ model Message {
   id                 String           @id @default(uuid())
   messageId          String           @unique
   slackIntegrationId String
-  userId             String
+  senderId           String
   channelId          String
   text               String           @db.Text
   timestamp          String

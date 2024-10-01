@@ -3,13 +3,8 @@ import {
   privateProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-// import { MessageCreateInputSchema } from "prisma/generated/zod";
+import { MessageCreateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
-
-// const CreateMessageInputSchema = z.object({
-//   message: MessageCreateInputSchema,
-//   providerUserId: z.string(),
-// });
 
 export const messagesRouter = createTRPCRouter({
   getAll: privateProcedure.query(async ({ ctx }) => {
@@ -34,23 +29,11 @@ export const messagesRouter = createTRPCRouter({
       });
     }),
 
-  // create: publicProcedure
-  //   .input(CreateMessageInputSchema)
-  //   .mutation(async ({ ctx, input }) => {
-  //     return ctx.db.message.create({
-  //       data: {
-  //         messageId: input.message.messageId,
-  //         userId: input.message.userId,
-  //         channelId: input.message.channelId,
-  //         text: input.message.text,
-  //         timestamp: input.message.timestamp,
-  //         threadTs: input.message.threadTs,
-  //         slackIntegration: {
-  //           connect: {
-  //             teamId: input.providerUserId,
-  //           },
-  //         },
-  //       },
-  //     });
-  //   }),
+  create: publicProcedure
+    .input(MessageCreateInputSchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.message.create({
+        data: input,
+      });
+    }),
 });

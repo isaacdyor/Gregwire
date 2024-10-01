@@ -1,3 +1,4 @@
+import { api } from "@/trpc/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -15,6 +16,17 @@ const SlackPayloadSchema = z.object({
       ts: z.string(),
       thread_ts: z.string().optional(),
     })
+    .optional(),
+  authorizations: z
+    .array(
+      z.object({
+        enterprise_id: z.string().nullable(),
+        team_id: z.string(),
+        user_id: z.string(),
+        is_bot: z.boolean(),
+        is_enterprise_install: z.boolean(),
+      }),
+    )
     .optional(),
 });
 
@@ -35,25 +47,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ challenge: body.challenge });
     }
 
+    if (!body.authorizations?.[0]?.user_id) {
+      console.error("No authorizations found in payload");
+      return NextResponse.json({ success: false }, { status: 400 });
+    }
+
     // Log event details if it's an event
     if (body.type === "event_callback" && body.event) {
-      // const newMessage = await api.messages.create({
-      //   message: {
-      //     messageId: body.event.ts,
-      //     userId: body.event.user,
-      //     channelId: body.event.channel,
-      //     text: body.event.text,
-      //     timestamp: body.event.ts,
-      //     threadTs: body.event.thread_ts,
-      //     slackIntegration: {
-      //       connect: {
-      //         teamId: body.team_id,
-      //       },
-      //     },
-      //   },
-      //   providerUserId: body.event.user,
-      // });
-      // console.log("New message:", newMessage);
+      const newMessage = await api.messages.create({
+        messageId: body.event.ts,
+        senderId: body.event.user,
+        channelId: body.event.channel,
+        text: body.event.text,
+        timestamp: body.event.ts,
+        threadTs: body.event.thread_ts,
+        slackIntegration: {
+          connect: {
+            slackUserId: body.authorizations[0].user_id,
+          },
+        },
+      });
+      console.log("New message:", newMessage);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
