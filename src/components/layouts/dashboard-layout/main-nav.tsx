@@ -20,7 +20,9 @@ export const MainNav: React.FC = () => {
       const Icon = Icons[item.icon];
 
       if ("children" in item) {
-        // This is a dropdown item
+        const isActiveParent = item.children.some((child) =>
+          child.url.startsWith(`/${segment}`),
+        );
         return (
           <div
             key={item.label}
@@ -31,9 +33,8 @@ export const MainNav: React.FC = () => {
             <button
               className={cn(
                 "flex h-10 w-full items-center rounded-md px-2.5 text-sm text-muted-foreground hover:bg-secondary/50",
-                // dropdownOpen ? "bg-secondary" : "hover:bg-green-500/50",
+                isActiveParent && "bg-secondary hover:bg-secondary",
               )}
-              // onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <ChevronRight
                 className={cn(
