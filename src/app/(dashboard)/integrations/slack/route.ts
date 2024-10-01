@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
     const newIntegration = await api.slack.create({
       teamId: team.id,
       accessToken: authed_user.access_token,
+      slackUserId: authed_user.id,
       integration: {},
     });
 

@@ -11,6 +11,7 @@ export const slackRouter = createTRPCRouter({
         data: {
           teamId: input.teamId,
           accessToken: input.accessToken,
+          slackUserId: input.slackUserId,
           integration: {
             create: {
               type: IntegrationType.SLACK,

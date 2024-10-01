@@ -68,6 +68,7 @@ model SlackIntegration {
   integrationId String  @unique
   teamId        String
   accessToken   String
+  slackUserId   String  @unique
   
   integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
   messages      Message[]
