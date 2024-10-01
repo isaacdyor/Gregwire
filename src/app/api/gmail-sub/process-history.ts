@@ -84,21 +84,18 @@ export async function processHistory(
           return console.log("Email already exists");
         }
         const newEmail = await api.emails.create({
-          email: {
-            messageId: message.id,
-            subject,
-            from,
-            date: new Date(date),
-            body,
-            receivedAt: new Date(),
-            processed: false,
-            gmailIntegration: {
-              connect: {
-                integrationId: integration.id,
-              },
+          messageId: message.id,
+          subject,
+          from,
+          date: new Date(date),
+          body,
+          receivedAt: new Date(),
+          processed: false,
+          gmailIntegration: {
+            connect: {
+              email: integration.email,
             },
           },
-          integrationEmail: integration.email, // we found this integration by email
         });
         console.log(newEmail);
       }
