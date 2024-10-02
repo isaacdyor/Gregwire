@@ -1,23 +1,22 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AutomationElement } from "./automation-element";
+import { getCSSColor } from "@/utils/colors";
 
 interface Offset {
   x: number;
   y: number;
 }
 
-interface CanvasElement {
-  id: string;
-  component: React.ReactNode;
-  position: Offset;
+interface AutomationElement {
+  title: string;
+  content: string;
 }
 
-interface CanvasProps {
-  elements: CanvasElement[];
-}
-
-export const Canvas: React.FC<CanvasProps> = ({ elements }) => {
+export const Canvas: React.FC<{ elements: AutomationElement[] }> = ({
+  elements,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -32,28 +31,35 @@ export const Canvas: React.FC<CanvasProps> = ({ elements }) => {
     if (!ctx) return;
 
     const dotSpacing = 25;
-    ctx.fillStyle = "rgba(200, 200, 200, 0.5)";
+    ctx.fillStyle = getCSSColor("--border");
 
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw the dot grid
+    ctx.imageSmoothingEnabled = false;
+
+    // Adjust these values as needed
+    const dotRadius = 1.5; // Slightly larger than 1 for more visibility
+    const scaleFactor = 2; // Draw larger and scale down for crispness
+
     for (let x = offset.x % dotSpacing; x < canvas.width; x += dotSpacing) {
       for (let y = offset.y % dotSpacing; y < canvas.height; y += dotSpacing) {
+        // Align to nearest pixel
+        const pixelX = Math.round(x);
+        const pixelY = Math.round(y);
+
+        ctx.save();
+        ctx.translate(pixelX, pixelY);
+        ctx.scale(scaleFactor, scaleFactor);
+
         ctx.beginPath();
-        ctx.arc(x, y, 1, 0, Math.PI * 2);
+        ctx.arc(0, 0, dotRadius / scaleFactor, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.restore();
       }
     }
-
-    // Draw some text to show movement
-    ctx.fillStyle = "black";
-    ctx.font = "16px Arial";
-    ctx.fillText(
-      `Offset: (${offset.x.toFixed(2)}, ${offset.y.toFixed(2)})`,
-      10,
-      20,
-    );
   }, [offset]);
 
   const handleResize = useCallback(() => {
@@ -129,17 +135,17 @@ export const Canvas: React.FC<CanvasProps> = ({ elements }) => {
           height: "100%",
         }}
       />
-      {elements.map((element) => (
+      {elements.map((element, index) => (
         <div
-          key={element.id}
+          key={index}
           style={{
             position: "absolute",
-            left: `${element.position.x + offset.x}px`,
-            top: `${element.position.y + offset.y}px`,
+            left: `${index * 100 + offset.x}px`,
+            top: `${index * 100 + offset.y}px`,
             pointerEvents: "auto",
           }}
         >
-          {element.component}
+          <AutomationElement title={element.title} content={element.content} />
         </div>
       ))}
     </div>
