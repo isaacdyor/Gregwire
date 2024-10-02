@@ -1,5 +1,4 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { AutomationCreateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
 export const automationsRouter = createTRPCRouter({
@@ -14,16 +13,13 @@ export const automationsRouter = createTRPCRouter({
     });
   }),
 
-  create: privateProcedure
-    .input(AutomationCreateInputSchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.automation.create({
-        data: {
-          ...input,
-          userId: ctx.user.id,
-        },
-      });
-    }),
+  create: privateProcedure.mutation(async ({ ctx }) => {
+    return ctx.db.automation.create({
+      data: {
+        userId: ctx.user.id,
+      },
+    });
+  }),
 
   getById: privateProcedure
     .input(z.object({ id: z.string() }))

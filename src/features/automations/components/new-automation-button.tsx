@@ -1,13 +1,31 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const NewAutomationButton = () => {
-  const mutation = api.automations.create.useMutation();
+  const router = useRouter();
+  const { mutate: createAutomation, isPending } =
+    api.automations.create.useMutation({
+      onSuccess: (data) => {
+        router.push(`/automations/${data.id}`);
+      },
+    });
+
   return (
-    <Button size="sm" className="flex items-center gap-2">
+    <Button
+      onClick={() => createAutomation()}
+      size="sm"
+      className="flex items-center gap-2"
+    >
       Add new
-      <Plus className="h-6 w-6" />
+      {isPending ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Plus className="h-4 w-4" />
+      )}
     </Button>
   );
 };
