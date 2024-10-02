@@ -5,6 +5,7 @@ import { AutomationElement } from "./automation-element";
 import { Canvas } from "./canvas";
 import { AutomationElementDetail } from "./automation-element-detail";
 import { type Automation } from "@prisma/client";
+import { Input } from "@/components/ui/input";
 
 export const AutomationDetail = ({
   automation,
@@ -40,6 +41,12 @@ export const AutomationDetail = ({
       <p className="absolute left-2 top-2 z-20 rounded-md bg-background p-1 text-2xl font-bold">
         Automation Title
       </p>
+      <Input
+        value={automation.title}
+        onChange={(e) => {
+          console.log(e.target.value);
+        }}
+      />
       <Canvas>
         <div className="flex h-[calc(100vh-24px)] flex-col items-center pl-32 pt-24">
           {automations.map((automation, index) => (

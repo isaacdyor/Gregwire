@@ -52,9 +52,4 @@ export const dashboardConfig: DashboardItem[] = [
       },
     ],
   },
-  {
-    label: "Settings",
-    url: "/settings",
-    icon: "settings",
-  },
 ];

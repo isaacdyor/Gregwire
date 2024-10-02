@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Popover,
@@ -6,11 +5,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { EllipsisIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "../use-dashboard";
 import { LogoutButton } from "./logout-button";
+import { SettingsLink } from "./settings-link";
 import { ToggleTheme } from "./toggle-theme";
 
 export const UserMenu = () => {
@@ -73,6 +74,7 @@ export const UserMenu = () => {
       <PopoverContent className={cn("w-48 p-1", !isOpen && "hidden")}>
         <div className="flex flex-col gap-1">
           <ToggleTheme />
+          <SettingsLink />
           <LogoutButton />
         </div>
       </PopoverContent>
