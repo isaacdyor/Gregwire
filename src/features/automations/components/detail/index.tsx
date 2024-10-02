@@ -4,8 +4,13 @@ import { useState } from "react";
 import { AutomationElement } from "./automation-element";
 import { Canvas } from "./canvas";
 import { AutomationElementDetail } from "./automation-element-detail";
+import { type Automation } from "@prisma/client";
 
-export const AutomationDetail = () => {
+export const AutomationDetail = ({
+  automation,
+}: {
+  automation: Automation;
+}) => {
   const [automationIndex, setAutomationIndex] = useState<number | null>(0);
 
   const automations = [
@@ -32,7 +37,7 @@ export const AutomationDetail = () => {
   ];
   return (
     <div className="relative h-full w-full">
-      <p className="absolute left-2 top-2 z-40 rounded-md bg-background p-1 text-2xl font-bold">
+      <p className="absolute left-2 top-2 z-20 rounded-md bg-background p-1 text-2xl font-bold">
         Automation Title
       </p>
       <Canvas>

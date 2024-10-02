@@ -104,3 +104,37 @@ model Message {
 
   @@index([channelId, timestamp])
 }
+
+model Automation {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+  lastRun   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  trigger   Trigger?
+  actions   Action[]
+}
+
+model Trigger {
+  id           String     @id @default(uuid())
+  automationId String     @unique
+  type         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+}
+
+model Action {
+  id           String     @id @default(uuid())
+  automationId String
+  type         String
+  position     Float      
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+
+  @@index([automationId, position])
+}
