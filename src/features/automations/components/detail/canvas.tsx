@@ -1,21 +1,15 @@
 "use client";
 
+import { adjustHSLOpacity, getCSSColor } from "@/utils/colors";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { AutomationElement } from "./automation-element";
-import { getCSSColor } from "@/utils/colors";
 
 interface Offset {
   x: number;
   y: number;
 }
 
-interface AutomationElement {
-  title: string;
-  content: string;
-}
-
-export const Canvas: React.FC<{ elements: AutomationElement[] }> = ({
-  elements,
+export const Canvas: React.FC<{ children: React.ReactNode }> = ({
+  children,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,7 +25,11 @@ export const Canvas: React.FC<{ elements: AutomationElement[] }> = ({
     if (!ctx) return;
 
     const dotSpacing = 25;
-    ctx.fillStyle = getCSSColor("--border");
+
+    // Usage example:
+    const color = getCSSColor("--muted-foreground");
+    const adjustedColor = adjustHSLOpacity(color, 0.3);
+    ctx.fillStyle = adjustedColor;
 
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -135,19 +133,16 @@ export const Canvas: React.FC<{ elements: AutomationElement[] }> = ({
           height: "100%",
         }}
       />
-      {elements.map((element, index) => (
-        <div
-          key={index}
-          style={{
-            position: "absolute",
-            left: `${index * 100 + offset.x}px`,
-            top: `${index * 100 + offset.y}px`,
-            pointerEvents: "auto",
-          }}
-        >
-          <AutomationElement title={element.title} content={element.content} />
-        </div>
-      ))}
+      <div
+        style={{
+          position: "absolute",
+          left: `${offset.x}px`,
+          top: `${offset.y}px`,
+          pointerEvents: "auto",
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
