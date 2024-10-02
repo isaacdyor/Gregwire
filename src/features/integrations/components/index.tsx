@@ -1,4 +1,4 @@
-import { NoIntegrationLayout } from "@/components/layouts/no-integration-layout";
+import { NotFoundLayout } from "@/components/layouts/not-found-layout";
 import { type Integration } from "@prisma/client";
 import React from "react";
 import { CurrentIntegrationCard } from "./current-integration-card";
@@ -7,7 +7,7 @@ export const Integrations: React.FC<{
   integrations: Integration[];
 }> = ({ integrations }) => {
   if (integrations.length === 0) {
-    return <NoIntegrationLayout />;
+    return <NotFoundLayout type="Integration" url="/integrations/new" />;
   }
 
   return (

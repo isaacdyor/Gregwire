@@ -1,12 +1,6 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import { AutomationCreateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
-
-// Define the input schema for creating an automation
-const AutomationCreateInputSchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  // Add more fields as needed for your automation
-});
 
 export const automationsRouter = createTRPCRouter({
   getAll: privateProcedure.query(async ({ ctx }) => {

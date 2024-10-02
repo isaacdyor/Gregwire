@@ -1,5 +1,5 @@
 import { ContentLayout } from "@/components/layouts/content-layout";
-import { NoIntegrationLayout } from "@/components/layouts/no-integration-layout";
+import { NotFoundLayout } from "@/components/layouts/not-found-layout";
 import { Messages } from "@/features/messages/components";
 import { api } from "@/trpc/server";
 
@@ -10,7 +10,7 @@ export default async function MessagesPage() {
   return (
     <ContentLayout title="Messages">
       {integrations.length === 0 ? (
-        <NoIntegrationLayout genericType="Messages" />
+        <NotFoundLayout type="Messages Integrations" url="/integrations/new" />
       ) : (
         <Messages messages={messages} />
       )}

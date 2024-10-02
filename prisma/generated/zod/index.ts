@@ -24,7 +24,7 @@ export const EmailScalarFieldEnumSchema = z.enum(['id','messageId','gmailIntegra
 
 export const MessageScalarFieldEnumSchema = z.enum(['id','messageId','slackIntegrationId','senderId','channelId','text','timestamp','threadTs','receivedAt','processed']);
 
-export const AutomationScalarFieldEnumSchema = z.enum(['id','userId','name','lastRun','createdAt','updatedAt']);
+export const AutomationScalarFieldEnumSchema = z.enum(['id','userId','title','lastRun','createdAt','updatedAt']);
 
 export const TriggerScalarFieldEnumSchema = z.enum(['id','automationId','type','createdAt','updatedAt']);
 
@@ -150,7 +150,7 @@ export type Message = z.infer<typeof MessageSchema>
 export const AutomationSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -391,7 +391,7 @@ export const AutomationCountOutputTypeSelectSchema: z.ZodType<Prisma.AutomationC
 export const AutomationSelectSchema: z.ZodType<Prisma.AutomationSelect> = z.object({
   id: z.boolean().optional(),
   userId: z.boolean().optional(),
-  name: z.boolean().optional(),
+  title: z.boolean().optional(),
   lastRun: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
@@ -937,7 +937,7 @@ export const AutomationWhereInputSchema: z.ZodType<Prisma.AutomationWhereInput> 
   NOT: z.union([ z.lazy(() => AutomationWhereInputSchema),z.lazy(() => AutomationWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   lastRun: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -948,7 +948,7 @@ export const AutomationWhereInputSchema: z.ZodType<Prisma.AutomationWhereInput> 
 export const AutomationOrderByWithRelationInputSchema: z.ZodType<Prisma.AutomationOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
+  title: z.lazy(() => SortOrderSchema).optional(),
   lastRun: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
@@ -965,7 +965,7 @@ export const AutomationWhereUniqueInputSchema: z.ZodType<Prisma.AutomationWhereU
   OR: z.lazy(() => AutomationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => AutomationWhereInputSchema),z.lazy(() => AutomationWhereInputSchema).array() ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   lastRun: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -976,7 +976,7 @@ export const AutomationWhereUniqueInputSchema: z.ZodType<Prisma.AutomationWhereU
 export const AutomationOrderByWithAggregationInputSchema: z.ZodType<Prisma.AutomationOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
+  title: z.lazy(() => SortOrderSchema).optional(),
   lastRun: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
@@ -991,7 +991,7 @@ export const AutomationScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Au
   NOT: z.union([ z.lazy(() => AutomationScalarWhereWithAggregatesInputSchema),z.lazy(() => AutomationScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   userId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  title: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   lastRun: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -1560,7 +1560,7 @@ export const MessageUncheckedUpdateManyInputSchema: z.ZodType<Prisma.MessageUnch
 export const AutomationCreateInputSchema: z.ZodType<Prisma.AutomationCreateInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -1571,7 +1571,7 @@ export const AutomationCreateInputSchema: z.ZodType<Prisma.AutomationCreateInput
 export const AutomationUncheckedCreateInputSchema: z.ZodType<Prisma.AutomationUncheckedCreateInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -1582,7 +1582,7 @@ export const AutomationUncheckedCreateInputSchema: z.ZodType<Prisma.AutomationUn
 export const AutomationUpdateInputSchema: z.ZodType<Prisma.AutomationUpdateInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1593,7 +1593,7 @@ export const AutomationUpdateInputSchema: z.ZodType<Prisma.AutomationUpdateInput
 export const AutomationUncheckedUpdateInputSchema: z.ZodType<Prisma.AutomationUncheckedUpdateInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1604,7 +1604,7 @@ export const AutomationUncheckedUpdateInputSchema: z.ZodType<Prisma.AutomationUn
 export const AutomationCreateManyInputSchema: z.ZodType<Prisma.AutomationCreateManyInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -1613,7 +1613,7 @@ export const AutomationCreateManyInputSchema: z.ZodType<Prisma.AutomationCreateM
 export const AutomationUpdateManyMutationInputSchema: z.ZodType<Prisma.AutomationUpdateManyMutationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1622,7 +1622,7 @@ export const AutomationUpdateManyMutationInputSchema: z.ZodType<Prisma.Automatio
 export const AutomationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AutomationUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2168,7 +2168,7 @@ export const ActionOrderByRelationAggregateInputSchema: z.ZodType<Prisma.ActionO
 export const AutomationCountOrderByAggregateInputSchema: z.ZodType<Prisma.AutomationCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
+  title: z.lazy(() => SortOrderSchema).optional(),
   lastRun: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
@@ -2177,7 +2177,7 @@ export const AutomationCountOrderByAggregateInputSchema: z.ZodType<Prisma.Automa
 export const AutomationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.AutomationMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
+  title: z.lazy(() => SortOrderSchema).optional(),
   lastRun: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
@@ -2186,7 +2186,7 @@ export const AutomationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Automati
 export const AutomationMinOrderByAggregateInputSchema: z.ZodType<Prisma.AutomationMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
+  title: z.lazy(() => SortOrderSchema).optional(),
   lastRun: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
@@ -3541,7 +3541,7 @@ export const ActionScalarWhereInputSchema: z.ZodType<Prisma.ActionScalarWhereInp
 export const AutomationCreateWithoutTriggerInputSchema: z.ZodType<Prisma.AutomationCreateWithoutTriggerInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3551,7 +3551,7 @@ export const AutomationCreateWithoutTriggerInputSchema: z.ZodType<Prisma.Automat
 export const AutomationUncheckedCreateWithoutTriggerInputSchema: z.ZodType<Prisma.AutomationUncheckedCreateWithoutTriggerInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3577,7 +3577,7 @@ export const AutomationUpdateToOneWithWhereWithoutTriggerInputSchema: z.ZodType<
 export const AutomationUpdateWithoutTriggerInputSchema: z.ZodType<Prisma.AutomationUpdateWithoutTriggerInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3587,7 +3587,7 @@ export const AutomationUpdateWithoutTriggerInputSchema: z.ZodType<Prisma.Automat
 export const AutomationUncheckedUpdateWithoutTriggerInputSchema: z.ZodType<Prisma.AutomationUncheckedUpdateWithoutTriggerInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3597,7 +3597,7 @@ export const AutomationUncheckedUpdateWithoutTriggerInputSchema: z.ZodType<Prism
 export const AutomationCreateWithoutActionsInputSchema: z.ZodType<Prisma.AutomationCreateWithoutActionsInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3607,7 +3607,7 @@ export const AutomationCreateWithoutActionsInputSchema: z.ZodType<Prisma.Automat
 export const AutomationUncheckedCreateWithoutActionsInputSchema: z.ZodType<Prisma.AutomationUncheckedCreateWithoutActionsInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  name: z.string(),
+  title: z.string(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3633,7 +3633,7 @@ export const AutomationUpdateToOneWithWhereWithoutActionsInputSchema: z.ZodType<
 export const AutomationUpdateWithoutActionsInputSchema: z.ZodType<Prisma.AutomationUpdateWithoutActionsInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3643,7 +3643,7 @@ export const AutomationUpdateWithoutActionsInputSchema: z.ZodType<Prisma.Automat
 export const AutomationUncheckedUpdateWithoutActionsInputSchema: z.ZodType<Prisma.AutomationUncheckedUpdateWithoutActionsInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   lastRun: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
