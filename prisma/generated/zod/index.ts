@@ -1560,7 +1560,7 @@ export const MessageUncheckedUpdateManyInputSchema: z.ZodType<Prisma.MessageUnch
 export const AutomationCreateInputSchema: z.ZodType<Prisma.AutomationCreateInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -1571,7 +1571,7 @@ export const AutomationCreateInputSchema: z.ZodType<Prisma.AutomationCreateInput
 export const AutomationUncheckedCreateInputSchema: z.ZodType<Prisma.AutomationUncheckedCreateInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -1604,7 +1604,7 @@ export const AutomationUncheckedUpdateInputSchema: z.ZodType<Prisma.AutomationUn
 export const AutomationCreateManyInputSchema: z.ZodType<Prisma.AutomationCreateManyInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -3541,7 +3541,7 @@ export const ActionScalarWhereInputSchema: z.ZodType<Prisma.ActionScalarWhereInp
 export const AutomationCreateWithoutTriggerInputSchema: z.ZodType<Prisma.AutomationCreateWithoutTriggerInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3551,7 +3551,7 @@ export const AutomationCreateWithoutTriggerInputSchema: z.ZodType<Prisma.Automat
 export const AutomationUncheckedCreateWithoutTriggerInputSchema: z.ZodType<Prisma.AutomationUncheckedCreateWithoutTriggerInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3597,7 +3597,7 @@ export const AutomationUncheckedUpdateWithoutTriggerInputSchema: z.ZodType<Prism
 export const AutomationCreateWithoutActionsInputSchema: z.ZodType<Prisma.AutomationCreateWithoutActionsInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3607,7 +3607,7 @@ export const AutomationCreateWithoutActionsInputSchema: z.ZodType<Prisma.Automat
 export const AutomationUncheckedCreateWithoutActionsInputSchema: z.ZodType<Prisma.AutomationUncheckedCreateWithoutActionsInput> = z.object({
   id: z.string().optional(),
   userId: z.string(),
-  title: z.string(),
+  title: z.string().optional(),
   lastRun: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),

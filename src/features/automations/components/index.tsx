@@ -1,7 +1,7 @@
 import { NotFoundLayout } from "@/components/layouts/not-found-layout";
 import { type Automation } from "@prisma/client";
 import { AutomationCard } from "./automation-card";
-import { NewAutomationButton } from "@/app/(dashboard)/automations/new-automation-button";
+import { NewAutomationButton } from "./new-automation-button";
 
 export const Automations: React.FC<{
   automations: Automation[];

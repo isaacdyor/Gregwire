@@ -108,7 +108,7 @@ model Message {
 model Automation {
   id        String    @id @default(uuid())
   userId    String
-  title      String
+  title     String    @default("Untitled Automation")
   lastRun   DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
