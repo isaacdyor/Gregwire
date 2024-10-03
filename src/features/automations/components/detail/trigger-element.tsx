@@ -18,7 +18,7 @@ export const TriggerElement: React.FC<{
     </Card>
     <div className="relative flex flex-col items-center">
       <div className="h-[16px] w-0.5 bg-border" />
-      <div className="group flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer hover:bg-secondary">
+      <div className="group flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer hover:bg-border">
         <Plus size={20} className="text-muted-foreground" />
       </div>
     </div>
