@@ -23,7 +23,7 @@ const routes: Routes = {
     children: {
       "[id]": {
         name: (id: string) => `Automation ${id}`,
-        component: ({ id }) => <TitleInput title={id} />,
+        component: () => <TitleInput />,
       },
       create: { name: "Create Automation" },
     },

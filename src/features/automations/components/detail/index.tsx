@@ -1,10 +1,11 @@
 "use client";
 
 import { type Automation } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AutomationElement } from "./automation-element";
 import { AutomationElementDetail } from "./automation-element-detail";
 import { Canvas } from "./canvas";
+import { useAutomationStore } from "@/stores/automations";
 
 export const AutomationDetail = ({
   automation,
@@ -12,6 +13,14 @@ export const AutomationDetail = ({
   automation: Automation;
 }) => {
   const [automationIndex, setAutomationIndex] = useState<number | null>(0);
+  const setAutomationTitle = useAutomationStore(
+    (state) => state.setAutomationTitle,
+  );
+
+  useEffect(() => {
+    setAutomationTitle(automation.title);
+    return () => setAutomationTitle(null); // Cleanup when unmounting
+  }, [automation.title, setAutomationTitle]);
 
   const automations = [
     {
@@ -24,25 +33,26 @@ export const AutomationDetail = ({
     },
     {
       title: "Card 3",
-      content: "This is the second card",
+      content: "This is the third card",
     },
     {
       title: "Card 4",
-      content: "This is the second card",
+      content: "This is the fourth card",
     },
     {
       title: "Card 5",
-      content: "This is the second card",
+      content: "This is the fifth card",
     },
   ];
+
   return (
     <div className="relative h-full w-full">
       <Canvas>
         <div className="flex h-[calc(100vh-24px)] flex-col items-center pl-32 pt-24">
-          {automations.map((automation, index) => (
+          {automations.map((automationItem, index) => (
             <AutomationElement
-              key={automation.title}
-              {...automation}
+              key={automationItem.title}
+              {...automationItem}
               isLast={index === automations.length - 1}
               setAutomationIndex={setAutomationIndex}
               index={index}
