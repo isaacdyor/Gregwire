@@ -1,34 +1,42 @@
 import { api } from "@/trpc/react";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const AddActionButton: React.FC<{
   firstIndex: number;
   secondIndex?: number;
   automationId: string;
 }> = ({ firstIndex, secondIndex, automationId }) => {
-  const utils = api.useUtils();
-  const { mutate: addAction } = api.actions.create.useMutation({
+  const router = useRouter();
+
+  const { mutate: addAction, isPending } = api.actions.create.useMutation({
     onSuccess: async () => {
-      await utils.automations.getById.invalidate();
+      router.refresh();
     },
   });
 
+  const handleClick = () => {
+    addAction({
+      type: "EMAIL",
+      position: 0,
+      automation: {
+        connect: {
+          id: automationId,
+        },
+      },
+    });
+  };
+
   return (
     <div
-      onClick={() =>
-        addAction({
-          type: "EMAIL",
-          position: 0,
-          automation: {
-            connect: {
-              id: automationId,
-            },
-          },
-        })
-      }
+      onClick={handleClick}
       className="group flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer hover:bg-border"
     >
-      <Plus className="text-muted-foreground" />
+      {isPending ? (
+        <Loader2 className="animate-spin text-muted-foreground" />
+      ) : (
+        <Plus className="text-muted-foreground" />
+      )}
     </div>
   );
 };

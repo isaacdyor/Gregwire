@@ -7,7 +7,7 @@ export const ActionElement: React.FC<{
   setAutomationIndex: (index: number | null) => void;
   index: number;
 }> = ({ action, setAutomationIndex, index }) => (
-  <div className="relative flex flex-col items-center">
+  <div className="relative flex w-[calc(100%-438px)] flex-col items-center">
     <div className="h-[17px] w-0.5 bg-border" />
     <Card
       className="relative w-96 hover:cursor-pointer"

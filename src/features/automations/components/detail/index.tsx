@@ -14,9 +14,7 @@ export const AutomationDetail = ({
 }: {
   automation: AutomationWithTriggerAndActions;
 }) => {
-  const [automationIndex, setAutomationIndex] = useState<number | null>(
-    automation.trigger ? 0 : null,
-  );
+  const [automationIndex, setAutomationIndex] = useState<number | null>(null);
   const setAutomation = useAutomationStore((state) => state.setAutomation);
 
   useEffect(() => {
@@ -27,7 +25,7 @@ export const AutomationDetail = ({
   return (
     <div className="relative h-full w-full">
       <Canvas>
-        <div className="flex h-[calc(100vh-24px)] w-full flex-col pl-32 pt-24">
+        <div className="flex h-[calc(100vh-24px)] w-full flex-col pt-20">
           <TriggerElement
             setAutomationIndex={setAutomationIndex}
             trigger={automation.trigger}
