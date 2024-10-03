@@ -13,14 +13,12 @@ export const AutomationDetail = ({
   automation: Automation;
 }) => {
   const [automationIndex, setAutomationIndex] = useState<number | null>(0);
-  const setAutomationTitle = useAutomationStore(
-    (state) => state.setAutomationTitle,
-  );
+  const setAutomation = useAutomationStore((state) => state.setAutomation);
 
   useEffect(() => {
-    setAutomationTitle(automation.title);
-    return () => setAutomationTitle(null); // Cleanup when unmounting
-  }, [automation.title, setAutomationTitle]);
+    setAutomation(automation);
+    return () => setAutomation(null); // Cleanup when unmounting
+  }, [automation, automation.title, setAutomation]);
 
   const automations = [
     {

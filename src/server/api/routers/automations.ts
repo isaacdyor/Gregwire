@@ -1,4 +1,5 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import { AutomationUpdateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
 export const automationsRouter = createTRPCRouter({
@@ -29,6 +30,18 @@ export const automationsRouter = createTRPCRouter({
           id: input.id,
           userId: ctx.user.id,
         },
+      });
+    }),
+
+  update: privateProcedure
+    .input(AutomationUpdateInputSchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.automation.update({
+        where: {
+          id: input.id as string,
+          userId: ctx.user.id,
+        },
+        data: input,
       });
     }),
 });

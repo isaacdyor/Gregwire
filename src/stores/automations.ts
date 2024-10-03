@@ -1,12 +1,13 @@
 // stores/useAutomationStore.ts
+import { type Automation } from "@prisma/client";
 import { create } from "zustand";
 
 interface AutomationStore {
-  automationTitle: string | null;
-  setAutomationTitle: (automationTitle: string | null) => void;
+  automation: Automation | null;
+  setAutomation: (automation: Automation | null) => void;
 }
 
 export const useAutomationStore = create<AutomationStore>((set) => ({
-  automationTitle: null,
-  setAutomationTitle: (automationTitle) => set({ automationTitle }),
+  automation: null,
+  setAutomation: (automation) => set({ automation }),
 }));
