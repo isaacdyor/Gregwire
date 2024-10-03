@@ -1,23 +1,23 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
+import { type TriggerOrAction } from "@/types/automations";
 
 export const AutomationElement: React.FC<{
-  title: string;
-  content: string;
+  automationElements: TriggerOrAction[];
   isLast?: boolean;
   setAutomationIndex: (index: number | null) => void;
   index: number;
-}> = ({ title, content, isLast = false, setAutomationIndex, index }) => (
+}> = ({ automationElements, isLast = false, setAutomationIndex, index }) => (
   <div className="relative flex flex-col items-center">
     <Card
       className="relative w-96 hover:cursor-pointer"
       onClick={() => setAutomationIndex(index)}
     >
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>title</CardTitle>
       </CardHeader>
-      <CardContent>{content}</CardContent>
+      <CardContent>content</CardContent>
     </Card>
     <div className="relative flex flex-col items-center">
       <div className="h-[16px] w-0.5 bg-border" />
