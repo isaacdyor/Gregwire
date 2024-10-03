@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { usePathname } from "next/navigation";
 import {
@@ -10,9 +8,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
+import { TitleInput } from "./title-input";
 export interface RouteConfig {
   name: string | ((id: string) => string);
+  component?: React.ComponentType<{ id: string }>;
   children?: Record<string, RouteConfig>;
 }
 
@@ -24,10 +23,7 @@ const routes: Routes = {
     children: {
       "[id]": {
         name: (id: string) => `Automation ${id}`,
-        children: {
-          edit: { name: "Edit" },
-          run: { name: "Run" },
-        },
+        component: ({ id }) => <TitleInput title={id} />,
       },
       create: { name: "Create Automation" },
     },
@@ -37,6 +33,7 @@ const routes: Routes = {
 interface Crumb {
   name: string;
   path: string;
+  component?: React.ComponentType<{ id: string }>;
 }
 
 export const NavBreadcrumbs: React.FC = () => {
@@ -76,6 +73,7 @@ export const NavBreadcrumbs: React.FC = () => {
           ? currentConfig.name(segment)
           : currentConfig.name,
       path: newPath,
+      component: currentConfig.component,
     };
 
     return [
@@ -101,9 +99,21 @@ export const NavBreadcrumbs: React.FC = () => {
           <React.Fragment key={crumb.path}>
             <BreadcrumbItem>
               {index === breadcrumbs.length - 1 ? (
-                <BreadcrumbPage>{crumb.name}</BreadcrumbPage>
+                <BreadcrumbPage>
+                  {crumb.component ? (
+                    <crumb.component id={pathSegments[index] ?? ""} />
+                  ) : (
+                    crumb.name
+                  )}
+                </BreadcrumbPage>
               ) : (
-                <BreadcrumbLink href={crumb.path}>{crumb.name}</BreadcrumbLink>
+                <BreadcrumbLink href={crumb.path}>
+                  {crumb.component ? (
+                    <crumb.component id={pathSegments[index] ?? ""} />
+                  ) : (
+                    crumb.name
+                  )}
+                </BreadcrumbLink>
               )}
             </BreadcrumbItem>
             {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}

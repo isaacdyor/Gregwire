@@ -11,7 +11,7 @@ export const TitleInput: React.FC<{ title: string }> = ({ title }) => {
       onChange={(value) => {
         console.log(value);
       }}
-      className="absolute left-2 top-2 z-20 m-2 h-8 w-72 border-none bg-transparent text-xl font-semibold focus-visible:ring-0 focus-visible:ring-offset-0"
+      className="h-8 w-48 border-none bg-transparent p-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
       placeholder="Enter automation title"
     />
   );
