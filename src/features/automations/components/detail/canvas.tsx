@@ -140,6 +140,7 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
           top: `${offset.y}px`,
           pointerEvents: "auto",
         }}
+        className="w-full"
       >
         {children}
       </div>
