@@ -1,11 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { api } from "@/trpc/react";
-import { LogoutButton } from "@/components/layouts/dashboard-layout/user-menu/logout-button";
-import { SettingsLink } from "@/components/layouts/dashboard-layout/user-menu/settings-link";
-import { ToggleTheme } from "@/components/layouts/dashboard-layout/user-menu/toggle-theme";
+import { useState } from "react";
 
 export const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
