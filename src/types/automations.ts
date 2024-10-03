@@ -1,4 +1,4 @@
-import { type Action, type Trigger, type Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 
 type AutomationWithTriggerAndActions = Prisma.AutomationGetPayload<{
   include: {
@@ -7,6 +7,4 @@ type AutomationWithTriggerAndActions = Prisma.AutomationGetPayload<{
   };
 }>;
 
-type TriggerOrAction = Trigger | Action;
-
-export type { AutomationWithTriggerAndActions, TriggerOrAction };
+export type { AutomationWithTriggerAndActions };

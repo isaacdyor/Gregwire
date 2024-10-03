@@ -7,6 +7,7 @@ interface AutomationPageProps {
 
 export default async function AutomationPage({ params }: AutomationPageProps) {
   const automation = await api.automations.getById({ id: params.id });
+  console.log(automation);
 
   if (!automation) {
     return <div>Automation not found</div>;
