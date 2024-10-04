@@ -30,6 +30,7 @@ export const AutomationDetail = ({
     const params = new URLSearchParams(searchParams);
 
     params.set("index", index.toString());
+    console.log(params.toString());
 
     router.replace(`${pathname}?${params.toString()}`);
   };
@@ -41,6 +42,7 @@ export const AutomationDetail = ({
           <TriggerElement
             setAutomationIndex={setAutomationIndex}
             trigger={automation.trigger}
+            nextPosition={automation.actions[0]?.position ?? null}
           />
           {automation.actions.map((action, index) => {
             return (
@@ -49,6 +51,7 @@ export const AutomationDetail = ({
                 action={action}
                 index={index}
                 setAutomationIndex={setAutomationIndex}
+                nextPosition={automation.actions[index + 1]?.position ?? null}
               />
             );
           })}

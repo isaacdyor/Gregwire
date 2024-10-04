@@ -8,16 +8,10 @@ import { useRouter } from "next/navigation";
 export const NewAutomationButton = () => {
   const router = useRouter();
 
-  const { mutate: createTrigger, isPending: triggerPending } =
-    api.triggers.create.useMutation({
-      onSuccess: (data) => {
-        router.push(`/automations/${data.id}?index=0`);
-      },
-    });
   const { mutate: createAutomation, isPending: automationPending } =
     api.automations.create.useMutation({
-      onSuccess: () => {
-        createTrigger();
+      onSuccess: (data) => {
+        router.push(`/automations/${data.id}?index=0`);
       },
     });
 
@@ -28,7 +22,7 @@ export const NewAutomationButton = () => {
       className="flex items-center gap-2"
     >
       Add new
-      {automationPending || triggerPending ? (
+      {automationPending ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : (
         <Plus className="h-4 w-4" />

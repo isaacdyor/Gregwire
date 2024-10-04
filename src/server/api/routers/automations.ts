@@ -13,7 +13,11 @@ export const automationsRouter = createTRPCRouter({
       },
       include: {
         trigger: true,
-        actions: true,
+        actions: {
+          orderBy: {
+            position: "asc",
+          },
+        },
       },
     });
   }),
@@ -22,6 +26,11 @@ export const automationsRouter = createTRPCRouter({
     return ctx.db.automation.create({
       data: {
         userId: ctx.user.id,
+        trigger: {
+          create: {
+            type: "",
+          },
+        },
       },
     });
   }),
@@ -36,7 +45,11 @@ export const automationsRouter = createTRPCRouter({
         },
         include: {
           trigger: true,
-          actions: true,
+          actions: {
+            orderBy: {
+              position: "asc",
+            },
+          },
         },
       });
     }),
