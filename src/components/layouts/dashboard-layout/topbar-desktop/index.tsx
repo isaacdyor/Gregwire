@@ -8,10 +8,10 @@ export const TopbarDesktop = () => {
         <NavBreadcrumbs />
       </div>
       <div className="flex items-center gap-4">
-        <p className="rounded-md border px-2 text-sm hover:cursor-pointer">
+        <p className="rounded-md border px-2 text-sm hover:cursor-pointer hover:bg-secondary">
           Roadmap
         </p>
-        <div className="flex items-center hover:cursor-pointer">
+        <div className="flex items-center hover:cursor-pointer hover:underline">
           <p className="text-sm">Docs</p>
           <ArrowUpRight className="h-4 w-4" />
         </div>
