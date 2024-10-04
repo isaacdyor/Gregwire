@@ -11,7 +11,7 @@ export const NewAutomationButton = () => {
   const { mutate: createTrigger, isPending: triggerPending } =
     api.triggers.create.useMutation({
       onSuccess: (data) => {
-        router.push(`/automations/${data.id}`);
+        router.push(`/automations/${data.id}?index=0`);
       },
     });
   const { mutate: createAutomation, isPending: automationPending } =

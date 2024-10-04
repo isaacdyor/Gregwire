@@ -37,7 +37,7 @@ export const AutomationDetail = ({
   return (
     <div className="relative h-full w-full">
       <Canvas>
-        <div className="flex h-[calc(100vh-24px)] w-full flex-col pt-20">
+        <div className="flex h-[calc(100vh-24px)] w-[calc(100%-438px)] flex-col pt-20">
           <TriggerElement
             setAutomationIndex={setAutomationIndex}
             trigger={automation.trigger}

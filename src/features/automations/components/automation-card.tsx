@@ -6,7 +6,7 @@ export const AutomationCard: React.FC<{ automation: Automation }> = ({
   automation,
 }) => {
   return (
-    <Link href={`/automations/${automation.id}`}>
+    <Link href={`/automations/${automation.id}?index=0`}>
       <Card className="group">
         <CardContent className="p-6">
           <p>{automation.title}</p>
