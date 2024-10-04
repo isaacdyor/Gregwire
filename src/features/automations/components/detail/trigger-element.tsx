@@ -4,7 +4,7 @@ import { AddActionButton } from "./add-action-button";
 
 export const TriggerElement: React.FC<{
   trigger: Trigger | null;
-  setAutomationIndex: (index: number | null) => void;
+  setAutomationIndex: (index: number) => void;
 }> = ({ trigger, setAutomationIndex }) => (
   <div className="relative flex w-[calc(100%-438px)] flex-col items-center">
     <Card

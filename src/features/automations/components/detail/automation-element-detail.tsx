@@ -1,12 +1,14 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export const AutomationElementDetail: React.FC<{
-  automationIndex: number | null;
-  setAutomationIndex: (index: number | null) => void;
-}> = ({ automationIndex, setAutomationIndex }) => {
-  if (automationIndex === null) return null;
+export const AutomationElementDetail: React.FC = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const automationIndex = searchParams.get("index");
+
+  if (!automationIndex) return null;
 
   return (
     <Card className="absolute right-2 top-2 z-10 h-[calc(100%-24px)] w-96">
@@ -14,7 +16,7 @@ export const AutomationElementDetail: React.FC<{
         variant="ghost"
         size="icon"
         className="absolute right-2 top-2"
-        onClick={() => setAutomationIndex(null)}
+        onClick={() => router.push(window.location.pathname)}
       >
         <X className="h-4 w-4" />
       </Button>

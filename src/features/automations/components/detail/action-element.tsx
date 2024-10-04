@@ -4,14 +4,14 @@ import { AddActionButton } from "./add-action-button";
 
 export const ActionElement: React.FC<{
   action: Action;
-  setAutomationIndex: (index: number | null) => void;
+  setAutomationIndex: (index: number) => void;
   index: number;
 }> = ({ action, setAutomationIndex, index }) => (
   <div className="relative flex w-[calc(100%-438px)] flex-col items-center">
     <div className="h-[17px] w-0.5 bg-border" />
     <Card
       className="relative w-96 hover:cursor-pointer"
-      onClick={() => setAutomationIndex(index)}
+      onClick={() => setAutomationIndex(index + 1)}
     >
       <CardHeader>
         <CardTitle>{action.type}</CardTitle>
