@@ -23,7 +23,7 @@ export const AutomationElement: React.FC<{
   return (
     <div className="flex flex-col items-center">
       {index !== 0 && <div className="h-4 w-0.5 bg-border" />}
-      <div className="relative">
+      <div className="bg-background">
         <Card
           className={cn(
             "relative w-96 hover:cursor-pointer hover:border-muted-foreground/50",
