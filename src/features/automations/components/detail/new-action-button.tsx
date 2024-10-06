@@ -1,7 +1,8 @@
+import { useAutomationStore } from "@/stores/automations";
 import { api } from "@/trpc/react";
-import { Loader2, Plus } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { type Action } from "@prisma/client";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const NewActionButton: React.FC<{
   index: number;
@@ -9,22 +10,47 @@ export const NewActionButton: React.FC<{
   secondPosition: number | null;
   automationId: string;
 }> = ({ index, firstPosition, secondPosition, automationId }) => {
-  const [isRevalidating, setIsRevalidating] = useState(false);
+  const utils = api.useUtils();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
-  const automationIndex = params.get("index");
+  const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
 
-  const { mutate: addAction, isPending } = api.actions.create.useMutation({
+  const { mutate: addAction } = api.actions.create.useMutation({
+    onMutate: async () => {
+      await utils.automations.getById.cancel({ id: automationId });
+      const previousAutomation = utils.automations.getById.getData({
+        id: automationId,
+      });
+      const previousActions = previousAutomation?.actions ?? [];
+      const newActions: Action[] = [
+        ...previousActions,
+        {
+          id: "new",
+          type: "EMAIL",
+          position: calculatePosition(),
+          automationId,
+          createdAt: new Date(),
+        },
+      ];
+      utils.automations.getById.setData({ id: automationId }, (prevData) => {
+        if (!prevData) return prevData;
+        return {
+          ...prevData,
+          actions: newActions.sort((a, b) => a.position - b.position),
+        };
+      });
+      setActiveIndex(index + 1);
+      console.log("setting index", index + 1);
+      return { previousAutomation };
+    },
+    onError(err, newAction, ctx) {
+      utils.automations.getById.setData(
+        { id: automationId },
+        ctx?.previousAutomation,
+      );
+    },
     onSuccess: async () => {
-      setIsRevalidating(true);
-      if (Number(automationIndex) === index + 1) {
-        router.refresh();
-      } else {
-        router.push(`/automations/${automationId}?index=${index + 1}`);
-      }
-
-      setIsRevalidating(false);
+      router.push(`/automations/${automationId}?index=${index + 1}`);
+      await utils.automations.getById.invalidate({ id: automationId });
     },
   });
 
@@ -52,11 +78,7 @@ export const NewActionButton: React.FC<{
       onClick={handleClick}
       className="group flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer hover:bg-border"
     >
-      {isPending || isRevalidating ? (
-        <Loader2 className="animate-spin text-muted-foreground" />
-      ) : (
-        <Plus className="text-muted-foreground" />
-      )}
+      <Plus className="text-muted-foreground" />
     </div>
   );
 };

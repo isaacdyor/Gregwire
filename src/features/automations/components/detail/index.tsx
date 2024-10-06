@@ -1,7 +1,7 @@
 "use client";
 
 import { useAutomationStore } from "@/stores/automations";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AutomationElement } from "./automation-element";
 import { AutomationElementDetail } from "./automation-element-detail";
@@ -15,10 +15,19 @@ interface AutomationDetailProps {
 }
 
 export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
-  const setAutomation = useAutomationStore((state) => state.setAutomation);
   const { data: automation } = api.automations.getById.useQuery({
     id: automationId,
   });
+
+  const setAutomation = useAutomationStore((state) => state.setAutomation);
+  const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
+  const activeIndex = useAutomationStore((state) => state.activeIndex);
+  console.log("activeIndex", activeIndex);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const automationIndex = searchParams.get("index");
 
   useEffect(() => {
     if (automation) {
@@ -26,12 +35,14 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
     }
   }, [automation, setAutomation]);
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const automationIndex = searchParams.get("index");
+  useEffect(() => {
+    if (automationIndex) {
+      setActiveIndex(Number(automationIndex));
+    }
+  }, [automationIndex, setActiveIndex]);
 
   const setAutomationIndex = (index: number) => {
+    setActiveIndex(index);
     const params = new URLSearchParams(searchParams);
     params.set("index", index.toString());
     router.replace(`${pathname}?${params.toString()}`);
@@ -47,7 +58,7 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
         <div className="flex h-[calc(100vh-24px)] w-[calc(100%-438px)] flex-col items-center pt-20">
           <AutomationElement
             automationId={automation.id}
-            active={automationIndex !== null && Number(automationIndex) === 0}
+            active={activeIndex !== null && Number(activeIndex) === 0}
             setAutomationIndex={setAutomationIndex}
             firstPosition={0}
             nextPosition={automation.actions[0]?.position ?? null}
@@ -59,13 +70,13 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
             <AutomationElement
               key={action.id}
               automationId={automation.id}
-              active={Number(automationIndex) === index + 1}
+              active={Number(activeIndex) === index + 1}
               index={index + 1}
               firstPosition={action.position}
               setAutomationIndex={setAutomationIndex}
               nextPosition={automation.actions[index + 1]?.position ?? null}
             >
-              <ActionElement action={action} />
+              <ActionElement action={action} index={index} />
             </AutomationElement>
           ))}
         </div>

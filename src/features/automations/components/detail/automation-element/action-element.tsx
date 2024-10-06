@@ -6,23 +6,45 @@ import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 interface ActionElementProps {
   action: Action;
+  index: number;
 }
 
-export const ActionElement: React.FC<ActionElementProps> = ({ action }) => {
+export const ActionElement: React.FC<ActionElementProps> = ({
+  action,
+  index,
+}) => {
   const utils = api.useUtils();
   const router = useRouter();
+  const automationId = action.automationId;
 
   const { mutate: deleteAction } = api.actions.delete.useMutation({
+    onMutate: async ({ id }) => {
+      await utils.automations.getById.cancel({ id: automationId });
+      const previousAutomation = utils.automations.getById.getData({
+        id: automationId,
+      });
+      utils.automations.getById.setData({ id: automationId }, (prevData) => {
+        if (!prevData) return prevData;
+
+        const updatedActions = prevData.actions.filter(
+          (action) => action.id !== id,
+        );
+
+        return {
+          ...prevData,
+          actions: updatedActions,
+        };
+      });
+      return { previousAutomation };
+    },
     onSuccess: async () => {
-      console.log("invalidating");
-      router.refresh();
-      await utils.automations.invalidate();
+      router.push(`/automations/${automationId}?index=${index + 1}`);
+      await utils.automations.getById.invalidate({ id: automationId });
     },
   });
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    e.preventDefault();
     deleteAction({ id: action.id });
   };
 
