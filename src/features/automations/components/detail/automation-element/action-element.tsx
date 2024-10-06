@@ -1,17 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/trpc/react";
 import { type Action } from "@prisma/client";
 import { Trash } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 interface ActionElementProps {
   action: Action;
 }
 
 export const ActionElement: React.FC<ActionElementProps> = ({ action }) => {
+  const utils = api.useUtils();
+  const router = useRouter();
+
+  const { mutate: deleteAction } = api.actions.delete.useMutation({
+    onSuccess: async () => {
+      console.log("invalidating");
+      router.refresh();
+      await utils.automations.invalidate();
+    },
+  });
+
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log("delete");
+    deleteAction({ id: action.id });
   };
 
   return (

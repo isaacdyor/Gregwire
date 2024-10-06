@@ -3,6 +3,7 @@ import {
   ActionCreateInputSchema,
   AutomationUpdateInputSchema,
 } from "prisma/generated/zod";
+import { z } from "zod";
 
 export const actionsRouter = createTRPCRouter({
   create: privateProcedure
@@ -16,12 +17,27 @@ export const actionsRouter = createTRPCRouter({
   update: privateProcedure
     .input(AutomationUpdateInputSchema)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.automation.update({
+      return ctx.db.action.update({
         where: {
           id: input.id as string,
-          userId: ctx.user.id,
+          automation: {
+            userId: ctx.user.id,
+          },
         },
         data: input,
+      });
+    }),
+
+  delete: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.action.delete({
+        where: {
+          id: input.id,
+          automation: {
+            userId: ctx.user.id,
+          },
+        },
       });
     }),
 });

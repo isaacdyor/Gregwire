@@ -1,27 +1,30 @@
 "use client";
 
 import { useAutomationStore } from "@/stores/automations";
-import { type AutomationWithTriggerAndActions } from "@/types/automations";
 import { useEffect } from "react";
-
-import { ActionElement } from "./automation-element/action-element";
-import { AutomationElementDetail } from "./automation-element-detail";
-import { Canvas } from "./canvas";
-import { TriggerElement } from "./automation-element/trigger-element";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AutomationElement } from "./automation-element";
+import { AutomationElementDetail } from "./automation-element-detail";
+import { ActionElement } from "./automation-element/action-element";
+import { TriggerElement } from "./automation-element/trigger-element";
+import { Canvas } from "./canvas";
+import { api } from "@/trpc/react";
 
-export const AutomationDetail = ({
-  automation,
-}: {
-  automation: AutomationWithTriggerAndActions;
-}) => {
+interface AutomationDetailProps {
+  automationId: string;
+}
+
+export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
   const setAutomation = useAutomationStore((state) => state.setAutomation);
+  const { data: automation } = api.automations.getById.useQuery({
+    id: automationId,
+  });
 
   useEffect(() => {
-    setAutomation(automation);
-    return () => setAutomation(null);
-  }, [automation, automation.title, setAutomation]);
+    if (automation) {
+      setAutomation(automation);
+    }
+  }, [automation, setAutomation]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,6 +36,10 @@ export const AutomationDetail = ({
     params.set("index", index.toString());
     router.replace(`${pathname}?${params.toString()}`);
   };
+
+  if (!automation) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="relative h-full w-full">
@@ -48,21 +55,19 @@ export const AutomationDetail = ({
           >
             <TriggerElement trigger={automation.trigger} />
           </AutomationElement>
-          {automation.actions.map((action, index) => {
-            return (
-              <AutomationElement
-                key={action.id}
-                automationId={automation.id}
-                active={Number(automationIndex) === index + 1}
-                index={index + 1}
-                firstPosition={action.position}
-                setAutomationIndex={setAutomationIndex}
-                nextPosition={automation.actions[index + 1]?.position ?? null}
-              >
-                <ActionElement action={action} />
-              </AutomationElement>
-            );
-          })}
+          {automation.actions.map((action, index) => (
+            <AutomationElement
+              key={action.id}
+              automationId={automation.id}
+              active={Number(automationIndex) === index + 1}
+              index={index + 1}
+              firstPosition={action.position}
+              setAutomationIndex={setAutomationIndex}
+              nextPosition={automation.actions[index + 1]?.position ?? null}
+            >
+              <ActionElement action={action} />
+            </AutomationElement>
+          ))}
         </div>
       </Canvas>
 
