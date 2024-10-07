@@ -15,7 +15,7 @@ export const AutomationElementDetail: React.FC = () => {
   if (activeIndex === null) return null;
 
   return (
-    <Card className="absolute right-2 top-2 z-10 h-[calc(100%-24px)] w-96">
+    <Card className="absolute right-2 top-2 z-10 h-[calc(100%-24px)] w-96 overflow-hidden">
       <Button
         variant="ghost"
         size="icon"

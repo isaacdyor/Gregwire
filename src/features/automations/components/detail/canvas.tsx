@@ -16,6 +16,7 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [offset, setOffset] = useState<Offset>({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState<Offset>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState<number>(1);
 
   const drawCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -24,26 +25,20 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dotSpacing = 25;
+    const dotSpacing = 25 * zoom;
 
-    // Usage example:
     const color = getCSSColor("--muted-foreground");
     const adjustedColor = adjustHSLOpacity(color, 0.3);
     ctx.fillStyle = adjustedColor;
 
-    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the dot grid
     ctx.imageSmoothingEnabled = false;
 
-    // Adjust these values as needed
-    const dotRadius = 1.5; // Slightly larger than 1 for more visibility
-    const scaleFactor = 2; // Draw larger and scale down for crispness
+    const dotRadius = 1.5 * zoom;
+    const scaleFactor = 2;
 
     for (let x = offset.x % dotSpacing; x < canvas.width; x += dotSpacing) {
       for (let y = offset.y % dotSpacing; y < canvas.height; y += dotSpacing) {
-        // Align to nearest pixel
         const pixelX = Math.round(x);
         const pixelY = Math.round(y);
 
@@ -58,7 +53,7 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
         ctx.restore();
       }
     }
-  }, [offset]);
+  }, [offset, zoom]);
 
   const handleResize = useCallback(() => {
     if (canvasRef.current && containerRef.current) {
@@ -76,7 +71,7 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     drawCanvas();
-  }, [offset, drawCanvas]);
+  }, [offset, zoom, drawCanvas]);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const container = containerRef.current;
@@ -108,6 +103,34 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
     setIsDragging(false);
   };
 
+  const handleWheel = (e: WheelEvent) => {
+    e.preventDefault();
+
+    if (e.ctrlKey) {
+      // Zoom
+      const zoomFactor = 1 - e.deltaY * 0.001;
+      setZoom((prevZoom) => Math.max(0.1, Math.min(5, prevZoom * zoomFactor)));
+    } else {
+      // Scroll
+      setOffset((prevOffset) => ({
+        x: prevOffset.x - e.deltaX,
+        y: prevOffset.y - e.deltaY,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -138,6 +161,8 @@ export const Canvas: React.FC<{ children: React.ReactNode }> = ({
           position: "absolute",
           left: `${offset.x}px`,
           top: `${offset.y}px`,
+          transform: `scale(${zoom})`,
+          transformOrigin: "top left",
           pointerEvents: "auto",
         }}
         className="w-full"
