@@ -1,6 +1,6 @@
 import { useAutomationStore } from "@/stores/automations";
 import { api } from "@/trpc/react";
-import { type Action } from "@prisma/client";
+import { type Action, ActionType } from "@prisma/client";
 import { Plus } from "lucide-react";
 
 export const NewActionButton: React.FC<{
@@ -23,10 +23,11 @@ export const NewActionButton: React.FC<{
       const newActions: Action[] = [
         ...previousActions,
         {
-          id: "new",
-          type: "EMAIL",
+          id: crypto.randomUUID(),
+          type: ActionType.SEND_EMAIL,
           position: calculatePosition(),
           automationId,
+          action_data: null,
           createdAt: new Date(),
         },
       ];
@@ -61,8 +62,9 @@ export const NewActionButton: React.FC<{
 
   const handleClick = () => {
     addAction({
-      type: "EMAIL",
+      type: ActionType.SEND_EMAIL,
       position: calculatePosition(),
+      action_data: {},
       automation: {
         connect: {
           id: automationId,

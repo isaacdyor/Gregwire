@@ -49,7 +49,7 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
   }, [activeIndex, pathname, router]);
 
   if (!automation) {
-    return <div>Loading...</div>;
+    return <div>Not Found</div>;
   }
 
   return (

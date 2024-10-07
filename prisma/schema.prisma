@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,6 +22,11 @@ enum IntegrationStatus {
   ACTIVE
   REVOKED
   EXPIRED
+}
+
+enum ActionType {
+  SEND_EMAIL
+  SEND_SLACK_MESSAGE
 }
 
 // Models
@@ -128,11 +130,12 @@ model Trigger {
 model Action {
   id  String  @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   automationId String
-  type         String
+  type         ActionType
   position     Float      
   createdAt    DateTime   @default(now())
 
   automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  action_data  Json
 
   @@index([automationId, position])
 }
