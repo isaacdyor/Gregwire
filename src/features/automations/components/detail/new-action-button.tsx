@@ -1,6 +1,7 @@
 import { useAutomationStore } from "@/stores/automations";
 import { api } from "@/trpc/react";
-import { type Action, ActionType } from "@prisma/client";
+import { type Action } from "@/types/actions";
+import { ActionType } from "@prisma/client";
 import { Plus } from "lucide-react";
 
 export const NewActionButton: React.FC<{

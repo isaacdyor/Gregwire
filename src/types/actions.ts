@@ -16,9 +16,11 @@ export const ActionDataSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
-export const ExtendedActionCreateInputSchema = z.intersection(
+export const TypedActionCreateInputSchema = z.intersection(
   ActionCreateInputSchema,
   z.object({
     action_data: ActionDataSchema,
   }),
 );
+
+export type Action = z.infer<typeof TypedActionCreateInputSchema>;

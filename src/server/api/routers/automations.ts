@@ -1,3 +1,4 @@
+import { parseAutomation } from "@/features/automations/utils/parse-automation";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { AutomationUpdateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
@@ -10,14 +11,6 @@ export const automationsRouter = createTRPCRouter({
       },
       orderBy: {
         createdAt: "desc",
-      },
-      include: {
-        trigger: true,
-        actions: {
-          orderBy: {
-            position: "asc",
-          },
-        },
       },
     });
   }),
@@ -38,7 +31,7 @@ export const automationsRouter = createTRPCRouter({
   getById: privateProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return ctx.db.automation.findUnique({
+      const automation = await ctx.db.automation.findUnique({
         where: {
           id: input.id,
           userId: ctx.user.id,
@@ -52,6 +45,12 @@ export const automationsRouter = createTRPCRouter({
           },
         },
       });
+
+      if (!automation) {
+        throw new Error("Automation not found");
+      }
+
+      return parseAutomation(automation);
     }),
 
   update: privateProcedure

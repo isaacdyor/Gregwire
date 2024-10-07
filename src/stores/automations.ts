@@ -1,5 +1,5 @@
 // stores/useAutomationStore.ts
-import { type AutomationWithTriggerAndActions } from "@/types/automations";
+import { type AutomationWithTriggerAndActions } from "@/features/automations/utils/parse-automation";
 import { create } from "zustand";
 
 interface AutomationStore {

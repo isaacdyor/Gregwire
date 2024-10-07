@@ -1,6 +1,6 @@
 import { type Prisma } from "@prisma/client";
 
-export type AutomationWithTriggerAndActions = Prisma.AutomationGetPayload<{
+export type AutomationInclude = Prisma.AutomationGetPayload<{
   include: {
     trigger: true;
     actions: true;

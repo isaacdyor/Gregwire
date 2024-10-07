@@ -1,11 +1,11 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { ExtendedActionCreateInputSchema } from "@/types/actions";
+import { TypedActionCreateInputSchema } from "@/types/actions";
 import { AutomationUpdateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
 export const actionsRouter = createTRPCRouter({
   create: privateProcedure
-    .input(ExtendedActionCreateInputSchema)
+    .input(TypedActionCreateInputSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.db.action.create({
         data: input,
