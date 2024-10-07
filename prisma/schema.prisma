@@ -130,7 +130,7 @@ model Trigger {
 model Action {
   id  String  @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
   automationId String
-  type         ActionType
+  type         ActionType 
   position     Float      
   createdAt    DateTime   @default(now())
 

@@ -64,7 +64,12 @@ export const NewActionButton: React.FC<{
     addAction({
       type: ActionType.SEND_EMAIL,
       position: calculatePosition(),
-      action_data: {},
+      action_data: {
+        type: ActionType.SEND_EMAIL,
+        subject: "Hello",
+        body: "Hello",
+        to: "hello@example.com",
+      },
       automation: {
         connect: {
           id: automationId,
