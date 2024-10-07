@@ -22,7 +22,6 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
   const setAutomation = useAutomationStore((state) => state.setAutomation);
   const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
   const activeIndex = useAutomationStore((state) => state.activeIndex);
-  console.log("activeIndex", activeIndex);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,12 +40,13 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
     }
   }, [automationIndex, setActiveIndex]);
 
-  const setAutomationIndex = (index: number) => {
-    setActiveIndex(index);
-    const params = new URLSearchParams(searchParams);
-    params.set("index", index.toString());
-    router.replace(`${pathname}?${params.toString()}`);
-  };
+  useEffect(() => {
+    if (activeIndex !== null) {
+      router.replace(`${pathname}?index=${activeIndex}`);
+    } else {
+      router.replace(pathname);
+    }
+  }, [activeIndex, pathname, router]);
 
   if (!automation) {
     return <div>Loading...</div>;
@@ -59,7 +59,7 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
           <AutomationElement
             automationId={automation.id}
             active={activeIndex !== null && Number(activeIndex) === 0}
-            setAutomationIndex={setAutomationIndex}
+            setActiveIndex={setActiveIndex}
             firstPosition={0}
             nextPosition={automation.actions[0]?.position ?? null}
             index={0}
@@ -73,7 +73,7 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
               active={Number(activeIndex) === index + 1}
               index={index + 1}
               firstPosition={action.position}
-              setAutomationIndex={setAutomationIndex}
+              setActiveIndex={setActiveIndex}
               nextPosition={automation.actions[index + 1]?.position ?? null}
             >
               <ActionElement action={action} index={index} />

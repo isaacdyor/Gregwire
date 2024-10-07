@@ -6,7 +6,7 @@ import { NewActionButton } from "../new-action-button";
 export const AutomationElement: React.FC<{
   children: ReactNode;
   active: boolean;
-  setAutomationIndex: (index: number) => void;
+  setActiveIndex: (index: number) => void;
   firstPosition: number;
   nextPosition: number | null;
   index: number;
@@ -14,7 +14,7 @@ export const AutomationElement: React.FC<{
 }> = ({
   children,
   active,
-  setAutomationIndex,
+  setActiveIndex,
   firstPosition,
   nextPosition,
   index,
@@ -29,7 +29,7 @@ export const AutomationElement: React.FC<{
             "relative w-96 hover:cursor-pointer hover:border-muted-foreground/50",
             active && "border-muted-foreground/50 bg-muted/20",
           )}
-          onClick={() => setAutomationIndex(index)}
+          onClick={() => setActiveIndex(index)}
         >
           {children}
         </Card>
