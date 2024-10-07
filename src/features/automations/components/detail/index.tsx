@@ -1,14 +1,14 @@
 "use client";
 
 import { useAutomationStore } from "@/stores/automations";
-import { useCallback, useEffect } from "react";
+import { api } from "@/trpc/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { AutomationElement } from "./automation-element";
 import { AutomationElementDetail } from "./automation-element-detail";
 import { ActionElement } from "./automation-element/action-element";
 import { TriggerElement } from "./automation-element/trigger-element";
 import { Canvas } from "./canvas";
-import { api } from "@/trpc/react";
 
 interface AutomationDetailProps {
   automationId: string;
@@ -76,7 +76,7 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
               setActiveIndex={setActiveIndex}
               nextPosition={automation.actions[index + 1]?.position ?? null}
             >
-              <ActionElement action={action} index={index} />
+              <ActionElement action={action} index={index + 1} />
             </AutomationElement>
           ))}
         </div>

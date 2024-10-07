@@ -4,7 +4,7 @@ import { useAutomationStore } from "@/stores/automations";
 import { api } from "@/trpc/react";
 import { type Action } from "@prisma/client";
 import { Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
+
 interface ActionElementProps {
   action: Action;
   index: number;
@@ -15,10 +15,12 @@ export const ActionElement: React.FC<ActionElementProps> = ({
   index,
 }) => {
   const utils = api.useUtils();
-  const router = useRouter();
+
   const automationId = action.automationId;
   const activeIndex = useAutomationStore((state) => state.activeIndex);
   const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
+
+  console.log(index);
 
   const { mutate: deleteAction } = api.actions.delete.useMutation({
     onMutate: async ({ id }) => {
@@ -26,7 +28,6 @@ export const ActionElement: React.FC<ActionElementProps> = ({
       const previousAutomation = utils.automations.getById.getData({
         id: automationId,
       });
-      const oldIndex = activeIndex;
 
       if (activeIndex === index) {
         setActiveIndex(null);
@@ -46,7 +47,7 @@ export const ActionElement: React.FC<ActionElementProps> = ({
           actions: updatedActions,
         };
       });
-      return { previousAutomation, oldIndex };
+      return { previousAutomation };
     },
     onError: (err, newAction, ctx) => {
       utils.automations.getById.setData(
@@ -55,8 +56,6 @@ export const ActionElement: React.FC<ActionElementProps> = ({
       );
     },
     onSuccess: async () => {
-      router.push(`/automations/${automationId}?index=${activeIndex}`);
-
       await utils.automations.getById.invalidate({ id: automationId });
     },
   });

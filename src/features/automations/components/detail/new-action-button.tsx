@@ -2,7 +2,6 @@ import { useAutomationStore } from "@/stores/automations";
 import { api } from "@/trpc/react";
 import { type Action } from "@prisma/client";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export const NewActionButton: React.FC<{
   index: number;
@@ -11,7 +10,7 @@ export const NewActionButton: React.FC<{
   automationId: string;
 }> = ({ index, firstPosition, secondPosition, automationId }) => {
   const utils = api.useUtils();
-  const router = useRouter();
+
   const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
 
   const { mutate: addAction } = api.actions.create.useMutation({
@@ -49,7 +48,6 @@ export const NewActionButton: React.FC<{
       );
     },
     onSuccess: async () => {
-      router.push(`/automations/${automationId}?index=${index + 1}`);
       await utils.automations.getById.invalidate({ id: automationId });
     },
   });
