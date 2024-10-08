@@ -135,7 +135,7 @@ model Action {
   createdAt    DateTime   @default(now())
 
   automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  actionData  Json /// @zod.custom.omit([model, input])
+  actionData  Json
 
   @@index([automationId, position])
 }
