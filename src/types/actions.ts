@@ -23,7 +23,7 @@ export const TypedActionCreateInputSchema = z.intersection(
   }),
 );
 
-const TypedActionSchema = ActionSchema.extend({
+export const TypedActionSchema = ActionSchema.extend({
   actionData: ActionDataSchema,
 });
 

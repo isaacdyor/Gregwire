@@ -9,11 +9,9 @@ export const AutomationElementDetail: React.FC = () => {
 
   const { automation } = useAutomationStore((state) => state);
 
-  const trigger = automation?.trigger;
-  const actions = automation?.actions;
-
   if (activeIndex === null) return null;
 
+  const trigger = automation?.trigger;
   const action = automation?.actions[activeIndex - 1];
 
   return (
