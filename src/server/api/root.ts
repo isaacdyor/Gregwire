@@ -9,6 +9,7 @@ import { llmRouter } from "./routers/llm";
 import { automationsRouter } from "./routers/automations";
 import { triggersRouter } from "./routers/trigger";
 import { actionsRouter } from "./routers/actions";
+import { chatsRouter } from "./routers/chats";
 /**
  * This is the primary router for your server.
  *
@@ -25,6 +26,7 @@ export const appRouter = createTRPCRouter({
   automations: automationsRouter,
   triggers: triggersRouter,
   actions: actionsRouter,
+  chats: chatsRouter,
 });
 
 // export type definition of API

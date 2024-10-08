@@ -4,7 +4,6 @@ import { Icons } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { dashboardConfig } from "@/config/dashboard-config";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import React, { useMemo } from "react";
@@ -13,106 +12,38 @@ import { UserMenu } from "./user-menu";
 
 export const MainNav: React.FC = () => {
   const segment = useSelectedLayoutSegment();
-  const { isOpen, setIsOpen, dropdownOpen, setDropdownOpen } = useDashboard();
+  const { isOpen, setIsOpen } = useDashboard();
 
   const sidebarItems = useMemo(() => {
     return dashboardConfig.map((item) => {
       const Icon = Icons[item.icon];
-
-      if ("children" in item) {
-        const isActiveParent = item.children.some((child) =>
-          child.url.startsWith(`/${segment}`),
-        );
-        return (
-          <div
-            key={item.label}
-            className="relative"
-            onMouseEnter={() => setDropdownOpen(true)}
-            onMouseLeave={() => setDropdownOpen(false)}
-          >
-            <button
+      return (
+        <Link
+          href={item.url}
+          key={item.label}
+          className={cn(
+            "flex h-10 items-center rounded-md px-2.5 text-sm text-muted-foreground",
+            item.url.startsWith(`/${segment}`)
+              ? "bg-secondary"
+              : "hover:bg-secondary/50",
+          )}
+          onClick={() => setIsOpen(false)}
+        >
+          <div className="flex w-full items-center overflow-hidden">
+            <Icon className="h-5 w-5 flex-shrink-0" />
+            <span
               className={cn(
-                "flex h-10 w-full items-center rounded-md px-2.5 text-sm text-muted-foreground hover:bg-secondary/50",
-                isActiveParent && "bg-secondary hover:bg-secondary",
+                "ml-3 transition-all duration-200",
+                isOpen ? "w-auto opacity-100" : "w-0 opacity-0",
               )}
             >
-              <ChevronRight
-                className={cn(
-                  "h-5 w-5 shrink-0 transition-transform",
-                  dropdownOpen && "rotate-90",
-                )}
-              />
-              <span
-                className={cn(
-                  "ml-3 transition-all duration-200",
-                  isOpen ? "w-auto opacity-100" : "w-0 opacity-0",
-                )}
-              >
-                {item.label}
-              </span>
-            </button>
-            <div
-              className={cn(
-                "overflow-hidden transition-all duration-300 ease-in-out",
-                dropdownOpen && isOpen
-                  ? "max-h-[500px] opacity-100"
-                  : "max-h-0 opacity-0",
-              )}
-            >
-              <div className="mt-1 space-y-1 pl-1.5">
-                {item.children.map((child) => {
-                  const ChildIcon = Icons[child.icon];
-                  return (
-                    <Link
-                      href={child.url}
-                      key={child.label}
-                      className={cn(
-                        "flex h-8 items-center gap-3 rounded-md px-2.5 text-sm text-muted-foreground transition-colors duration-100",
-                        child.url.startsWith(`/${segment}`)
-                          ? "bg-secondary"
-                          : "hover:bg-secondary/50",
-                      )}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <ChildIcon className="h-4 w-4 flex-shrink-0" />
-                      <span>{child.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+              {item.label}
+            </span>
           </div>
-        );
-      } else {
-        // This is a regular item
-        return (
-          <Link
-            href={item.url}
-            key={item.label}
-            className={cn(
-              "flex h-10 items-center rounded-md px-2.5 text-sm text-muted-foreground",
-              item.url.startsWith(`/${segment}`)
-                ? "bg-secondary"
-                : "hover:bg-secondary/50",
-            )}
-            onClick={() => setIsOpen(false)}
-          >
-            <div className="flex w-full items-center overflow-hidden">
-              <Icon className="h-5 w-5 flex-shrink-0" />
-              <span
-                className={cn(
-                  "ml-3 transition-all duration-200",
-                  isOpen ? "w-auto opacity-100" : "w-0 opacity-0",
-                )}
-              >
-                {item.label}
-              </span>
-            </div>
-          </Link>
-        );
-      }
+        </Link>
+      );
     });
-  }, [dropdownOpen, isOpen, setDropdownOpen, segment, setIsOpen]);
+  }, [segment, isOpen, setIsOpen]);
 
   return (
     <div
@@ -131,7 +62,7 @@ export const MainNav: React.FC = () => {
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
       >
-        <div className="flex flex-col justify-center space-y-6">
+        <div className="h flex flex-col justify-center space-y-6">
           <div className="flex w-full items-center px-2">
             <Logo full={isOpen} />
           </div>

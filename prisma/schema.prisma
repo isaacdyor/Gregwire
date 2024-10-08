@@ -37,72 +37,73 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   integrations Integration[]
+  chats        Chat[]
 }
 
 model Integration {
-  id         String            @id @default(uuid())
-  userId     String
-  type       IntegrationType
-  status     IntegrationStatus @default(ACTIVE)
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
+  id        String            @id @default(uuid())
+  userId    String
+  type      IntegrationType
+  status    IntegrationStatus @default(ACTIVE)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
-  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gmail      GmailIntegration?
-  slack      SlackIntegration?
+  user  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gmail GmailIntegration?
+  slack SlackIntegration?
 }
 
 model GmailIntegration {
-  id              String    @id @default(uuid())
-  integrationId   String    @unique
-  email           String    @unique
+  id              String   @id @default(uuid())
+  integrationId   String   @unique
+  email           String   @unique
   accessToken     String
   refreshToken    String?
   tokenExpiration DateTime
   recentHistoryId String?
-  
-  integration     Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
-  emails          Email[]
+
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  emails      Email[]
 }
 
 model SlackIntegration {
-  id            String  @id @default(uuid())
-  integrationId String  @unique
+  id            String @id @default(uuid())
+  integrationId String @unique
   teamId        String
   accessToken   String
-  slackUserId   String  @unique
-  
-  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
-  messages      Message[]
+  slackUserId   String @unique
+
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  messages    Message[]
 }
 
 model Email {
-  id                String          @id @default(uuid())
-  messageId         String          @unique
+  id                 String    @id @default(uuid())
+  messageId          String    @unique
   gmailIntegrationId String
-  subject           String?
-  from              String?
-  date              DateTime?
-  body              String?         @db.Text
-  receivedAt        DateTime        @default(now())
-  processed         Boolean         @default(false)
+  subject            String?
+  from               String?
+  date               DateTime?
+  body               String?   @db.Text
+  receivedAt         DateTime  @default(now())
+  processed          Boolean   @default(false)
 
-  gmailIntegration  GmailIntegration @relation(fields: [gmailIntegrationId], references: [id], onDelete: Cascade)
+  gmailIntegration GmailIntegration @relation(fields: [gmailIntegrationId], references: [id], onDelete: Cascade)
 }
 
 model Message {
-  id                 String           @id @default(uuid())
-  messageId          String           @unique
+  id                 String   @id @default(uuid())
+  messageId          String   @unique
   slackIntegrationId String
   senderId           String
   channelId          String
-  text               String           @db.Text
+  text               String   @db.Text
   timestamp          String
   threadTs           String?
-  receivedAt         DateTime         @default(now())
-  processed          Boolean          @default(false)
+  receivedAt         DateTime @default(now())
+  processed          Boolean  @default(false)
 
-  slackIntegration   SlackIntegration @relation(fields: [slackIntegrationId], references: [id], onDelete: Cascade)
+  slackIntegration SlackIntegration @relation(fields: [slackIntegrationId], references: [id], onDelete: Cascade)
 
   @@index([channelId, timestamp])
 }
@@ -114,28 +115,49 @@ model Automation {
   lastRun   DateTime?
   createdAt DateTime  @default(now())
 
-  trigger   Trigger?
-  actions   Action[]
+  trigger Trigger?
+  actions Action[]
 }
 
 model Trigger {
-  id  String  @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
-  automationId String     @unique
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  automationId String   @unique
   type         String
-  createdAt    DateTime   @default(now())
+  createdAt    DateTime @default(now())
 
-  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
 }
 
 model Action {
-  id  String  @id @db.Uuid @default(dbgenerated("gen_random_uuid()"))
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   automationId String
-  type         ActionType 
-  position     Float      
+  type         ActionType
+  position     Float
   createdAt    DateTime   @default(now())
 
-  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  actionData  Json
+  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  actionData Json
 
   @@index([automationId, position])
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  chatId    String
+  content   String
+  system    Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
