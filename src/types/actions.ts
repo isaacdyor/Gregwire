@@ -1,5 +1,5 @@
 import { ActionType } from "@prisma/client";
-import { ActionCreateInputSchema } from "prisma/generated/zod";
+import { ActionCreateInputSchema, ActionSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
 export const ActionDataSchema = z.discriminatedUnion("type", [
@@ -19,8 +19,12 @@ export const ActionDataSchema = z.discriminatedUnion("type", [
 export const TypedActionCreateInputSchema = z.intersection(
   ActionCreateInputSchema,
   z.object({
-    action_data: ActionDataSchema,
+    actionData: ActionDataSchema,
   }),
 );
 
-export type Action = z.infer<typeof TypedActionCreateInputSchema>;
+const TypedActionSchema = ActionSchema.extend({
+  actionData: ActionDataSchema,
+});
+
+export type Action = z.infer<typeof TypedActionSchema>;

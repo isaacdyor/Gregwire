@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAutomationStore } from "@/stores/automations";
 import { api } from "@/trpc/react";
-import { type Action } from "@prisma/client";
+import { type Action } from "@/types/actions";
+
 import { Trash } from "lucide-react";
 
 interface ActionElementProps {
@@ -19,8 +20,6 @@ export const ActionElement: React.FC<ActionElementProps> = ({
   const automationId = action.automationId;
   const activeIndex = useAutomationStore((state) => state.activeIndex);
   const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
-
-  console.log(index);
 
   const { mutate: deleteAction } = api.actions.delete.useMutation({
     onMutate: async ({ id }) => {

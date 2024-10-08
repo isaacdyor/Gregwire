@@ -14,6 +14,8 @@ export const AutomationElementDetail: React.FC = () => {
 
   if (activeIndex === null) return null;
 
+  const action = automation?.actions[activeIndex - 1];
+
   return (
     <Card className="absolute right-2 top-2 z-10 h-[calc(100%-16px)] w-96 overflow-hidden">
       <Button
@@ -34,7 +36,7 @@ export const AutomationElementDetail: React.FC = () => {
           <div>Trigger Details: {JSON.stringify(trigger)}</div>
         ) : (
           <div>
-            Action Details: {JSON.stringify(actions?.[activeIndex - 1])}
+            <p>{action?.actionData.to}</p>
           </div>
         )}
       </CardContent>

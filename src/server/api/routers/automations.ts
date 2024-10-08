@@ -50,7 +50,8 @@ export const automationsRouter = createTRPCRouter({
         throw new Error("Automation not found");
       }
 
-      return parseAutomation(automation);
+      // return parseAutomation(automation);
+      return automation;
     }),
 
   update: privateProcedure

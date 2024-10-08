@@ -9,6 +9,7 @@ import { AutomationElementDetail } from "./automation-element-detail";
 import { ActionElement } from "./automation-element/action-element";
 import { TriggerElement } from "./automation-element/trigger-element";
 import { Canvas } from "./canvas";
+import { parseAutomation } from "../../utils/parse-automation";
 
 interface AutomationDetailProps {
   automationId: string;
@@ -18,6 +19,9 @@ export const AutomationDetail = ({ automationId }: AutomationDetailProps) => {
   const { data: automation } = api.automations.getById.useQuery({
     id: automationId,
   });
+
+  console.log(automation);
+  console.log(parseAutomation(automation!));
 
   const setAutomation = useAutomationStore((state) => state.setAutomation);
   const setActiveIndex = useAutomationStore((state) => state.setActiveIndex);
