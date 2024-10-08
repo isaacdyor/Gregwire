@@ -30,9 +30,27 @@ export const NewActionButton: React.FC<{
           automationId,
           actionData: {
             type: ActionType.SEND_EMAIL,
-            subject: "Hello",
-            body: "Hello",
-            to: "hello@example.com",
+            to: {
+              value: "hello@example.com",
+              input: {
+                inputType: "email",
+                label: "To",
+              },
+            },
+            subject: {
+              value: "Hello",
+              input: {
+                inputType: "text",
+                label: "Subject",
+              },
+            },
+            body: {
+              value: "Hello",
+              input: {
+                inputType: "textarea",
+                label: "Body",
+              },
+            },
           },
           createdAt: new Date(),
         },
@@ -72,9 +90,27 @@ export const NewActionButton: React.FC<{
       position: calculatePosition(),
       actionData: {
         type: ActionType.SEND_EMAIL,
-        subject: "Hello",
-        body: "Hello",
-        to: "hello@example.com",
+        subject: {
+          value: "Hello",
+          input: {
+            inputType: "text",
+            label: "Subject",
+          },
+        },
+        body: {
+          value: "Hello",
+          input: {
+            inputType: "textarea",
+            label: "Body",
+          },
+        },
+        to: {
+          value: "hello@example.com",
+          input: {
+            inputType: "email",
+            label: "To",
+          },
+        },
       },
       automation: {
         connect: {
