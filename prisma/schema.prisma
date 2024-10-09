@@ -23,12 +23,6 @@ enum IntegrationStatus {
   REVOKED
   EXPIRED
 }
-
-enum ActionType {
-  SEND_EMAIL
-  SEND_SLACK_MESSAGE
-}
-
 // Models
 
 model User {
@@ -131,7 +125,8 @@ model Trigger {
 model Action {
   id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   automationId String
-  type         ActionType
+  integration  IntegrationType
+  title        String
   position     Float
   createdAt    DateTime   @default(now())
 

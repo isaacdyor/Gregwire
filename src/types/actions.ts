@@ -1,4 +1,4 @@
-import { ActionType } from "@prisma/client";
+import { IntegrationType } from "@prisma/client";
 import { ActionCreateInputSchema, ActionSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
