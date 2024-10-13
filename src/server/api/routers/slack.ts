@@ -1,5 +1,4 @@
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { IntegrationType } from "@prisma/client";
 import { SlackIntegrationCreateInputSchema } from "prisma/generated/zod";
 import { z } from "zod";
 
@@ -7,23 +6,9 @@ export const slackRouter = createTRPCRouter({
   create: privateProcedure
     .input(SlackIntegrationCreateInputSchema)
     .mutation(async ({ ctx, input }) => {
-      const slackIntegration = await ctx.db.slackIntegration.create({
-        data: {
-          teamId: input.teamId,
-          accessToken: input.accessToken,
-          slackUserId: input.slackUserId,
-          integration: {
-            create: {
-              type: IntegrationType.SLACK,
-              userId: ctx.user.id,
-            },
-          },
-        },
+      return await ctx.db.slackIntegration.create({
+        data: input,
       });
-
-      return {
-        slackIntegration,
-      };
     }),
 
   getAll: privateProcedure.query(async ({ ctx }) => {
