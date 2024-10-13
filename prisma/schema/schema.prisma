@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 generator zod {
@@ -11,18 +12,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums
-
-enum IntegrationType {
-  GMAIL
-  SLACK
-}
-
-enum IntegrationStatus {
-  ACTIVE
-  REVOKED
-  EXPIRED
-}
 // Models
 
 model User {
@@ -32,43 +21,6 @@ model User {
   updatedAt    DateTime      @updatedAt
   integrations Integration[]
   chats        Chat[]
-}
-
-model Integration {
-  id        String            @id @default(uuid())
-  userId    String
-  type      IntegrationType
-  status    IntegrationStatus @default(ACTIVE)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  user  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gmail GmailIntegration?
-  slack SlackIntegration?
-}
-
-model GmailIntegration {
-  id              String   @id @default(uuid())
-  integrationId   String   @unique
-  email           String   @unique
-  accessToken     String
-  refreshToken    String?
-  tokenExpiration DateTime
-  recentHistoryId String?
-
-  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
-  emails      Email[]
-}
-
-model SlackIntegration {
-  id            String @id @default(uuid())
-  integrationId String @unique
-  teamId        String
-  accessToken   String
-  slackUserId   String @unique
-
-  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
-  messages    Message[]
 }
 
 model Email {
@@ -120,20 +72,6 @@ model Trigger {
   createdAt    DateTime @default(now())
 
   automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-}
-
-model Action {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  automationId String
-  integration  IntegrationType
-  title        String
-  position     Float
-  createdAt    DateTime   @default(now())
-
-  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  actionData Json
-
-  @@index([automationId, position])
 }
 
 model Chat {

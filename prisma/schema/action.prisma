@@ -1,0 +1,35 @@
+model Action {
+  id           String          @id @default(uuid())
+  automationId String
+  integration  IntegrationType
+  title        String
+  position     Float
+  createdAt    DateTime        @default(now())
+
+  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  actionData Json
+
+  gmailSendEmail   GmailSendEmailAction?
+  slackSendMessage SlackSendMessageAction?
+
+  @@index([automationId, position])
+}
+
+model GmailSendEmailAction {
+  id       String @id @default(uuid())
+  actionId String @unique
+  toEmail  String
+  subject  String
+  body     String
+
+  action Action @relation(fields: [actionId], references: [id], onDelete: Cascade)
+}
+
+model SlackSendMessageAction {
+  id       String @id @default(uuid())
+  actionId String @unique
+  channel  String
+  message  String
+
+  action Action @relation(fields: [actionId], references: [id], onDelete: Cascade)
+}
